@@ -19,7 +19,7 @@ export async function PATCH(req: Request) {
   if (!session) return new Response("Unauthorized", { status: 401 });
 
   const body = await req.json();
-  const { id, ...data } = body;
+  const { id, resourceIds, ...data } = body;
 
   const userRole = (session.user as any).role;
   if (!["Admin", "Moderator", "User"].includes(userRole)) {
@@ -43,7 +43,8 @@ export async function PATCH(req: Request) {
       startDate: startDate || undefined,
       endDate: endDate || undefined,
       actualDuration,
-      varianceDuration
+      varianceDuration,
+      resources: resourceIds ? { set: resourceIds.map((rid: string) => ({ id: rid })) } : undefined
     },
   });
   return NextResponse.json(task);

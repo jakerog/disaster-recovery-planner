@@ -1,12 +1,13 @@
 "use client";
 
-import { Task } from "@prisma/client";
+import { Task, Resource } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function TaskEditForm({ task }: { task: Task }) {
+export default function TaskEditForm({ task, allResources = [] }: { task: Task & { resources?: Resource[] }, allResources?: Resource[] }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [selectedResources, setSelectedResources] = useState<string[]>(task.resources?.map(r => r.id) || []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -27,6 +28,7 @@ export default function TaskEditForm({ task }: { task: Task }) {
           estimatedTime: parseInt(data.estimatedTime as string),
           startDate: data.startDate && data.startTime ? new Date(`${data.startDate}T${data.startTime}`) : null,
           endDate: data.endDate && data.endTime ? new Date(`${data.endDate}T${data.endTime}`) : null,
+          resourceIds: selectedResources,
         }),
       });
 
@@ -41,8 +43,14 @@ export default function TaskEditForm({ task }: { task: Task }) {
     }
   };
 
+  const toggleResource = (id: string) => {
+    setSelectedResources(prev =>
+      prev.includes(id) ? prev.filter(r => r !== id) : [...prev, id]
+    );
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-6 text-gray-900">
        <div className="grid grid-cols-2 gap-6">
         <div>
           <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-2">Task ID</label>
@@ -75,31 +83,31 @@ export default function TaskEditForm({ task }: { task: Task }) {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
-        <div>
-          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-2">Start Date</label>
-          <input name="startDate" type="date" defaultValue={task.startDate?.toISOString().split('T')[0]} className="w-full border border-gray-200 rounded-lg p-2 text-sm" />
-        </div>
-        <div>
-          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-2">Start Time</label>
-          <input name="startTime" type="time" defaultValue={task.startDate?.toISOString().split('T')[1]?.substring(0,5)} className="w-full border border-gray-200 rounded-lg p-2 text-sm" />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-6">
-        <div>
-          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-2">End Date</label>
-          <input name="endDate" type="date" defaultValue={task.endDate?.toISOString().split('T')[0]} className="w-full border border-gray-200 rounded-lg p-2 text-sm" />
-        </div>
-        <div>
-          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-2">End Time</label>
-          <input name="endTime" type="time" defaultValue={task.endDate?.toISOString().split('T')[1]?.substring(0,5)} className="w-full border border-gray-200 rounded-lg p-2 text-sm" />
-        </div>
-      </div>
-
       <div>
-        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-2">Estimated (Min)</label>
-        <input name="estimatedTime" type="number" defaultValue={task.estimatedTime || 0} className="w-full border border-gray-200 rounded-lg p-2 text-sm" />
+        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-2">Assigned Resources</label>
+        <div className="flex flex-wrap gap-2 mt-2">
+          {allResources.map(r => (
+            <button
+              key={r.id}
+              type="button"
+              onClick={() => toggleResource(r.id)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${
+                selectedResources.includes(r.id)
+                  ? "bg-black text-white border-black"
+                  : "bg-white text-gray-400 border-gray-200 hover:border-gray-400"
+              }`}
+            >
+              {r.fullName}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-6">
+        <div>
+          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-2">Estimated (Min)</label>
+          <input name="estimatedTime" type="number" defaultValue={task.estimatedTime || 0} className="w-full border border-gray-200 rounded-lg p-2 text-sm" />
+        </div>
       </div>
 
       <div>
