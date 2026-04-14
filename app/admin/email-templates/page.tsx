@@ -1,15 +1,15 @@
 import { prisma } from "@/lib/prisma";
+import EmailTemplateForm from "@/components/forms/EmailTemplateForm";
 
 export default async function EmailTemplatesPage() {
   const templates = await prisma.emailTemplate.findMany();
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
+    <div className="p-8 bg-gray-50 min-h-screen text-gray-900">
       <div className="max-w-5xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-2xl font-bold tracking-tight">Email Templates</h1>
-          <button className="bg-black text-white px-5 py-2.5 rounded-lg text-sm font-bold">New Template</button>
-        </div>
+        <h1 className="text-2xl font-bold tracking-tight mb-8">Recovery Communications</h1>
+
+        <EmailTemplateForm />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {templates.map(t => (
