@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { differenceInMinutes } from "date-fns";
+import { auth } from "@/auth";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
@@ -14,19 +15,37 @@ export async function GET(req: Request) {
 }
 
 export async function PATCH(req: Request) {
+  const session = await auth();
+  if (!session) return new Response("Unauthorized", { status: 401 });
+
   const body = await req.json();
   const { id, ...data } = body;
+
+  // Basic RBAC: Only Admin, Moderator, or assigned Resource (if we had resource mapping) can edit
+  const userRole = (session.user as any).role;
+  if (!["Admin", "Moderator", "User"].includes(userRole)) {
+     return new Response("Forbidden", { status: 403 });
+  }
+
   const startDate = data.startDate ? new Date(data.startDate) : null;
   const endDate = data.endDate ? new Date(data.endDate) : null;
   let actualDuration = null;
   let varianceDuration = null;
+
   if (startDate && endDate) {
     actualDuration = differenceInMinutes(endDate, startDate);
     if (data.estimatedTime) varianceDuration = actualDuration - data.estimatedTime;
   }
+
   const task = await prisma.task.update({
     where: { id },
-    data: { ...data, startDate, endDate, actualDuration, varianceDuration },
+    data: {
+      ...data,
+      startDate: startDate || undefined,
+      endDate: endDate || undefined,
+      actualDuration,
+      varianceDuration
+    },
   });
   return NextResponse.json(task);
 }
