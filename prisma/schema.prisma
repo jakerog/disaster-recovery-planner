@@ -71,6 +71,7 @@ model Exercise {
   status         String         @default("Planned") // Planned, In-Progress, On-Hold, Completed, Cancelled
   photo          String?
   notes          String?
+  mock3Required  Boolean        @default(false)
   owners         Resource[]     @relation("ExerciseOwner")
   resources      Resource[]
   vendors        Vendor[]
@@ -116,16 +117,16 @@ model Stage {
 
 model Task {
   id                 String    @id @default(cuid())
-  taskId             String    // Task ID from requirements
+  taskId             String
   workflow           String    @default("Sequential") // Sequential, Parallel
   resourceAllocation String    @default("Single") // Single, Multiple
-  status             String    @default("Not-Started") // Not-Started, In-Progress, Completed
+  status             String    @default("Not-Started") // Not-Started, In-Progress, Completed, Failed
   startDate          DateTime?
   endDate            DateTime?
   estimatedTime      Int?      // In minutes
-  actualDuration     Int?      // Calculated: End - Start in minutes
-  varianceDuration   Int?      // Calculated: Actual - Estimated
-  evidence           String?   // JSON or comma-separated photo URLs
+  actualDuration     Int?
+  varianceDuration   Int?
+  evidence           String?
   notes              String?
   stage              Stage     @relation(fields: [stageId], references: [id])
   stageId            String
@@ -161,7 +162,7 @@ model EmailTemplate {
 model EmailList {
   id        String   @id @default(cuid())
   name      String
-  emails    String   // Comma-separated or JSON
+  emails    String
   createdAt DateTime @default(now())
 }
 

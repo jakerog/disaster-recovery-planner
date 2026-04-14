@@ -3,24 +3,36 @@
 import { Phase, Exercise } from "@prisma/client";
 import { useState } from "react";
 
-export default function AvailabilityForm({ phases }: { phases: (Phase & { exercise: Exercise })[] }) {
+export default function AvailabilityForm({ phases, resourceId }: { phases: (Phase & { exercise: Exercise })[], resourceId: string }) {
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [status, setStatus] = useState<string>("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    setSuccess(false);
-
-    // Hardcoded user for demo
-    const resourceId = "cm6p..."; // We'd get this from session
+    const formData = new FormData(e.currentTarget);
 
     try {
-      // Logic for submitting multiple at once or just one
-      alert("Availability data has been recorded (Simulated)");
-      setSuccess(true);
+      const promises = phases.map(phase => {
+        const available = formData.get(`phase-${phase.id}`) === "yes";
+        return fetch("/api/availability", {
+          method: "POST",
+          body: JSON.stringify({
+            resourceId,
+            phaseId: phase.id,
+            exerciseId: phase.exerciseId,
+            available,
+            notes: "Checked in via portal"
+          })
+        });
+      });
+
+      await Promise.all(promises);
+      setStatus("Successfully recorded your availability.");
+      alert("Availability Saved");
     } catch (error) {
       console.error(error);
+      setStatus("Failed to save availability.");
     } finally {
       setLoading(false);
     }
@@ -38,7 +50,7 @@ export default function AvailabilityForm({ phases }: { phases: (Phase & { exerci
           </div>
           <div className="flex gap-4">
             <label className="flex items-center gap-2 cursor-pointer bg-white px-4 py-2 rounded-lg border border-gray-200 hover:border-green-500 transition-colors">
-              <input type="radio" name={`phase-${phase.id}`} value="yes" className="accent-green-600" />
+              <input type="radio" name={`phase-${phase.id}`} value="yes" defaultChecked className="accent-green-600" />
               <span className="text-sm font-bold text-gray-700">Available</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer bg-white px-4 py-2 rounded-lg border border-gray-200 hover:border-red-500 transition-colors">
@@ -49,9 +61,12 @@ export default function AvailabilityForm({ phases }: { phases: (Phase & { exerci
         </div>
       ))}
 
-      <button type="submit" disabled={loading} className="w-full py-4 bg-gray-900 text-white rounded-xl font-bold hover:bg-black transition-all shadow-lg shadow-gray-200 disabled:opacity-50">
-        {loading ? "Saving..." : success ? "Availability Saved!" : "Confirm Availability"}
-      </button>
+      <div>
+        <button type="submit" disabled={loading} className="w-full py-4 bg-black text-white rounded-xl font-bold hover:bg-gray-800 transition-all shadow-lg disabled:opacity-50 uppercase tracking-widest text-xs">
+          {loading ? "Syncing..." : "Confirm Presence"}
+        </button>
+        {status && <p className="mt-4 text-center text-sm font-bold text-green-600 uppercase tracking-tight">{status}</p>}
+      </div>
     </form>
   );
 }

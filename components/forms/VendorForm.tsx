@@ -7,57 +7,42 @@ import { useState, useEffect } from "react";
 export default function VendorForm({ initialData }: { initialData?: Vendor | null }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<any>(initialData || { name: "", type: "Internal", email: "", phone: "" });
+  const [data, setData] = useState<any>(initialData || { name: "", type: "Internal", email: "", phone: "", photo: "" });
 
   useEffect(() => {
     if (initialData) setData(initialData);
-    else setData({ name: "", type: "Internal", email: "", phone: "" });
+    else setData({ name: "", type: "Internal", email: "", phone: "", photo: "" });
   }, [initialData]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-
     try {
       const method = data.id ? "PATCH" : "POST";
-      const res = await fetch("/api/vendors", {
-        method,
-        body: JSON.stringify(data),
-      });
-
+      const res = await fetch("/api/vendors", { method, body: JSON.stringify(data) });
       if (res.ok) {
         router.refresh();
-        if (!data.id) setData({ name: "", type: "Internal", email: "", phone: "" });
-        alert(`Vendor ${data.id ? "updated" : "created"} successfully`);
+        if (!data.id) setData({ name: "", type: "Internal", email: "", phone: "", photo: "" });
+        alert("Vendor Saved");
       }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+    } catch (error) { console.error(error); } finally { setLoading(false); }
   };
 
   return (
     <form onSubmit={handleSubmit} className="bg-white p-8 rounded-2xl border border-gray-200 space-y-6 shadow-sm mb-10 text-gray-900">
-      <div className="flex justify-between items-center">
-        <h2 className="text-xl font-black tracking-tight">{data.id ? "Edit Vendor" : "Add Vendor"}</h2>
-        {data.id && <button type="button" onClick={() => setData({ name: "", type: "Internal", email: "", phone: "" })} className="text-xs font-bold text-gray-400 hover:text-black uppercase">Cancel Edit</button>}
-      </div>
+      <h2 className="text-xl font-black tracking-tight uppercase">{data.id ? "Edit Vendor" : "New Vendor"}</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Vendor Name</label>
-          <input value={data.name} onChange={e => setData({...data, name: e.target.value})} required className="w-full border border-gray-200 rounded-lg p-2 text-sm font-medium" placeholder="Cloud Solutions Inc." />
-        </div>
-        <div>
-          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Type</label>
-          <select value={data.type} onChange={e => setData({...data, type: e.target.value})} className="w-full border border-gray-200 rounded-lg p-2 text-sm font-medium bg-gray-50">
-            <option value="Internal">Internal</option>
-            <option value="External">External</option>
-          </select>
-        </div>
+        <input value={data.name} onChange={e => setData({...data, name: e.target.value})} placeholder="Vendor Name" required className="border p-2 rounded text-sm" />
+        <select value={data.type} onChange={e => setData({...data, type: e.target.value})} className="border p-2 rounded text-sm">
+          <option value="Internal">Internal</option>
+          <option value="External">External</option>
+        </select>
+        <input value={data.email || ""} onChange={e => setData({...data, email: e.target.value})} placeholder="Contact Email" type="email" className="border p-2 rounded text-sm" />
+        <input value={data.phone || ""} onChange={e => setData({...data, phone: e.target.value})} placeholder="Contact Phone" className="border p-2 rounded text-sm" />
+        <input value={data.photo || ""} onChange={e => setData({...data, photo: e.target.value})} placeholder="Logo URL" className="border p-2 rounded text-sm" />
       </div>
-      <button type="submit" disabled={loading} className="w-full py-4 bg-black text-white rounded-xl font-bold hover:bg-gray-800 transition-all shadow-lg disabled:opacity-50">
-        {loading ? "Saving..." : data.id ? "Update Vendor" : "Add Vendor"}
+      <button type="submit" disabled={loading} className="w-full py-3 bg-black text-white rounded font-bold uppercase tracking-widest">
+        {loading ? "Saving..." : "Save Vendor Profile"}
       </button>
     </form>
   );

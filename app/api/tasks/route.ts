@@ -19,20 +19,15 @@ export async function PATCH(req: Request) {
   if (!session) return new Response("Unauthorized", { status: 401 });
 
   const body = await req.json();
-  const { id, resourceIds, ...data } = body;
+  const { id, resourceIds, startDate, endDate, ...data } = body;
 
-  const userRole = (session.user as any).role;
-  if (!["Admin", "Moderator", "User"].includes(userRole)) {
-     return new Response("Forbidden", { status: 403 });
-  }
-
-  const startDate = data.startDate ? new Date(data.startDate) : null;
-  const endDate = data.endDate ? new Date(data.endDate) : null;
   let actualDuration = null;
   let varianceDuration = null;
 
   if (startDate && endDate) {
-    actualDuration = Math.abs(differenceInMinutes(endDate, startDate));
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    actualDuration = Math.abs(differenceInMinutes(end, start));
     if (data.estimatedTime) varianceDuration = actualDuration - data.estimatedTime;
   }
 
@@ -40,8 +35,8 @@ export async function PATCH(req: Request) {
     where: { id },
     data: {
       ...data,
-      startDate: startDate || undefined,
-      endDate: endDate || undefined,
+      startDate: startDate ? new Date(startDate) : undefined,
+      endDate: endDate ? new Date(endDate) : undefined,
       actualDuration,
       varianceDuration,
       resources: resourceIds ? { set: resourceIds.map((rid: string) => ({ id: rid })) } : undefined

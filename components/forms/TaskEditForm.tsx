@@ -1,126 +1,115 @@
 "use client";
 
-import { Task, Resource } from "@prisma/client";
+import { Task, Resource, Team, Stage } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function TaskEditForm({ task, allResources = [] }: { task: Task & { resources?: Resource[] }, allResources?: Resource[] }) {
+export default function TaskEditForm({ task, allResources = [], allTeams = [], allStages = [] }: {
+  task: Task & { resources?: Resource[] },
+  allResources?: Resource[],
+  allTeams?: Team[],
+  allStages?: Stage[]
+}) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [selectedResources, setSelectedResources] = useState<string[]>(task.resources?.map(r => r.id) || []);
+  const [resourceIds, setResourceIds] = useState<string[]>(task.resources?.map(r => r.id) || []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries());
+    const formProps = Object.fromEntries(formData);
 
     try {
       const res = await fetch("/api/tasks", {
         method: "PATCH",
         body: JSON.stringify({
+          ...formProps,
           id: task.id,
-          taskId: data.taskId,
-          status: data.status,
-          workflow: data.workflow,
-          resourceAllocation: data.resourceAllocation,
-          notes: data.notes,
-          estimatedTime: parseInt(data.estimatedTime as string),
-          startDate: data.startDate && data.startTime ? new Date(`${data.startDate}T${data.startTime}`) : null,
-          endDate: data.endDate && data.endTime ? new Date(`${data.endDate}T${data.endTime}`) : null,
-          resourceIds: selectedResources,
+          estimatedTime: parseInt(formProps.estimatedTime as string),
+          resourceIds,
+          startDate: formProps.startDate && formProps.startTime ? new Date(`${formProps.startDate}T${formProps.startTime}`) : null,
+          endDate: formProps.endDate && formProps.endTime ? new Date(`${formProps.endDate}T${formProps.endTime}`) : null,
         }),
       });
-
-      if (res.ok) {
-        router.push(`/exercise/${task.exerciseId}`);
-        router.refresh();
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const toggleResource = (id: string) => {
-    setSelectedResources(prev =>
-      prev.includes(id) ? prev.filter(r => r !== id) : [...prev, id]
-    );
+      if (res.ok) { router.push(`/exercise/${task.exerciseId}`); router.refresh(); }
+    } catch (error) { console.error(error); } finally { setLoading(false); }
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 text-gray-900">
-       <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-2">Task ID</label>
-          <input name="taskId" defaultValue={task.taskId} className="w-full border border-gray-200 rounded-lg p-2 text-sm font-medium" />
+          <label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">Task ID</label>
+          <input name="taskId" defaultValue={task.taskId} className="w-full border p-2 rounded text-sm" />
         </div>
         <div>
-          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-2">Status</label>
-          <select name="status" defaultValue={task.status} className="w-full border border-gray-200 rounded-lg p-2 text-sm font-bold bg-gray-50">
-            <option value="Not-Started">Not-Started</option>
-            <option value="In-Progress">In-Progress</option>
-            <option value="Completed">Completed</option>
-          </select>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-6">
-        <div>
-          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-2">Workflow</label>
-          <select name="workflow" defaultValue={task.workflow} className="w-full border border-gray-200 rounded-lg p-2 text-sm font-medium">
-            <option value="Sequential">Sequential</option>
-            <option value="Parallel">Parallel</option>
+          <label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">Status</label>
+          <select name="status" defaultValue={task.status} className="w-full border p-2 rounded text-sm">
+            <option>Not-Started</option><option>In-Progress</option><option>Completed</option><option>Failed</option>
           </select>
         </div>
         <div>
-          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-2">Allocation</label>
-          <select name="resourceAllocation" defaultValue={task.resourceAllocation} className="w-full border border-gray-200 rounded-lg p-2 text-sm font-medium">
-            <option value="Single">Single</option>
-            <option value="Multiple">Multiple</option>
+          <label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">Workflow</label>
+          <select name="workflow" defaultValue={task.workflow} className="w-full border p-2 rounded text-sm">
+            <option>Sequential</option><option>Parallel</option>
+          </select>
+        </div>
+        <div>
+          <label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">Allocation</label>
+          <select name="resourceAllocation" defaultValue={task.resourceAllocation} className="w-full border p-2 rounded text-sm">
+            <option>Single</option><option>Multiple</option>
+          </select>
+        </div>
+        <div>
+          <label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">Start Date</label>
+          <input name="startDate" type="date" defaultValue={task.startDate?.toISOString().split('T')[0]} className="w-full border p-2 rounded text-sm" />
+        </div>
+        <div>
+          <label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">Start Time</label>
+          <input name="startTime" type="time" defaultValue={task.startDate?.toISOString().split('T')[1]?.substring(0,5)} className="w-full border p-2 rounded text-sm" />
+        </div>
+        <div>
+          <label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">End Date</label>
+          <input name="endDate" type="date" defaultValue={task.endDate?.toISOString().split('T')[0]} className="w-full border p-2 rounded text-sm" />
+        </div>
+        <div>
+          <label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">End Time</label>
+          <input name="endTime" type="time" defaultValue={task.endDate?.toISOString().split('T')[1]?.substring(0,5)} className="w-full border p-2 rounded text-sm" />
+        </div>
+        <div>
+          <label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">Est Min</label>
+          <input name="estimatedTime" type="number" defaultValue={task.estimatedTime || 0} className="w-full border p-2 rounded text-sm" />
+        </div>
+        <div>
+          <label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">Team</label>
+          <select name="teamId" defaultValue={task.teamId || ""} className="w-full border p-2 rounded text-sm">
+            <option value="">Select Team</option>
+            {allTeams.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
           </select>
         </div>
       </div>
 
       <div>
-        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-2">Assigned Resources</label>
-        <div className="flex flex-wrap gap-2 mt-2">
+        <label className="text-[10px] font-bold text-gray-400 block mb-2 uppercase">Allocate Resources</label>
+        <div className="flex flex-wrap gap-2">
           {allResources.map(r => (
-            <button
-              key={r.id}
-              type="button"
-              onClick={() => toggleResource(r.id)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${
-                selectedResources.includes(r.id)
-                  ? "bg-black text-white border-black"
-                  : "bg-white text-gray-400 border-gray-200 hover:border-gray-400"
-              }`}
-            >
+            <button key={r.id} type="button" onClick={() => setResourceIds(prev => prev.includes(r.id) ? prev.filter(i => i !== r.id) : [...prev, r.id])}
+              className={`px-3 py-1 rounded text-[10px] font-bold border uppercase tracking-widest ${resourceIds.includes(r.id) ? "bg-black text-white" : "bg-white text-gray-400"}`}>
               {r.fullName}
             </button>
           ))}
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
-        <div>
-          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-2">Estimated (Min)</label>
-          <input name="estimatedTime" type="number" defaultValue={task.estimatedTime || 0} className="w-full border border-gray-200 rounded-lg p-2 text-sm" />
-        </div>
-      </div>
-
       <div>
-        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-2">Notes</label>
-        <textarea name="notes" defaultValue={task.notes || ""} className="w-full border border-gray-200 rounded-lg p-3 text-sm min-h-[100px]" placeholder="Execution details..."></textarea>
+        <label className="text-[10px] font-bold text-gray-400 block mb-1 uppercase">Notes</label>
+        <textarea name="notes" defaultValue={task.notes || ""} className="w-full border p-2 rounded text-sm min-h-[80px]" />
       </div>
 
-      <div className="pt-6 border-t border-gray-100 flex gap-4">
-        <button type="submit" disabled={loading} className="flex-1 py-3 bg-black text-white rounded-xl font-bold hover:bg-gray-800 transition-all disabled:opacity-50">
-          {loading ? "Saving..." : "Save Changes"}
-        </button>
-        <button type="button" onClick={() => router.back()} className="px-6 py-3 bg-white text-gray-500 border border-gray-200 rounded-xl font-bold">Cancel</button>
-      </div>
+      <button type="submit" disabled={loading} className="w-full py-4 bg-black text-white rounded font-bold uppercase tracking-widest hover:bg-gray-800 transition-colors">
+        {loading ? "Syncing..." : "Update Task Metadata"}
+      </button>
     </form>
   );
 }
