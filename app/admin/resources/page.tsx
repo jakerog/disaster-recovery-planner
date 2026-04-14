@@ -1,19 +1,40 @@
-import { prisma } from "@/lib/prisma";
-import ResourceForm from "@/components/forms/ResourceForm";
+"use client";
 
-export default async function AdminResourcesPage() {
-  const [resources, teams, vendors] = await Promise.all([
-    prisma.resource.findMany({ include: { team: true, vendor: true } }),
-    prisma.team.findMany(),
-    prisma.vendor.findMany(),
-  ]);
+import { Resource, Team, Vendor } from "@prisma/client";
+import ResourceForm from "@/components/forms/ResourceForm";
+import { useState, useEffect } from "react";
+
+export default function AdminResourcesPage() {
+  const [resources, setResources] = useState<any[]>([]);
+  const [teams, setTeams] = useState<Team[]>([]);
+  const [vendors, setVendors] = useState<Vendor[]>([]);
+  const [editingResource, setEditingResource] = useState<Resource | null>(null);
+
+  const fetchData = async () => {
+    const [resR, resT, resV] = await Promise.all([
+      fetch("/api/resources").then(r => r.json()),
+      fetch("/api/teams").then(r => r.json()),
+      fetch("/api/vendors").then(r => r.json()),
+    ]);
+    setResources(resR);
+    setTeams(resT);
+    setVendors(resV);
+  };
+
+  useEffect(() => { fetchData(); }, []);
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure?")) return;
+    await fetch(`/api/resources?id=${id}`, { method: "DELETE" });
+    fetchData();
+  };
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen text-gray-900">
       <div className="max-w-5xl mx-auto">
         <h1 className="text-3xl font-black mb-10 tracking-tighter uppercase">Resource Management</h1>
 
-        <ResourceForm teams={teams} vendors={vendors} />
+        <ResourceForm initialData={editingResource} teams={teams} vendors={vendors} />
 
         <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
           <table className="w-full text-left">
@@ -40,8 +61,8 @@ export default async function AdminResourcesPage() {
                     <div className="text-[10px] text-blue-600 font-black uppercase tracking-tighter">{r.vendor?.name}</div>
                   </td>
                   <td className="px-6 py-4 text-sm flex gap-4">
-                    <button className="text-gray-400 font-bold hover:text-black transition-colors">Edit</button>
-                    <button className="text-red-300 font-bold hover:text-red-600 transition-colors">Delete</button>
+                    <button onClick={() => setEditingResource(r)} className="text-gray-400 font-bold hover:text-black transition-colors">Edit</button>
+                    <button onClick={() => handleDelete(r.id)} className="text-red-300 font-bold hover:text-red-600 transition-colors">Delete</button>
                   </td>
                 </tr>
               ))}

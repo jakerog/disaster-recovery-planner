@@ -1,23 +1,16 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-export async function GET() {
-  const lists = await prisma.emailList.findMany();
-  return NextResponse.json(lists);
-}
-
 export async function POST(req: Request) {
   const body = await req.json();
-  const list = await prisma.emailList.create({
-    data: { name: body.name, emails: body.emails },
-  });
-  return NextResponse.json(list);
+  const event = await prisma.event.create({ data: body });
+  return NextResponse.json(event);
 }
 
 export async function DELETE(req: Request) {
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");
   if (!id) return new Response("Missing ID", { status: 400 });
-  await prisma.emailList.delete({ where: { id } });
+  await prisma.event.delete({ where: { id } });
   return new Response(null, { status: 204 });
 }
