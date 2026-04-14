@@ -21,7 +21,6 @@ export async function PATCH(req: Request) {
   const body = await req.json();
   const { id, ...data } = body;
 
-  // Basic RBAC: Only Admin, Moderator, or assigned Resource (if we had resource mapping) can edit
   const userRole = (session.user as any).role;
   if (!["Admin", "Moderator", "User"].includes(userRole)) {
      return new Response("Forbidden", { status: 403 });
@@ -33,7 +32,7 @@ export async function PATCH(req: Request) {
   let varianceDuration = null;
 
   if (startDate && endDate) {
-    actualDuration = differenceInMinutes(endDate, startDate);
+    actualDuration = Math.abs(differenceInMinutes(endDate, startDate));
     if (data.estimatedTime) varianceDuration = actualDuration - data.estimatedTime;
   }
 

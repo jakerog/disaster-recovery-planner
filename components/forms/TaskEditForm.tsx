@@ -19,11 +19,14 @@ export default function TaskEditForm({ task }: { task: Task }) {
         method: "PATCH",
         body: JSON.stringify({
           id: task.id,
+          taskId: data.taskId,
           status: data.status,
           workflow: data.workflow,
           resourceAllocation: data.resourceAllocation,
           notes: data.notes,
           estimatedTime: parseInt(data.estimatedTime as string),
+          startDate: data.startDate && data.startTime ? new Date(`${data.startDate}T${data.startTime}`) : null,
+          endDate: data.endDate && data.endTime ? new Date(`${data.endDate}T${data.endTime}`) : null,
         }),
       });
 
@@ -40,6 +43,21 @@ export default function TaskEditForm({ task }: { task: Task }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+       <div className="grid grid-cols-2 gap-6">
+        <div>
+          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-2">Task ID</label>
+          <input name="taskId" defaultValue={task.taskId} className="w-full border border-gray-200 rounded-lg p-2 text-sm font-medium" />
+        </div>
+        <div>
+          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-2">Status</label>
+          <select name="status" defaultValue={task.status} className="w-full border border-gray-200 rounded-lg p-2 text-sm font-bold bg-gray-50">
+            <option value="Not-Started">Not-Started</option>
+            <option value="In-Progress">In-Progress</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </div>
+      </div>
+
       <div className="grid grid-cols-2 gap-6">
         <div>
           <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-2">Workflow</label>
@@ -57,13 +75,26 @@ export default function TaskEditForm({ task }: { task: Task }) {
         </div>
       </div>
 
-      <div>
-        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-2">Status</label>
-        <select name="status" defaultValue={task.status} className="w-full border border-gray-200 rounded-lg p-3 text-sm font-bold bg-gray-50">
-          <option value="Not-Started">Not-Started</option>
-          <option value="In-Progress">In-Progress</option>
-          <option value="Completed">Completed</option>
-        </select>
+      <div className="grid grid-cols-2 gap-6">
+        <div>
+          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-2">Start Date</label>
+          <input name="startDate" type="date" defaultValue={task.startDate?.toISOString().split('T')[0]} className="w-full border border-gray-200 rounded-lg p-2 text-sm" />
+        </div>
+        <div>
+          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-2">Start Time</label>
+          <input name="startTime" type="time" defaultValue={task.startDate?.toISOString().split('T')[1]?.substring(0,5)} className="w-full border border-gray-200 rounded-lg p-2 text-sm" />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-6">
+        <div>
+          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-2">End Date</label>
+          <input name="endDate" type="date" defaultValue={task.endDate?.toISOString().split('T')[0]} className="w-full border border-gray-200 rounded-lg p-2 text-sm" />
+        </div>
+        <div>
+          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-2">End Time</label>
+          <input name="endTime" type="time" defaultValue={task.endDate?.toISOString().split('T')[1]?.substring(0,5)} className="w-full border border-gray-200 rounded-lg p-2 text-sm" />
+        </div>
       </div>
 
       <div>

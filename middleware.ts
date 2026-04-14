@@ -10,10 +10,29 @@ export default auth((req: NextRequest & { auth: any }) => {
   const isLoggedIn = !!req.auth;
   const userRole = req.auth?.user?.role;
 
+  // Public paths
+  if (nextUrl.pathname === "/" || nextUrl.pathname === "/login") {
+    return NextResponse.next();
+  }
+
+  if (!isLoggedIn) {
+    return NextResponse.redirect(new URL("/login", nextUrl));
+  }
+
+  // Admin protection
   if (nextUrl.pathname.startsWith("/admin")) {
-    if (!isLoggedIn) return NextResponse.redirect(new URL("/login", nextUrl));
     if (userRole !== "Admin") return NextResponse.redirect(new URL("/", nextUrl));
   }
+
+  // Report protection
+  if (nextUrl.pathname.startsWith("/reports")) {
+    if (!["Admin", "Moderator", "Report"].includes(userRole)) {
+      return NextResponse.redirect(new URL("/", nextUrl));
+    }
+  }
+
+  // Exercise and Availability are for all authenticated users (RBAC handled at component level for editing)
+
   return NextResponse.next();
 });
 
