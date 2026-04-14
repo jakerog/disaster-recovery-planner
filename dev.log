@@ -5,84 +5,38 @@
 ▲ Next.js 16.2.3 (Turbopack)
 - Local:         http://localhost:3000
 - Network:       http://192.168.0.2:3000
-✓ Ready in 537ms
+✓ Ready in 1245ms
 ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
 
 [31m[auth][error][0m MissingSecret: Please define a `secret`. Read more at https://errors.authjs.dev#missingsecret
     at assertConfig (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:513:16)
     at Auth (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:5331:210)
-○ Compiling /_not-found/page ...
- GET /exercise/dummy 404 in 6.0s (next.js: 5.1s, proxy.ts: 268ms, application-code: 666ms)
+ GET / 200 in 1480ms (next.js: 646ms, proxy.ts: 293ms, application-code: 541ms)
 [31m[auth][error][0m MissingSecret: Please define a `secret`. Read more at https://errors.authjs.dev#missingsecret
     at assertConfig (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:513:16)
     at Auth (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:5331:210)
-[31m[auth][error][0m MissingSecret: Please define a `secret`. Read more at https://errors.authjs.dev#missingsecret
-    at assertConfig (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:513:16)
-    at Auth (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:5331:210)
-[31m[auth][error][0m MissingSecret: Please define a `secret`. Read more at https://errors.authjs.dev#missingsecret
-    at assertConfig (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:513:16)
-    at Auth (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:5331:210)
- GET / 200 in 1951ms (next.js: 1441ms, proxy.ts: 75ms, application-code: 435ms)
-[31m[auth][error][0m MissingSecret: Please define a `secret`. Read more at https://errors.authjs.dev#missingsecret
-    at assertConfig (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:513:16)
-    at Auth (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:5331:210)
-[browser] Image with src "http://localhost:3000/vercel.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[31m[auth][error][0m MissingSecret: Please define a `secret`. Read more at https://errors.authjs.dev#missingsecret
-    at assertConfig (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:513:16)
-    at Auth (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:5331:210)
-[31m[auth][error][0m MissingSecret: Please define a `secret`. Read more at https://errors.authjs.dev#missingsecret
-    at assertConfig (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:513:16)
-    at Auth (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:5331:210)
- GET / 200 in 202ms (next.js: 68ms, proxy.ts: 23ms, application-code: 112ms)
-[31m[auth][error][0m MissingSecret: Please define a `secret`. Read more at https://errors.authjs.dev#missingsecret
-    at assertConfig (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:513:16)
-    at Auth (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:5331:210)
-[31m[auth][error][0m MissingSecret: Please define a `secret`. Read more at https://errors.authjs.dev#missingsecret
-    at assertConfig (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:513:16)
-    at Auth (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:5331:210)
-[browser] Image with src "http://localhost:3000/vercel.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[31m[auth][error][0m MissingSecret: Please define a `secret`. Read more at https://errors.authjs.dev#missingsecret
-    at assertConfig (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:513:16)
-    at Auth (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:5331:210)
-prisma:query SELECT `main`.`Phase`.`id`, `main`.`Phase`.`name`, `main`.`Phase`.`order`, `main`.`Phase`.`exerciseId` FROM `main`.`Phase` WHERE 1=1 LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`Exercise`.`id`, `main`.`Exercise`.`name`, `main`.`Exercise`.`startDate`, `main`.`Exercise`.`endDate`, `main`.`Exercise`.`status`, `main`.`Exercise`.`photo`, `main`.`Exercise`.`notes` FROM `main`.`Exercise` WHERE `main`.`Exercise`.`id` IN (?) LIMIT ? OFFSET ?
- GET /availability 200 in 739ms (next.js: 502ms, proxy.ts: 8ms, application-code: 229ms)
-✓ Compiled in 271ms
-[31m[auth][error][0m MissingSecret: Please define a `secret`. Read more at https://errors.authjs.dev#missingsecret
-    at assertConfig (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:513:16)
-    at Auth (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:5331:210)
- GET /exercise/dummy 404 in 201ms (next.js: 64ms, proxy.ts: 45ms, application-code: 92ms)
-[31m[auth][error][0m MissingSecret: Please define a `secret`. Read more at https://errors.authjs.dev#missingsecret
-    at assertConfig (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:513:16)
-    at Auth (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:5331:210)
-[31m[auth][error][0m MissingSecret: Please define a `secret`. Read more at https://errors.authjs.dev#missingsecret
-    at assertConfig (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:513:16)
-    at Auth (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:5331:210)
- GET / 200 in 126ms (next.js: 26ms, proxy.ts: 10ms, application-code: 90ms)
-[31m[auth][error][0m MissingSecret: Please define a `secret`. Read more at https://errors.authjs.dev#missingsecret
-    at assertConfig (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:513:16)
-    at Auth (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:5331:210)
-[31m[auth][error][0m MissingSecret: Please define a `secret`. Read more at https://errors.authjs.dev#missingsecret
-    at assertConfig (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:513:16)
-    at Auth (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:5331:210)
- GET / 200 in 63ms (next.js: 4ms, proxy.ts: 4ms, application-code: 55ms)
-[31m[auth][error][0m MissingSecret: Please define a `secret`. Read more at https://errors.authjs.dev#missingsecret
-    at assertConfig (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:513:16)
-    at Auth (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:5331:210)
-prisma:query SELECT 1
-prisma:query SELECT `main`.`Phase`.`id`, `main`.`Phase`.`name`, `main`.`Phase`.`order`, `main`.`Phase`.`exerciseId` FROM `main`.`Phase` WHERE 1=1 LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`Exercise`.`id`, `main`.`Exercise`.`name`, `main`.`Exercise`.`startDate`, `main`.`Exercise`.`endDate`, `main`.`Exercise`.`status`, `main`.`Exercise`.`photo`, `main`.`Exercise`.`notes` FROM `main`.`Exercise` WHERE `main`.`Exercise`.`id` IN (?) LIMIT ? OFFSET ?
- GET /availability 200 in 104ms (next.js: 18ms, proxy.ts: 6ms, application-code: 79ms)
-✓ Compiled in 52ms
- GET /exercise/dummy 404 in 237ms (next.js: 72ms, application-code: 165ms)
-prisma:query SELECT 1
-prisma:query SELECT `main`.`Exercise`.`id`, `main`.`Exercise`.`name`, `main`.`Exercise`.`startDate`, `main`.`Exercise`.`endDate`, `main`.`Exercise`.`status`, `main`.`Exercise`.`photo`, `main`.`Exercise`.`notes` FROM `main`.`Exercise` WHERE 1=1 LIMIT ? OFFSET ?
- GET /admin/exercises 200 in 962ms (next.js: 807ms, application-code: 155ms)
-prisma:query SELECT `main`.`Resource`.`id`, `main`.`Resource`.`fullName`, `main`.`Resource`.`email`, `main`.`Resource`.`phoneNumber`, `main`.`Resource`.`telephoneNumber`, `main`.`Resource`.`photo`, `main`.`Resource`.`teamId`, `main`.`Resource`.`vendorId`, `main`.`Resource`.`exerciseId` FROM `main`.`Resource` WHERE 1=1 LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Exercise`.`id`, `main`.`Exercise`.`name`, `main`.`Exercise`.`startDate`, `main`.`Exercise`.`endDate`, `main`.`Exercise`.`status`, `main`.`Exercise`.`photo`, `main`.`Exercise`.`notes` FROM `main`.`Exercise` WHERE (`main`.`Exercise`.`id` = ? AND 1=1) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Stage`.`id`, `main`.`Stage`.`name`, `main`.`Stage`.`startDate`, `main`.`Stage`.`endDate`, `main`.`Stage`.`exerciseId`, `main`.`Stage`.`eventId`, `main`.`Stage`.`notes` FROM `main`.`Stage` WHERE `main`.`Stage`.`exerciseId` IN (?) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Task`.`id`, `main`.`Task`.`taskId`, `main`.`Task`.`workflow`, `main`.`Task`.`resourceAllocation`, `main`.`Task`.`status`, `main`.`Task`.`startDate`, `main`.`Task`.`endDate`, `main`.`Task`.`estimatedTime`, `main`.`Task`.`actualDuration`, `main`.`Task`.`varianceDuration`, `main`.`Task`.`evidence`, `main`.`Task`.`notes`, `main`.`Task`.`stageId`, `main`.`Task`.`teamId`, `main`.`Task`.`exerciseId` FROM `main`.`Task` WHERE `main`.`Task`.`stageId` IN (?,?,?,?,?,?,?,?) ORDER BY `main`.`Task`.`taskId` ASC LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`_ResourceToTask`.`B`, `main`.`_ResourceToTask`.`A` FROM `main`.`_ResourceToTask` WHERE `main`.`_ResourceToTask`.`B` IN (?)
 prisma:query SELECT `main`.`Team`.`id`, `main`.`Team`.`name`, `main`.`Team`.`description`, `main`.`Team`.`photo`, `main`.`Team`.`vendorId`, `main`.`Team`.`exerciseId` FROM `main`.`Team` WHERE `main`.`Team`.`id` IN (?) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`Vendor`.`id`, `main`.`Vendor`.`name`, `main`.`Vendor`.`type`, `main`.`Vendor`.`email`, `main`.`Vendor`.`phone`, `main`.`Vendor`.`photo`, `main`.`Vendor`.`exerciseId` FROM `main`.`Vendor` WHERE `main`.`Vendor`.`id` IN (?) LIMIT ? OFFSET ?
- GET /admin/resources 200 in 989ms (next.js: 895ms, application-code: 94ms)
-prisma:query SELECT `main`.`Phase`.`id`, `main`.`Phase`.`name`, `main`.`Phase`.`order`, `main`.`Phase`.`exerciseId` FROM `main`.`Phase` WHERE 1=1 LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`Exercise`.`id`, `main`.`Exercise`.`name`, `main`.`Exercise`.`startDate`, `main`.`Exercise`.`endDate`, `main`.`Exercise`.`status`, `main`.`Exercise`.`photo`, `main`.`Exercise`.`notes` FROM `main`.`Exercise` WHERE `main`.`Exercise`.`id` IN (?) LIMIT ? OFFSET ?
- GET /availability 200 in 114ms (next.js: 12ms, application-code: 102ms)
-✓ Compiled in 142ms
+ GET /exercise/cmnyy8ain0000j64bmo6ex2d3 200 in 2.5s (next.js: 2.0s, proxy.ts: 20ms, application-code: 489ms)
+[31m[auth][error][0m MissingSecret: Please define a `secret`. Read more at https://errors.authjs.dev#missingsecret
+    at assertConfig (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:513:16)
+    at Auth (/app/.next/dev/server/edge/chunks/node_modules_@auth_core_0ejd557._.js:5331:210)
+prisma:query SELECT `main`.`Exercise`.`id`, `main`.`Exercise`.`name`, `main`.`Exercise`.`startDate`, `main`.`Exercise`.`endDate`, `main`.`Exercise`.`status`, `main`.`Exercise`.`photo`, `main`.`Exercise`.`notes` FROM `main`.`Exercise` WHERE (`main`.`Exercise`.`id` = ? AND 1=1) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Stage`.`id`, `main`.`Stage`.`name`, `main`.`Stage`.`startDate`, `main`.`Stage`.`endDate`, `main`.`Stage`.`exerciseId`, `main`.`Stage`.`eventId`, `main`.`Stage`.`notes` FROM `main`.`Stage` WHERE `main`.`Stage`.`exerciseId` IN (?) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Task`.`id`, `main`.`Task`.`taskId`, `main`.`Task`.`workflow`, `main`.`Task`.`resourceAllocation`, `main`.`Task`.`status`, `main`.`Task`.`startDate`, `main`.`Task`.`endDate`, `main`.`Task`.`estimatedTime`, `main`.`Task`.`actualDuration`, `main`.`Task`.`varianceDuration`, `main`.`Task`.`evidence`, `main`.`Task`.`notes`, `main`.`Task`.`stageId`, `main`.`Task`.`teamId`, `main`.`Task`.`exerciseId` FROM `main`.`Task` WHERE `main`.`Task`.`stageId` IN (?,?,?,?,?,?,?,?) LIMIT ? OFFSET ?
+The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+ GET /reports/cmnyy8ain0000j64bmo6ex2d3 200 in 1217ms (next.js: 883ms, proxy.ts: 12ms, application-code: 322ms)
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
