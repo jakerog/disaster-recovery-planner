@@ -147,6 +147,7 @@ model EmailTemplate {
   subject   String
   body      String
   createdAt DateTime @default(now())
+  schedules EmailSchedule[]
 }
 
 model EmailList {
@@ -154,12 +155,14 @@ model EmailList {
   name      String
   emails    String
   createdAt DateTime @default(now())
+  schedules EmailSchedule[]
 }
 
 model EmailSchedule {
   id            String   @id @default(cuid())
+  template      EmailTemplate @relation(fields: [templateId], references: [id])
   templateId    String
-  listId        String
+  lists         EmailList[]
   scheduledAt   DateTime
   status        String   @default("Pending") // Pending, Sent, Failed
 }

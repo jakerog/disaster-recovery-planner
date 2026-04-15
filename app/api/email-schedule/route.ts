@@ -3,26 +3,26 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   const body = await req.json();
-  const { templateId, listId, scheduledAt } = body;
+  const { templateId, listIds, scheduledAt } = body;
 
   const schedule = await prisma.emailSchedule.create({
     data: {
       templateId,
-      listId,
+      lists: {
+        connect: Array.isArray(listIds) ? listIds.map((id: string) => ({ id })) : [{ id: body.listId }]
+      },
       scheduledAt: new Date(scheduledAt),
       status: "Pending",
     },
   });
-
-  // Simulate background processing
-  console.log(`[EMAIL SIMULATION] Scheduled email with template ${templateId} to list ${listId} at ${scheduledAt}`);
 
   return NextResponse.json(schedule);
 }
 
 export async function GET() {
   const schedules = await prisma.emailSchedule.findMany({
-    orderBy: { scheduledAt: "desc" }
+    orderBy: { scheduledAt: "desc" },
+    include: { template: true, lists: true }
   });
   return NextResponse.json(schedules);
 }
