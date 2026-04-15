@@ -21,14 +21,32 @@ export async function PATCH(req: Request) {
   const body = await req.json();
   const { id, resourceIds, startDate, endDate, ...data } = body;
 
-  let actualDuration = null;
-  let varianceDuration = null;
+  const currentTask = await prisma.task.findUnique({
+    where: { id },
+    include: { resources: true }
+  });
 
-  if (startDate && endDate) {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    actualDuration = Math.abs(differenceInMinutes(end, start));
-    if (data.estimatedTime) varianceDuration = actualDuration - data.estimatedTime;
+  if (!currentTask) return new Response("Task not found", { status: 404 });
+
+  // RBAC: Non-admin users can only edit their own tasks
+  const isOwner = currentTask.resources.some(r => r.email === session.user?.email);
+  const userRole = (session.user as any)?.role;
+  const isAdmin = userRole === "Admin" || userRole === "Moderator";
+
+  if (!isAdmin && !isOwner) {
+    return new Response("Permission Denied: You can only edit tasks assigned to you.", { status: 403 });
+  }
+
+  let actualDuration = currentTask.actualDuration;
+  let varianceDuration = currentTask.varianceDuration;
+
+  const start = startDate ? new Date(startDate) : (currentTask.startDate || null);
+  const end = endDate ? new Date(endDate) : (currentTask.endDate || null);
+
+  if (start && end) {
+    actualDuration = Math.abs(differenceInMinutes(new Date(end), new Date(start)));
+    const est = data.estimatedTime || currentTask.estimatedTime;
+    if (est) varianceDuration = actualDuration - est;
   }
 
   const task = await prisma.task.update({

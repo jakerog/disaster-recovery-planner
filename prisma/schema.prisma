@@ -7,21 +7,12 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  password      String?
-  role          String    @default("User") // Admin, User, Report, Moderator
-  image         String?
-  resource      Resource? @relation(fields: [resourceId], references: [id])
-  resourceId    String?   @unique
-}
-
 model Resource {
   id              String         @id @default(cuid())
   fullName        String
   email           String         @unique
+  password        String?
+  role            String         @default("User") // Admin, User, Report, Moderator
   phoneNumber     String?
   telephoneNumber String?
   photo           String?
@@ -32,7 +23,6 @@ model Resource {
   vendorId        String?
   exercise        Exercise?      @relation(fields: [exerciseId], references: [id])
   exerciseId      String?
-  user            User?
   ownedExercises  Exercise[]     @relation("ExerciseOwner")
   availabilities  Availability[]
 }
