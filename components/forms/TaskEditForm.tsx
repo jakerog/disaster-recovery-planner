@@ -4,6 +4,7 @@ import { Task, Resource, Team, Stage } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
+import { Camera, Save } from "lucide-react";
 
 export default function TaskEditForm({ task, allResources = [], allTeams = [], allStages = [] }: {
   task: Task & { resources?: Resource[] },
@@ -40,7 +41,10 @@ export default function TaskEditForm({ task, allResources = [], allTeams = [], a
           endDate: formProps.endDate && formProps.endTime ? new Date(`${formProps.endDate}T${formProps.endTime}`) : null,
         }),
       });
-      if (res.ok) { router.push(`/exercise/${task.exerciseId}`); router.refresh(); }
+      if (res.ok) {
+        router.push(`/exercise/${task.exerciseId}`);
+        router.refresh();
+      }
       else { alert(await res.text()); }
     } catch (error) { console.error(error); } finally { setLoading(false); }
   };
@@ -55,65 +59,92 @@ export default function TaskEditForm({ task, allResources = [], allTeams = [], a
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-10 text-gray-900 skeuo-card p-12 rounded-[2.5rem]">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <form onSubmit={handleSubmit} className="space-y-12 text-gray-900 skeuo-card p-10 md:p-16 rounded-[3rem] border border-white">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
         <div>
-          <label className="text-[10px] font-black text-gray-400 uppercase block mb-2 tracking-widest">Task Designation</label>
-          <input name="taskId" defaultValue={task.taskId} className="skeuo-inset w-full p-4 text-sm font-bold border-none" />
+          <label className="text-[10px] font-black text-gray-400 uppercase block mb-3 tracking-widest px-1">Task Designation (ID)</label>
+          <input name="taskId" defaultValue={task.taskId} className="skeuo-inset w-full p-4 text-sm font-bold border-none focus:ring-1 focus:ring-blue-500/20" />
         </div>
         <div>
-          <label className="text-[10px] font-black text-gray-400 uppercase block mb-2 tracking-widest">Status Protocol</label>
-          <select name="status" defaultValue={task.status} className="skeuo-inset w-full p-4 text-sm font-bold border-none appearance-none">
-            <option>Not-Started</option><option>In-Progress</option><option>Completed</option><option>Failed</option>
+          <label className="text-[10px] font-black text-gray-400 uppercase block mb-3 tracking-widest px-1">Operational Stage</label>
+          <select name="stageId" defaultValue={task.stageId} className="skeuo-inset w-full p-4 text-sm font-bold border-none appearance-none cursor-pointer">
+            {allStages.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
           </select>
         </div>
         <div>
-          <label className="text-[10px] font-black text-gray-400 uppercase block mb-2 tracking-widest">Workflow Chain</label>
-          <select name="workflow" defaultValue={task.workflow} className="skeuo-inset w-full p-4 text-sm font-bold border-none appearance-none">
-            <option>Sequential</option><option>Parallel</option>
+          <label className="text-[10px] font-black text-gray-400 uppercase block mb-3 tracking-widest px-1">Status Protocol</label>
+          <select name="status" defaultValue={task.status} className="skeuo-inset w-full p-4 text-sm font-bold border-none appearance-none cursor-pointer">
+            <option value="Not-Started">Not-Started</option>
+            <option value="In-Progress">In-Progress</option>
+            <option value="Completed">Completed</option>
+            <option value="Failed">Failed</option>
           </select>
         </div>
         <div>
-          <label className="text-[10px] font-black text-gray-400 uppercase block mb-2 tracking-widest">Allocation Profile</label>
-          <select name="resourceAllocation" defaultValue={task.resourceAllocation} className="skeuo-inset w-full p-4 text-sm font-bold border-none appearance-none">
-            <option>Single</option><option>Multiple</option>
+          <label className="text-[10px] font-black text-gray-400 uppercase block mb-3 tracking-widest px-1">Workflow Chain</label>
+          <select name="workflow" defaultValue={task.workflow} className="skeuo-inset w-full p-4 text-sm font-bold border-none appearance-none cursor-pointer">
+            <option value="Sequential">Sequential</option>
+            <option value="Parallel">Parallel</option>
           </select>
         </div>
         <div>
-          <label className="text-[10px] font-black text-gray-400 uppercase block mb-2 tracking-widest">Deployment Date</label>
-          <input name="startDate" type="date" defaultValue={task.startDate?.toISOString().split('T')[0]} className="skeuo-inset w-full p-4 text-sm font-bold border-none" />
+          <label className="text-[10px] font-black text-gray-400 uppercase block mb-3 tracking-widest px-1">Allocation Profile</label>
+          <select name="resourceAllocation" defaultValue={task.resourceAllocation} className="skeuo-inset w-full p-4 text-sm font-bold border-none appearance-none cursor-pointer">
+            <option value="Single">Single</option>
+            <option value="Multiple">Multiple</option>
+          </select>
         </div>
         <div>
-          <label className="text-[10px] font-black text-gray-400 uppercase block mb-2 tracking-widest">Commencement Time</label>
-          <input name="startTime" type="time" defaultValue={task.startDate?.toISOString().split('T')[1]?.substring(0,5)} className="skeuo-inset w-full p-4 text-sm font-bold border-none" />
-        </div>
-        <div>
-          <label className="text-[10px] font-black text-gray-400 uppercase block mb-2 tracking-widest">Conclusion Date</label>
-          <input name="endDate" type="date" defaultValue={task.endDate?.toISOString().split('T')[0]} className="skeuo-inset w-full p-4 text-sm font-bold border-none" />
-        </div>
-        <div>
-          <label className="text-[10px] font-black text-gray-400 uppercase block mb-2 tracking-widest">Resolution Time</label>
-          <input name="endTime" type="time" defaultValue={task.endDate?.toISOString().split('T')[1]?.substring(0,5)} className="skeuo-inset w-full p-4 text-sm font-bold border-none" />
-        </div>
-        <div>
-          <label className="text-[10px] font-black text-gray-400 uppercase block mb-2 tracking-widest">Estimated Window (m)</label>
+          <label className="text-[10px] font-black text-gray-400 uppercase block mb-3 tracking-widest px-1">Estimated Window (m)</label>
           <input name="estimatedTime" type="number" defaultValue={task.estimatedTime || 0} className="skeuo-inset w-full p-4 text-sm font-bold border-none" />
         </div>
+
+        <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-10 p-8 skeuo-inset border border-white/50">
+          <div>
+            <label className="text-[10px] font-black text-gray-400 uppercase block mb-3 tracking-widest px-1">Commencement Window</label>
+            <div className="flex gap-4">
+               <input name="startDate" type="date" defaultValue={task.startDate?.toISOString().split('T')[0]} className="bg-white/50 p-3 rounded-xl text-xs font-bold w-full" />
+               <input name="startTime" type="time" defaultValue={task.startDate?.toISOString().split('T')[1]?.substring(0,5)} className="bg-white/50 p-3 rounded-xl text-xs font-bold w-full" />
+            </div>
+          </div>
+          <div>
+            <label className="text-[10px] font-black text-gray-400 uppercase block mb-3 tracking-widest px-1">Resolution Window</label>
+            <div className="flex gap-4">
+               <input name="endDate" type="date" defaultValue={task.endDate?.toISOString().split('T')[0]} className="bg-white/50 p-3 rounded-xl text-xs font-bold w-full" />
+               <input name="endTime" type="time" defaultValue={task.endDate?.toISOString().split('T')[1]?.substring(0,5)} className="bg-white/50 p-3 rounded-xl text-xs font-bold w-full" />
+            </div>
+          </div>
+        </div>
+
         <div>
-          <label className="text-[10px] font-black text-gray-400 uppercase block mb-2 tracking-widest">Team Mandate</label>
-          <select name="teamId" defaultValue={task.teamId || ""} className="skeuo-inset w-full p-4 text-sm font-bold border-none appearance-none">
+          <label className="text-[10px] font-black text-gray-400 uppercase block mb-3 tracking-widest px-1">Team Mandate</label>
+          <select name="teamId" defaultValue={task.teamId || ""} className="skeuo-inset w-full p-4 text-sm font-bold border-none appearance-none cursor-pointer">
             <option value="">Select Team</option>
             {allTeams.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
           </select>
         </div>
+
+        <div>
+          <label className="text-[10px] font-black text-gray-400 uppercase block mb-3 tracking-widest px-1">Evidence Cryptography</label>
+          <div className="skeuo-inset p-4 flex items-center justify-between group cursor-pointer hover:bg-white/50 transition-colors">
+             <span className="text-[11px] font-bold text-gray-400">Upload Visual Proof (Photos/Logs)</span>
+             <Camera size={18} className="text-gray-300" />
+          </div>
+        </div>
       </div>
 
       <div>
-        <label className="text-[10px] font-black text-gray-400 block mb-4 uppercase tracking-[0.2em]">Matrix Allocation</label>
+        <label className="text-[10px] font-black text-gray-400 block mb-4 uppercase tracking-[0.2em] px-1">Agent Matrix Allocation</label>
         <div className="flex flex-wrap gap-3">
           {allResources.map(r => (
-            <button key={r.id} type="button" onClick={() => setResourceIds(prev => prev.includes(r.id) ? prev.filter(i => i !== r.id) : [...prev, r.id])}
-              className={`px-4 py-2 rounded-xl text-[10px] font-black border uppercase tracking-widest transition-all ${resourceIds.includes(r.id) ? "skeuo-button text-white" : "skeuo-inset text-gray-400"}`}>
+            <button
+              key={r.id}
+              type="button"
+              onClick={() => setResourceIds(prev => prev.includes(r.id) ? prev.filter(i => i !== r.id) : [...prev, r.id])}
+              className={`px-5 py-2.5 rounded-2xl text-[10px] font-black border-none uppercase tracking-widest transition-all ${
+                resourceIds.includes(r.id) ? "skeuo-button text-white scale-105" : "skeuo-inset text-gray-400 opacity-60"
+              }`}
+            >
               {r.fullName}
             </button>
           ))}
@@ -121,12 +152,17 @@ export default function TaskEditForm({ task, allResources = [], allTeams = [], a
       </div>
 
       <div>
-        <label className="text-[10px] font-black text-gray-400 block mb-2 uppercase tracking-widest">Operational Intel</label>
-        <textarea name="notes" defaultValue={task.notes || ""} className="skeuo-inset w-full p-4 text-sm font-bold border-none min-h-[120px]" />
+        <label className="text-[10px] font-black text-gray-400 block mb-3 tracking-widest px-1">Operational Intelligence (Notes)</label>
+        <textarea name="notes" defaultValue={task.notes || ""} className="skeuo-inset w-full p-6 text-sm font-bold border-none min-h-[160px] leading-relaxed" />
       </div>
 
-      <button type="submit" disabled={loading} className="w-full skeuo-button text-white p-6 rounded-2xl font-black uppercase tracking-[0.4em] text-[12px] shadow-2xl">
-        {loading ? "Synchronizing Matrix..." : "Update Task Metadata"}
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full skeuo-button text-white p-8 rounded-[2rem] font-black uppercase tracking-[0.5em] text-[13px] shadow-[0_25px_60px_rgba(0,0,0,0.4)] flex items-center justify-center gap-4 group transition-all"
+      >
+        <Save size={20} className="group-hover:scale-110 transition-transform" />
+        {loading ? "Transmitting..." : "Synchronize Metadata"}
       </button>
     </form>
   );
