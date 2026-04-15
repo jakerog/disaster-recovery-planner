@@ -8,26 +8,34 @@
 
  ✓ Starting...
  ○ (pwa) PWA support is disabled.
- ✓ Ready in 3s
+ ✓ Ready in 3.4s
  ○ Compiling /middleware ...
- ✓ Compiled /middleware in 540ms (238 modules)
+ ✓ Compiled /middleware in 599ms (238 modules)
  ○ Compiling / ...
- ✓ Compiled / in 1349ms (619 modules)
- GET / 200 in 1777ms
+ ✓ Compiled / in 3.5s (839 modules)
+ GET / 200 in 4177ms
  ○ Compiling /login ...
- ✓ Compiled /login in 1007ms (672 modules)
- GET /login 200 in 1264ms
+ ✓ Compiled /login in 621ms (858 modules)
+ GET /login 200 in 791ms
  ○ Compiling /api/auth/[...nextauth] ...
- ✓ Compiled /api/auth/[...nextauth] in 1857ms (837 modules)
- GET /api/auth/providers 200 in 2894ms
- GET /api/auth/csrf 200 in 27ms
+ ✓ Compiled /api/auth/[...nextauth] in 553ms (851 modules)
+ GET /api/auth/providers 200 in 1213ms
+ GET /api/auth/session 200 in 1545ms
+ GET /api/auth/csrf 200 in 45ms
+ GET /api/auth/session 200 in 52ms
 prisma:query SELECT `main`.`Resource`.`id`, `main`.`Resource`.`fullName`, `main`.`Resource`.`email`, `main`.`Resource`.`password`, `main`.`Resource`.`role`, `main`.`Resource`.`phoneNumber`, `main`.`Resource`.`telephoneNumber`, `main`.`Resource`.`photo`, `main`.`Resource`.`teamId`, `main`.`Resource`.`vendorId`, `main`.`Resource`.`exerciseId` FROM `main`.`Resource` WHERE (`main`.`Resource`.`email` = ? AND 1=1) LIMIT ? OFFSET ?
- POST /api/auth/callback/credentials? 200 in 198ms
- GET / 200 in 211ms
+ POST /api/auth/callback/credentials? 200 in 229ms
+ GET / 200 in 181ms
+ GET /api/auth/session 200 in 32ms
+ GET /api/auth/session 200 in 12ms
+ GET / 200 in 83ms
+ GET /api/auth/session 200 in 31ms
+ GET /api/auth/session 200 in 13ms
  ○ Compiling /admin/exercises ...
- ✓ Compiled /admin/exercises in 608ms (875 modules)
- GET /admin/exercises 200 in 855ms
- ✓ Compiled /api/exercises in 273ms (877 modules)
+ ✓ Compiled /admin/exercises in 569ms (899 modules)
+ GET /admin/exercises 200 in 821ms
+ ✓ Compiled /api/exercises in 405ms (901 modules)
+ GET /api/exercises 200 in 537ms
 prisma:query SELECT `main`.`Exercise`.`id`, `main`.`Exercise`.`name`, `main`.`Exercise`.`startDate`, `main`.`Exercise`.`endDate`, `main`.`Exercise`.`status`, `main`.`Exercise`.`photo`, `main`.`Exercise`.`notes`, `main`.`Exercise`.`mock3Required` FROM `main`.`Exercise` WHERE 1=1 LIMIT ? OFFSET ?
 prisma:query SELECT `main`.`_ExerciseOwner`.`A`, `main`.`_ExerciseOwner`.`B` FROM `main`.`_ExerciseOwner` WHERE `main`.`_ExerciseOwner`.`A` IN (?)
 prisma:query SELECT `main`.`Resource`.`id`, `main`.`Resource`.`fullName`, `main`.`Resource`.`email`, `main`.`Resource`.`password`, `main`.`Resource`.`role`, `main`.`Resource`.`phoneNumber`, `main`.`Resource`.`telephoneNumber`, `main`.`Resource`.`photo`, `main`.`Resource`.`teamId`, `main`.`Resource`.`vendorId`, `main`.`Resource`.`exerciseId` FROM `main`.`Resource` WHERE `main`.`Resource`.`id` IN (?) LIMIT ? OFFSET ?
@@ -38,11 +46,6 @@ prisma:query SELECT `main`.`Phase`.`id`, `main`.`Phase`.`name`, `main`.`Phase`.`
 prisma:query SELECT `main`.`Event`.`id`, `main`.`Event`.`name`, `main`.`Event`.`startDate`, `main`.`Event`.`endDate`, `main`.`Event`.`phaseId` FROM `main`.`Event` WHERE `main`.`Event`.`phaseId` IN (?,?,?,?) LIMIT ? OFFSET ?
 prisma:query SELECT `main`.`Stage`.`id`, `main`.`Stage`.`name`, `main`.`Stage`.`startDate`, `main`.`Stage`.`endDate`, `main`.`Stage`.`exerciseId`, `main`.`Stage`.`eventId`, `main`.`Stage`.`notes` FROM `main`.`Stage` WHERE `main`.`Stage`.`eventId` IN (?,?,?,?,?,?,?,?) LIMIT ? OFFSET ?
 prisma:query SELECT `main`.`Task`.`id`, `main`.`Task`.`taskId`, `main`.`Task`.`workflow`, `main`.`Task`.`resourceAllocation`, `main`.`Task`.`status`, `main`.`Task`.`startDate`, `main`.`Task`.`endDate`, `main`.`Task`.`estimatedTime`, `main`.`Task`.`actualDuration`, `main`.`Task`.`varianceDuration`, `main`.`Task`.`evidence`, `main`.`Task`.`notes`, `main`.`Task`.`stageId`, `main`.`Task`.`teamId`, `main`.`Task`.`exerciseId` FROM `main`.`Task` WHERE `main`.`Task`.`stageId` IN (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) LIMIT ? OFFSET ?
- GET /api/exercises 200 in 392ms
- ○ Compiling /availability ...
- ✓ Compiled /availability in 602ms (894 modules)
-prisma:query SELECT `main`.`Phase`.`id`, `main`.`Phase`.`name`, `main`.`Phase`.`order`, `main`.`Phase`.`exerciseId` FROM `main`.`Phase` WHERE 1=1 ORDER BY `main`.`Phase`.`order` ASC LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`Exercise`.`id`, `main`.`Exercise`.`name`, `main`.`Exercise`.`startDate`, `main`.`Exercise`.`endDate`, `main`.`Exercise`.`status`, `main`.`Exercise`.`photo`, `main`.`Exercise`.`notes`, `main`.`Exercise`.`mock3Required` FROM `main`.`Exercise` WHERE `main`.`Exercise`.`id` IN (?) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`Resource`.`id`, `main`.`Resource`.`fullName`, `main`.`Resource`.`email`, `main`.`Resource`.`password`, `main`.`Resource`.`role`, `main`.`Resource`.`phoneNumber`, `main`.`Resource`.`telephoneNumber`, `main`.`Resource`.`photo`, `main`.`Resource`.`teamId`, `main`.`Resource`.`vendorId`, `main`.`Resource`.`exerciseId` FROM `main`.`Resource` WHERE (`main`.`Resource`.`email` = ? AND 1=1) LIMIT ? OFFSET ?
- GET /availability 200 in 800ms
+ GET /api/auth/session 200 in 535ms
+ GET /api/auth/session 200 in 15ms
 [?25h

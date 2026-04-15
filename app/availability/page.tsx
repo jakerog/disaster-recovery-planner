@@ -10,7 +10,7 @@ export default async function AvailabilityPage() {
 
   const [phases, resource] = await Promise.all([
     prisma.phase.findMany({
-      include: { exercise: true },
+      include: { exercise: true, events: true },
       orderBy: { order: "asc" }
     }),
     prisma.resource.findUnique({ where: { email: session.user?.email || "" } })
@@ -20,35 +20,35 @@ export default async function AvailabilityPage() {
 
   return (
     <div className="p-4 md:p-8 bg-gray-100 min-h-screen font-sans">
-      <div className="max-w-3xl mx-auto skeuo-card p-8 md:p-12 rounded-[2.5rem]">
-        <header className="flex justify-between items-center mb-12">
-           <div className="flex items-center gap-4">
-             <div className="w-12 h-12 bg-black rounded-2xl flex items-center justify-center text-white shadow-xl">
-               <CalendarCheck size={24} />
+      <div className="max-w-4xl mx-auto skeuo-card p-8 md:p-16 rounded-[3rem] border border-white">
+        <header className="flex justify-between items-center mb-16">
+           <div className="flex items-center gap-6">
+             <div className="w-16 h-16 bg-black rounded-3xl flex items-center justify-center text-white shadow-2xl ring-4 ring-white">
+               <CalendarCheck size={32} />
              </div>
              <div>
-                <h1 className="text-2xl font-black tracking-tighter text-black uppercase leading-none">Pre-Check</h1>
-                <p className="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] mt-1">Resource Availability Portal</p>
+                <h1 className="text-4xl font-black tracking-tighter text-black uppercase leading-none">Pre-Check</h1>
+                <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em] mt-2">Recovery Window Validation</p>
              </div>
            </div>
-           <div className="text-right">
-             <div className="text-[10px] font-black text-black uppercase">{resource.fullName}</div>
-             <div className="text-[9px] font-bold text-gray-400 uppercase">{resource.email}</div>
+           <div className="text-right hidden sm:block">
+             <div className="text-[11px] font-black text-black uppercase tracking-tight">{resource.fullName}</div>
+             <div className="text-[10px] font-bold text-blue-600 uppercase tracking-widest">{resource.role}</div>
            </div>
         </header>
 
-        <section className="mb-10 p-6 skeuo-inset border border-white">
-           <div className="flex items-center gap-2 mb-4">
-             <Shield size={14} className="text-blue-500" />
-             <h2 className="text-[10px] font-black uppercase tracking-widest text-black">Active Mandate</h2>
+        <section className="mb-12 p-8 skeuo-inset border border-white/70">
+           <div className="flex items-center gap-3 mb-4">
+             <Shield size={16} className="text-blue-500" />
+             <h2 className="text-[11px] font-black uppercase tracking-[0.2em] text-black">Active Mandate</h2>
            </div>
-           <p className="text-sm font-bold text-gray-600">Please validate your participation status for the following recovery phases. Your response determines mission-critical resource allocation.</p>
+           <p className="text-base font-bold text-gray-600 leading-relaxed">Identity confirmed. Please validate your participation status for the following recovery cycles. Your response is mandatory for mission-critical resource allocation and failover orchestration.</p>
         </section>
 
-        <AvailabilityForm phases={phases} resourceId={resource.id} />
+        <AvailabilityForm phases={phases as any} resourceId={resource.id} />
 
-        <footer className="mt-12 pt-8 border-t border-gray-50 text-center">
-          <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.3em]">Sentinel Autonomous Resource Management</p>
+        <footer className="mt-16 pt-12 border-t border-gray-50 text-center">
+          <p className="text-[10px] font-black text-gray-300 uppercase tracking-[0.4em]">Sentinel Autonomous Resource Management Protocol</p>
         </footer>
       </div>
     </div>
