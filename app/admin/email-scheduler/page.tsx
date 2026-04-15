@@ -1,107 +1,78 @@
-"use client";
+import { prisma } from "@/lib/prisma";
+import { Send, Clock, CheckCircle2, AlertCircle, Calendar, Shield } from "lucide-react";
+import { format } from "date-fns";
 
-import { useState, useEffect } from "react";
-import { Send, Clock, Calendar, CheckCircle, AlertCircle } from "lucide-react";
-
-export default function EmailSchedulerPage() {
-  const [templates, setTemplates] = useState([]);
-  const [lists, setLists] = useState([]);
-  const [schedules, setSchedules] = useState([]);
-  const [formData, setFormData] = useState({ templateId: "", listId: "", scheduledAt: "" });
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    fetch("/api/email-templates").then(res => res.json()).then(setTemplates);
-    fetch("/api/email-lists").then(res => res.json()).then(setLists);
-    fetch("/api/email-schedule").then(res => res.json()).then(setSchedules);
-  }, []);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    await fetch("/api/email-schedule", {
-      method: "POST",
-      body: JSON.stringify(formData),
-    });
-    setFormData({ templateId: "", listId: "", scheduledAt: "" });
-    fetch("/api/email-schedule").then(res => res.json()).then(setSchedules);
-    setLoading(false);
-  };
+export default async function EmailSchedulerPage() {
+  const schedules = await prisma.emailSchedule.findMany({
+    include: { template: true, lists: true },
+    orderBy: { scheduledAt: 'desc' }
+  });
 
   return (
-    <div className="p-8 max-w-5xl mx-auto font-sans text-gray-900">
-      <header className="mb-12 border-b pb-8 border-gray-100">
-        <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] mb-2 block">Orchestration</span>
-        <h1 className="text-4xl font-black uppercase tracking-tighter">Email Scheduler</h1>
-      </header>
+    <div className="space-y-12">
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold text-slate-900">Transmission Command</h1>
+          <p className="text-sm text-slate-500 font-medium">Coordinate recovery notifications</p>
+        </div>
+        <button className="clean-button">
+          <Send size={20} />
+          New Broadcast
+        </button>
+      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-        <section>
-          <h2 className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-6">Create New Delivery</h2>
-          <form onSubmit={handleSubmit} className="space-y-6 bg-gray-50 p-8 rounded-3xl border border-gray-100">
-            <div>
-              <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 block mb-2">Template</label>
-              <select
-                value={formData.templateId}
-                onChange={e => setFormData({...formData, templateId: e.target.value})}
-                className="w-full bg-white border border-gray-200 p-4 rounded-2xl font-bold appearance-none"
-                required
-              >
-                <option value="">Select Template</option>
-                {templates.map((t: any) => <option key={t.id} value={t.id}>{t.name}</option>)}
-              </select>
-            </div>
-            <div>
-              <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 block mb-2">Target List</label>
-              <select
-                value={formData.listId}
-                onChange={e => setFormData({...formData, listId: e.target.value})}
-                className="w-full bg-white border border-gray-200 p-4 rounded-2xl font-bold appearance-none"
-                required
-              >
-                <option value="">Select List</option>
-                {lists.map((l: any) => <option key={l.id} value={l.id}>{l.name}</option>)}
-              </select>
-            </div>
-            <div>
-              <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 block mb-2">Schedule Time</label>
-              <input
-                type="datetime-local"
-                value={formData.scheduledAt}
-                onChange={e => setFormData({...formData, scheduledAt: e.target.value})}
-                className="w-full bg-white border border-gray-200 p-4 rounded-2xl font-bold"
-                required
-              />
-            </div>
-            <button
-              disabled={loading}
-              className="w-full bg-black text-white p-5 rounded-2xl font-black uppercase tracking-[0.2em] hover:bg-gray-800 transition-all flex items-center justify-center gap-3"
-            >
-              <Send size={16} /> {loading ? "Queueing..." : "Schedule Delivery"}
-            </button>
-          </form>
-        </section>
+      <div className="clean-card overflow-hidden">
+        <div className="p-8 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+           <h2 className="text-sm font-black text-slate-900 uppercase tracking-widest flex items-center gap-3">
+             <Calendar size={18} className="text-blue-600" /> Operational Schedule
+           </h2>
+           <div className="flex gap-4">
+              <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400">
+                <div className="w-2 h-2 rounded-full bg-emerald-500" /> Dispatched
+              </div>
+              <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400">
+                <div className="w-2 h-2 rounded-full bg-blue-500" /> Pending
+              </div>
+           </div>
+        </div>
 
-        <section>
-          <h2 className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-6">Scheduled Queues</h2>
-          <div className="space-y-4">
-            {schedules.map((s: any) => (
-              <div key={s.id} className="flex items-center justify-between p-6 bg-white border border-gray-100 rounded-3xl shadow-sm">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400">
-                    {s.status === "Pending" ? <Clock size={18}/> : <CheckCircle size={18} className="text-green-500"/>}
+        <div className="divide-y divide-slate-100">
+          {schedules.length === 0 ? (
+            <div className="p-20 text-center">
+              <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">No Transmissions Logged</p>
+            </div>
+          ) : (
+            schedules.map((schedule) => (
+              <div key={schedule.id} className="p-8 hover:bg-slate-50 transition-colors group">
+                <div className="flex flex-col lg:flex-row justify-between lg:items-center gap-6">
+                  <div className="flex items-start gap-6">
+                    <div className={`p-4 rounded-2xl ${schedule.status === 'Sent' ? 'bg-emerald-50 text-emerald-600' : 'bg-blue-50 text-blue-600'}`}>
+                      {schedule.status === 'Sent' ? <CheckCircle2 size={24} /> : <Clock size={24} />}
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-3 mb-1">
+                        <h3 className="font-bold text-slate-900 text-lg">{schedule.template.name}</h3>
+                        <span className={`status-pill ${schedule.status === 'Sent' ? 'status-pill-green' : 'status-pill-blue'}`}>
+                          {schedule.status}
+                        </span>
+                      </div>
+                      <p className="text-sm font-semibold text-slate-500 mb-3">Transmission to: {schedule.lists.map(l => l.name).join(', ')}</p>
+                      <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest text-slate-400">
+                         <span className="flex items-center gap-1.5"><Calendar size={12}/> {format(new Date(schedule.scheduledAt), 'MMM d, yyyy @ HH:mm')}</span>
+                         <span className="flex items-center gap-1.5"><Shield size={12}/> Protocol Verified</span>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="text-sm font-black uppercase tracking-tight">Queue ID: {s.id.slice(0,8)}</div>
-                    <div className="text-[10px] font-bold text-gray-400 uppercase">{new Date(s.scheduledAt).toLocaleString()}</div>
+
+                  <div className="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button className="clean-button-secondary text-[10px]">Modify</button>
+                    <button className="clean-button text-[10px]">Force Send</button>
                   </div>
                 </div>
-                <span className="text-[10px] font-black uppercase bg-gray-50 px-3 py-1 rounded text-gray-400">{s.status}</span>
               </div>
-            ))}
-            {schedules.length === 0 && <p className="text-sm font-bold text-gray-300 uppercase italic">No pending schedules</p>}
-          </div>
-        </section>
+            ))
+          )}
+        </div>
       </div>
     </div>
   );

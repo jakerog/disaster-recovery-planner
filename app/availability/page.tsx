@@ -20,7 +20,7 @@ export default async function AvailabilityPage() {
 
   return (
     <div className="p-4 md:p-8 bg-gray-100 min-h-screen font-sans">
-      <div className="max-w-4xl mx-auto skeuo-card p-8 md:p-16 rounded-[3rem] border border-white">
+      <div className="max-w-4xl mx-auto clean-card p-8 md:p-16 rounded-[3rem] border border-white">
         <header className="flex justify-between items-center mb-16">
            <div className="flex items-center gap-6">
              <div className="w-16 h-16 bg-black rounded-3xl flex items-center justify-center text-white shadow-2xl ring-4 ring-white">
@@ -37,7 +37,7 @@ export default async function AvailabilityPage() {
            </div>
         </header>
 
-        <section className="mb-12 p-8 skeuo-inset border border-white/70">
+        <section className="mb-12 p-8 clean-inset border border-white/70">
            <div className="flex items-center gap-3 mb-4">
              <Shield size={16} className="text-blue-500" />
              <h2 className="text-[11px] font-black uppercase tracking-[0.2em] text-black">Active Mandate</h2>

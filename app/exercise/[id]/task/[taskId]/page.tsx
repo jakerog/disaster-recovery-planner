@@ -19,7 +19,7 @@ export default async function TaskEditPage({ params }: { params: Promise<{ id: s
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen text-gray-900">
-      <div className="max-w-2xl mx-auto skeuo-card rounded-[2.5rem] p-12">
+      <div className="max-w-2xl mx-auto clean-card rounded-[2.5rem] p-12">
         <h1 className="text-2xl font-black mb-8 tracking-tighter uppercase">Edit Task: {task.taskId}</h1>
         <TaskEditForm task={task} allResources={allResources} allTeams={allTeams} allStages={allStages} />
       </div>

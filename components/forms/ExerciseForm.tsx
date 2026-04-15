@@ -34,7 +34,7 @@ export default function ExerciseForm({ initialData }: { initialData?: Exercise }
   };
 
   const Field = ({ label, name, icon: Icon, type = "text", checkbox = false }: any) => (
-    <div className={`skeuo-inset p-3 px-5 border border-white/50 ${checkbox ? "flex items-center gap-4 py-5" : ""}`}>
+    <div className={`clean-inset p-3 px-5 border border-white/50 ${checkbox ? "flex items-center gap-4 py-5" : ""}`}>
       {checkbox ? (
         <>
           <input id={name} name={name} type="checkbox" defaultChecked={!!initialData?.[name as keyof Exercise]} className="w-5 h-5 accent-black cursor-pointer" />
@@ -52,7 +52,7 @@ export default function ExerciseForm({ initialData }: { initialData?: Exercise }
   );
 
   return (
-    <form onSubmit={handleSubmit} className="skeuo-card p-10 rounded-[2.5rem] space-y-10 max-w-2xl mx-auto text-black">
+    <form onSubmit={handleSubmit} className="clean-card p-10 rounded-[2.5rem] space-y-10 max-w-2xl mx-auto text-black">
       <header className="flex justify-between items-center border-b border-gray-100 pb-8">
          <div>
             <h2 className="text-3xl font-black uppercase tracking-tighter">{initialData ? "Operational Mandate" : "New Directive"}</h2>
@@ -68,7 +68,7 @@ export default function ExerciseForm({ initialData }: { initialData?: Exercise }
         <Field label="Commencement Date" name="startDate" type="date" icon={Calendar} />
         <Field label="Termination Date" name="endDate" type="date" icon={Calendar} />
 
-        <div className="skeuo-inset p-3 px-5 border border-white/50">
+        <div className="clean-inset p-3 px-5 border border-white/50">
            <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 block mb-1 flex items-center gap-2">
              <Activity size={10} /> Operational Status
            </label>
@@ -84,7 +84,7 @@ export default function ExerciseForm({ initialData }: { initialData?: Exercise }
         </div>
       </div>
 
-      <button type="submit" disabled={loading} className="w-full skeuo-button text-white p-5 rounded-2xl font-black uppercase tracking-[0.3em] text-[11px] disabled:opacity-50">
+      <button type="submit" disabled={loading} className="w-full clean-button text-white p-5 rounded-2xl font-black uppercase tracking-[0.3em] text-[11px] disabled:opacity-50">
         {loading ? "Deploying Mandate..." : "Initialize Command"}
       </button>
     </form>

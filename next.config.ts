@@ -8,7 +8,7 @@ const withPWA = withPWAInit({
 });
 
 const nextConfig: NextConfig = {
-  output: 'standalone',
+  /* standard config for Vercel */
 };
 
 export default withPWA(nextConfig);

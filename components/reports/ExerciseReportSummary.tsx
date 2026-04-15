@@ -40,7 +40,7 @@ export default function ExerciseReportSummary({ exercise }: Props) {
           { label: "Efficiency Rating", val: `${totalEst ? Math.max(0, Math.floor(100 - (variance / totalEst) * 100)) : 100}%` },
           { label: "Phase Completion", val: `${Math.floor((exercise.phases.length / 4) * 100)}%` }
         ].map((stat, i) => (
-          <div key={i} className="skeuo-card p-10 rounded-[2rem] border border-white">
+          <div key={i} className="clean-card p-10 rounded-[2rem] border border-white">
             <span className="text-gray-400 font-black uppercase text-[10px] block mb-2 tracking-[0.2em]">{stat.label}</span>
             <span className={`text-5xl font-black tracking-tighter ${stat.color || "text-black"}`}>{stat.val}</span>
           </div>
@@ -53,7 +53,7 @@ export default function ExerciseReportSummary({ exercise }: Props) {
             <h2 className="text-2xl font-black tracking-tight uppercase">Failover Track</h2>
             <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Aggregate across all phases</span>
           </div>
-          <div className="skeuo-card p-10 rounded-[3rem] border border-white h-[450px]">
+          <div className="clean-card p-10 rounded-[3rem] border border-white h-[450px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={failoverEvents.map(e => ({ name: e.phaseName, Actual: e.actual, Estimated: e.estimated }))}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
@@ -72,7 +72,7 @@ export default function ExerciseReportSummary({ exercise }: Props) {
             <h2 className="text-2xl font-black tracking-tight uppercase">Failback Track</h2>
             <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Aggregate across all phases</span>
           </div>
-          <div className="skeuo-card p-10 rounded-[3rem] border border-white h-[450px]">
+          <div className="clean-card p-10 rounded-[3rem] border border-white h-[450px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={failbackEvents.map(e => ({ name: e.phaseName, Actual: e.actual, Estimated: e.estimated }))}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />

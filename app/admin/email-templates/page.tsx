@@ -1,46 +1,67 @@
-"use client";
+import { prisma } from "@/lib/prisma";
+import Link from "next/link";
+import { Mail, Plus, Users, Layout, Send, Calendar } from "lucide-react";
 
-import { EmailTemplate } from "@prisma/client";
-import EmailTemplateForm from "@/components/forms/EmailTemplateForm";
-import { useState, useEffect } from "react";
-
-export default function EmailTemplatesPage() {
-  const [templates, setTemplates] = useState<EmailTemplate[]>([]);
-
-  const fetchData = async () => {
-    const res = await fetch("/api/email-templates").then(r => r.json());
-    setTemplates(res);
-  };
-
-  useEffect(() => { fetchData(); }, []);
-
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure?")) return;
-    await fetch(`/api/email-templates?id=${id}`, { method: "DELETE" });
-    fetchData();
-  };
+export default async function EmailTemplatesPage() {
+  const templates = await prisma.emailTemplate.findMany({
+    orderBy: { createdAt: 'desc' }
+  });
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen text-gray-900">
-      <div className="max-w-5xl mx-auto">
-        <h1 className="text-2xl font-bold tracking-tight mb-8 uppercase">Recovery Communications</h1>
+    <div className="space-y-12">
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold text-slate-900">Communication Assets</h1>
+          <p className="text-sm text-slate-500 font-medium">Standardized recovery notification protocols</p>
+        </div>
+        <button className="clean-button">
+          <Plus size={20} />
+          Create Template
+        </button>
+      </div>
 
-        <EmailTemplateForm />
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {templates.map(t => (
-            <div key={t.id} className="bg-white border border-gray-200 p-8 rounded-2xl shadow-sm flex flex-col group hover:border-black transition-all">
-              <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Subject: {t.subject}</span>
-              <h2 className="text-xl font-black mb-4 tracking-tighter uppercase">{t.name}</h2>
-              <div className="bg-gray-50 p-4 rounded-xl text-sm text-gray-600 mb-6 border border-gray-100 flex-grow italic line-clamp-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="space-y-6">
+          <h2 className="text-xs font-bold text-slate-400 uppercase tracking-[0.3em] flex items-center gap-3">
+             <Layout size={14} /> Global Templates
+          </h2>
+          {templates.map((t) => (
+            <div key={t.id} className="clean-card p-6 group">
+              <div className="flex justify-between items-start mb-4">
+                <div className="p-3 bg-blue-50 rounded-lg text-blue-600">
+                  <Mail size={20} />
+                </div>
+                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                  Ready for Broadcast
+                </div>
+              </div>
+              <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors mb-1">{t.name}</h3>
+              <p className="text-xs text-slate-500 font-medium mb-6">Subject: {t.subject}</p>
+              <div className="p-4 bg-slate-50 rounded-lg border border-slate-100 italic text-xs text-slate-400 line-clamp-3 mb-6">
                 {t.body}
               </div>
-              <div className="flex gap-4">
-                <button className="flex-1 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-bold hover:bg-gray-200">Edit</button>
-                <button onClick={() => handleDelete(t.id)} className="flex-1 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-bold hover:bg-red-100">Delete</button>
+              <div className="flex gap-3">
+                <button className="flex-1 clean-button text-[10px] py-2">Edit Protocol</button>
+                <button className="flex-1 clean-button-secondary text-[10px] py-2">Preview</button>
               </div>
             </div>
           ))}
+        </div>
+
+        <div className="space-y-6">
+          <h2 className="text-xs font-bold text-slate-400 uppercase tracking-[0.3em] flex items-center gap-3">
+             <Users size={14} /> Transmission Vectors
+          </h2>
+          <div className="clean-card p-8 bg-blue-600 text-white relative overflow-hidden">
+            <div className="relative z-10">
+              <h3 className="text-xl font-bold mb-2">Broadcast Intelligence</h3>
+              <p className="text-sm text-blue-100 font-medium mb-8">Schedule automated recovery alerts across all resource pools.</p>
+              <Link href="/admin/email-scheduler" className="inline-flex items-center gap-2 bg-white text-blue-600 px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-blue-50 transition-all">
+                <Send size={16} /> Command Broadcast
+              </Link>
+            </div>
+            <Mail className="absolute -bottom-10 -right-10 text-white opacity-10" size={200} />
+          </div>
         </div>
       </div>
     </div>

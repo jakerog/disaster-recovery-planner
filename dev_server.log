@@ -1,0 +1,95 @@
+
+> sentinel-dr@0.1.0 dev
+> next dev
+
+   ▲ Next.js 15.2.0
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.0.2:3000
+   - Environments: .env
+
+ ✓ Starting...
+ ○ (pwa) PWA support is disabled.
+ ✓ Ready in 2.8s
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 612ms (246 modules)
+ ○ Compiling /login ...
+ ✓ Compiled /login in 2.5s (753 modules)
+ GET /login 200 in 3067ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 1452ms (932 modules)
+ GET /login 200 in 131ms
+ GET /api/auth/session 200 in 2568ms
+ GET /api/auth/session 200 in 33ms
+ GET /api/auth/providers 200 in 27ms
+ GET /api/auth/csrf 200 in 18ms
+prisma:query SELECT `main`.`Resource`.`id`, `main`.`Resource`.`fullName`, `main`.`Resource`.`email`, `main`.`Resource`.`password`, `main`.`Resource`.`role`, `main`.`Resource`.`phoneNumber`, `main`.`Resource`.`telephoneNumber`, `main`.`Resource`.`photo`, `main`.`Resource`.`teamId`, `main`.`Resource`.`vendorId`, `main`.`Resource`.`exerciseId` FROM `main`.`Resource` WHERE (`main`.`Resource`.`email` = ? AND 1=1) LIMIT ? OFFSET ?
+ POST /api/auth/callback/credentials? 200 in 184ms
+ ○ Compiling / ...
+ ✓ Compiled / in 1137ms (994 modules)
+ GET / 200 in 1550ms
+ GET /api/auth/session 200 in 42ms
+ GET /api/auth/session 200 in 18ms
+ GET /login 200 in 103ms
+ GET /api/auth/session 200 in 49ms
+ GET /api/auth/session 200 in 19ms
+ GET /api/auth/providers 200 in 28ms
+ GET /api/auth/csrf 200 in 12ms
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Resource`.`id`, `main`.`Resource`.`fullName`, `main`.`Resource`.`email`, `main`.`Resource`.`password`, `main`.`Resource`.`role`, `main`.`Resource`.`phoneNumber`, `main`.`Resource`.`telephoneNumber`, `main`.`Resource`.`photo`, `main`.`Resource`.`teamId`, `main`.`Resource`.`vendorId`, `main`.`Resource`.`exerciseId` FROM `main`.`Resource` WHERE (`main`.`Resource`.`email` = ? AND 1=1) LIMIT ? OFFSET ?
+ POST /api/auth/callback/credentials? 200 in 168ms
+ GET / 200 in 71ms
+ GET /api/auth/session 200 in 44ms
+ GET /api/auth/session 200 in 23ms
+ GET /login 200 in 72ms
+ GET /api/auth/session 200 in 42ms
+ GET /api/auth/session 200 in 12ms
+ GET /api/auth/providers 200 in 30ms
+ GET /api/auth/csrf 200 in 15ms
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Resource`.`id`, `main`.`Resource`.`fullName`, `main`.`Resource`.`email`, `main`.`Resource`.`password`, `main`.`Resource`.`role`, `main`.`Resource`.`phoneNumber`, `main`.`Resource`.`telephoneNumber`, `main`.`Resource`.`photo`, `main`.`Resource`.`teamId`, `main`.`Resource`.`vendorId`, `main`.`Resource`.`exerciseId` FROM `main`.`Resource` WHERE (`main`.`Resource`.`email` = ? AND 1=1) LIMIT ? OFFSET ?
+ POST /api/auth/callback/credentials? 200 in 150ms
+ GET / 200 in 94ms
+ GET /api/auth/session 200 in 39ms
+ GET /api/auth/session 200 in 12ms
+ ○ Compiling /reports/[id] ...
+ ✓ Compiled /reports/[id] in 5.1s (2044 modules)
+prisma:query SELECT `main`.`Exercise`.`id`, `main`.`Exercise`.`name`, `main`.`Exercise`.`startDate`, `main`.`Exercise`.`endDate`, `main`.`Exercise`.`status`, `main`.`Exercise`.`photo`, `main`.`Exercise`.`notes`, `main`.`Exercise`.`mock3Required` FROM `main`.`Exercise` WHERE (`main`.`Exercise`.`id` = ? AND 1=1) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Phase`.`id`, `main`.`Phase`.`name`, `main`.`Phase`.`order`, `main`.`Phase`.`exerciseId` FROM `main`.`Phase` WHERE `main`.`Phase`.`exerciseId` IN (?) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Event`.`id`, `main`.`Event`.`name`, `main`.`Event`.`startDate`, `main`.`Event`.`endDate`, `main`.`Event`.`phaseId` FROM `main`.`Event` WHERE `main`.`Event`.`phaseId` IN (?,?,?,?) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Stage`.`id`, `main`.`Stage`.`name`, `main`.`Stage`.`startDate`, `main`.`Stage`.`endDate`, `main`.`Stage`.`exerciseId`, `main`.`Stage`.`eventId`, `main`.`Stage`.`notes` FROM `main`.`Stage` WHERE `main`.`Stage`.`eventId` IN (?,?,?,?,?,?,?,?) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Task`.`id`, `main`.`Task`.`taskId`, `main`.`Task`.`workflow`, `main`.`Task`.`resourceAllocation`, `main`.`Task`.`status`, `main`.`Task`.`startDate`, `main`.`Task`.`endDate`, `main`.`Task`.`estimatedTime`, `main`.`Task`.`actualDuration`, `main`.`Task`.`varianceDuration`, `main`.`Task`.`evidence`, `main`.`Task`.`notes`, `main`.`Task`.`stageId`, `main`.`Task`.`teamId`, `main`.`Task`.`exerciseId` FROM `main`.`Task` WHERE `main`.`Task`.`stageId` IN (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) LIMIT ? OFFSET ?
+ GET /reports/cmo0k810g0005j6n1lb74qg46 200 in 6501ms
+ GET /api/auth/session 200 in 123ms
+ GET /api/auth/session 200 in 34ms
+ ○ Compiling /admin/email-templates ...
+ ✓ Compiled /admin/email-templates in 633ms (2079 modules)
+prisma:query SELECT 1
+prisma:query SELECT `main`.`EmailTemplate`.`id`, `main`.`EmailTemplate`.`name`, `main`.`EmailTemplate`.`subject`, `main`.`EmailTemplate`.`body`, `main`.`EmailTemplate`.`createdAt` FROM `main`.`EmailTemplate` WHERE 1=1 ORDER BY `main`.`EmailTemplate`.`createdAt` DESC LIMIT ? OFFSET ?
+ GET /admin/email-templates 200 in 996ms
+ GET /api/auth/session 200 in 81ms
+ GET /api/auth/session 200 in 14ms
+ GET / 200 in 87ms
+ GET /api/auth/session 200 in 34ms
+ GET /api/auth/session 200 in 12ms
+ ✓ Compiled in 762ms (902 modules)
+ ✓ Compiled in 326ms (902 modules)
+ ✓ Compiled in 914ms (2087 modules)
+ ✓ Compiled in 208ms (902 modules)
+ ✓ Compiled in 239ms (902 modules)
+ ⚠ Found a change in next.config.ts. Restarting the server to apply the changes...
+   ▲ Next.js 15.2.0
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.0.2:3000
+   - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 2.9s
+ ⚠ Found a change in next.config.ts. Restarting the server to apply the changes...
+   ▲ Next.js 15.2.0
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.0.2:3000
+   - Environments: .env
+
+ ✓ Starting...
+ ○ (pwa) PWA support is disabled.
+ ✓ Ready in 3s

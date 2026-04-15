@@ -21,45 +21,45 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-8 font-sans">
-      <div className="max-w-md w-full skeuo-card p-12 rounded-[2.5rem]">
-        <div className="flex justify-center mb-10">
-          <div className="w-24 h-24 bg-black rounded-3xl flex items-center justify-center text-white shadow-[0_20px_50px_rgba(0,0,0,0.3)] ring-8 ring-white">
-            <Shield size={48} />
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6 font-sans">
+      <div className="max-w-md w-full clean-card p-8 md:p-12">
+        <div className="flex justify-center mb-8">
+          <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-blue-200">
+            <Shield size={32} />
           </div>
         </div>
 
         <div className="text-center mb-10">
-          <h1 className="text-4xl font-black uppercase tracking-tighter mb-2 text-black">Sentinel</h1>
-          <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.4em]">Secure Access Node</p>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900 mb-2">Sentinel</h1>
+          <p className="text-sm text-slate-500 font-medium">Disaster Recovery Command Node</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-8">
-          <div className="skeuo-inset p-2 px-4">
-            <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 block mb-1 px-1" htmlFor="email">
-              Identity Protocol
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-2">
+            <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block px-1" htmlFor="email">
+              Email Address
             </label>
             <input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-transparent p-2 text-sm font-bold focus:outline-none text-black"
+              className="clean-input"
               placeholder="user@sentinel.cloud"
               required
             />
           </div>
 
-          <div className="skeuo-inset p-2 px-4">
-            <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 block mb-1 px-1" htmlFor="password">
-              Access Code
+          <div className="space-y-2">
+            <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block px-1" htmlFor="password">
+              Password
             </label>
             <input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-transparent p-2 text-sm font-bold focus:outline-none text-black"
+              className="clean-input"
               placeholder="••••••••"
               required
             />
@@ -68,14 +68,14 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full skeuo-button text-white p-5 rounded-2xl font-black uppercase tracking-[0.3em] text-[11px] disabled:opacity-50"
+            className="w-full clean-button py-3 text-sm uppercase tracking-widest"
           >
-            {loading ? "Authenticating..." : "Establish Connection"}
+            {loading ? "Authenticating..." : "Sign In"}
           </button>
         </form>
 
-        <p className="mt-12 text-center text-[10px] font-black text-gray-300 uppercase tracking-[0.2em]">
-          End-to-End Encrypted Terminal
+        <p className="mt-10 text-center text-xs font-medium text-slate-300 uppercase tracking-widest">
+          Secure Terminal v2.0
         </p>
       </div>
     </div>

@@ -37,7 +37,7 @@ export default async function ExerciseExecutionPage({ params }: { params: Promis
 
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900 font-sans pb-32">
-      <nav className="sticky top-0 z-50 skeuo-glass border-b border-white/50 px-8 py-4 flex justify-between items-center mb-12">
+      <nav className="sticky top-0 z-50 clean-glass border-b border-white/50 px-8 py-4 flex justify-between items-center mb-12">
          <div className="flex items-center gap-4">
             <div className="w-10 h-10 bg-black rounded-xl flex items-center justify-center text-white shadow-lg">
                <Shield size={20} />
@@ -52,14 +52,14 @@ export default async function ExerciseExecutionPage({ params }: { params: Promis
                <div className="text-[10px] font-black uppercase tracking-widest text-gray-400">Operator</div>
                <div className="text-[11px] font-black uppercase tracking-tight">{session?.user?.name}</div>
             </div>
-            <Link href="/" className="p-3 skeuo-card rounded-xl hover:scale-110 transition-transform">
+            <Link href="/" className="p-3 clean-card rounded-xl hover:scale-110 transition-transform">
                <LogOut size={16} className="text-red-500" />
             </Link>
          </div>
       </nav>
 
       <div className="max-w-7xl mx-auto px-8">
-        <header className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-20 skeuo-card p-12 rounded-[4rem] border border-white">
+        <header className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-20 clean-card p-12 rounded-[4rem] border border-white">
           <div>
             <div className="flex items-center gap-3 mb-6">
                <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse shadow-[0_0_15px_rgba(34,197,94,0.5)]"></div>
@@ -70,9 +70,9 @@ export default async function ExerciseExecutionPage({ params }: { params: Promis
           <div className="flex flex-col items-end gap-6 mt-8 lg:mt-0">
             <div className="flex gap-4">
                {hasFailures && <span className="bg-red-600 text-white px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.3em] animate-pulse shadow-[0_10px_30px_rgba(220,38,38,0.3)]">Rollback Protocols Active</span>}
-               <span className="skeuo-button text-white px-8 py-2.5 rounded-full text-[12px] font-black uppercase tracking-[0.3em]">{exercise.status}</span>
+               <span className="clean-button text-white px-8 py-2.5 rounded-full text-[12px] font-black uppercase tracking-[0.3em]">{exercise.status}</span>
             </div>
-            <Link href={`/reports/${exercise.id}`} className="skeuo-inset px-6 py-3 rounded-2xl text-[11px] font-black uppercase tracking-[0.3em] hover:text-blue-600 transition-all flex items-center gap-3 border border-white">
+            <Link href={`/reports/${exercise.id}`} className="clean-inset px-6 py-3 rounded-2xl text-[11px] font-black uppercase tracking-[0.3em] hover:text-blue-600 transition-all flex items-center gap-3 border border-white">
                Technical Dossier <ChevronRight size={14} />
             </Link>
           </div>
@@ -90,7 +90,7 @@ export default async function ExerciseExecutionPage({ params }: { params: Promis
                  <div className="absolute -left-12 top-0 bottom-0 w-px bg-gradient-to-b from-blue-500 via-gray-200 to-transparent opacity-30"></div>
 
                  <div className="flex items-center gap-8 mb-20 px-4">
-                    <div className="w-20 h-20 skeuo-card rounded-[2rem] flex items-center justify-center font-black text-4xl text-blue-600 border border-white">
+                    <div className="w-20 h-20 clean-card rounded-[2rem] flex items-center justify-center font-black text-4xl text-blue-600 border border-white">
                       {phase.order}
                     </div>
                     <div>
@@ -101,7 +101,7 @@ export default async function ExerciseExecutionPage({ params }: { params: Promis
 
                  <div className="grid grid-cols-1 xl:grid-cols-2 gap-16">
                    {phase.events.map((event) => (
-                     <div key={event.id} className="skeuo-card p-12 rounded-[3.5rem] border border-white">
+                     <div key={event.id} className="clean-card p-12 rounded-[3.5rem] border border-white">
                         <div className="flex justify-between items-center mb-12 border-b border-gray-100 pb-8">
                            <h3 className="text-3xl font-black uppercase tracking-tighter flex items-center gap-4">
                              <div className="w-4 h-4 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div>
@@ -132,10 +132,10 @@ export default async function ExerciseExecutionPage({ params }: { params: Promis
                                 </div>
 
                                 <div className="space-y-4">
-                                  {stage.tasks.map((task) => (
-                                    <div key={task.id} className="skeuo-inset p-5 flex items-center justify-between group hover:scale-[1.01] transition-all border border-white/50">
+                                  {stage.tasks.sort((a, b) => a.taskId.localeCompare(b.taskId)).map((task) => (
+                                    <div key={task.id} className="clean-inset p-5 flex items-center justify-between group hover:scale-[1.01] transition-all border border-white/50">
                                        <div className="flex items-center gap-5">
-                                          <div className="w-10 h-10 rounded-2xl skeuo-card border-none flex items-center justify-center text-[11px] font-black text-blue-600 shadow-md">
+                                          <div className="w-10 h-10 rounded-2xl clean-card border-none flex items-center justify-center text-[11px] font-black text-blue-600 shadow-md">
                                             {task.taskId.slice(-3)}
                                           </div>
                                           <div>
@@ -159,7 +159,7 @@ export default async function ExerciseExecutionPage({ params }: { params: Promis
                                             task.status === "Failed" ? "bg-red-50 text-red-600 border-red-100" : "bg-gray-50 text-gray-400 border-gray-100"
                                           }`}>{task.status}</div>
 
-                                          <Link href={`/exercise/${id}/task/${task.taskId}`} className="p-2.5 skeuo-card border-none rounded-xl opacity-0 group-hover:opacity-100 transition-all hover:scale-110">
+                                          <Link href={`/exercise/${id}/task/${task.taskId}`} className="p-2.5 clean-card border-none rounded-xl opacity-0 group-hover:opacity-100 transition-all hover:scale-110">
                                              <FileText size={16} className="text-black" />
                                           </Link>
                                        </div>

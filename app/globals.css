@@ -8,43 +8,64 @@
 }
 
 @layer utilities {
-  .skeuo-card {
-    background: linear-gradient(145deg, #ffffff, #f0f0f0);
-    box-shadow:
-      8px 8px 16px #d1d1d1,
-      -8px -8px 16px #ffffff,
-      inset 0 1px 0 rgba(255,255,255,0.8);
-    border: 1px solid rgba(0,0,0,0.05);
+  .clean-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
   }
 
-  .skeuo-button {
-    background: linear-gradient(to bottom, #444, #000);
-    box-shadow:
-      0 4px 0 #000,
-      0 8px 15px rgba(0,0,0,0.2),
-      inset 0 1px 1px rgba(255,255,255,0.3);
-    transition: all 0.1s ease;
-    border: 1px solid #000;
+  .clean-button {
+    background: #2563eb;
+    color: #ffffff;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    border: 1px solid #2563eb;
   }
 
-  .skeuo-button:active {
-    transform: translateY(2px);
-    box-shadow:
-      0 2px 0 #000,
-      0 4px 8px rgba(0,0,0,0.3),
-      inset 0 1px 1px rgba(255,255,255,0.2);
+  .clean-button:hover {
+    background: #1d4ed8;
+    border-color: #1d4ed8;
   }
 
-  .skeuo-glass {
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  .clean-button-secondary {
+    background: #ffffff;
+    color: #1e293b;
+    border: 1px solid #e2e8f0;
+    font-weight: 600;
+    transition: all 0.2s ease;
   }
 
-  .skeuo-inset {
-    background: #f8f9fa;
-    box-shadow: inset 4px 4px 8px #e9ecef, inset -4px -4px 8px #ffffff;
-    border-radius: 12px;
+  .clean-button-secondary:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+  }
+
+  .clean-glass {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .clean-inset {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+  }
+
+  .clean-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+  }
+
+  .clean-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    ring: 2px;
+    ring-color: #3b82f6;
   }
 }

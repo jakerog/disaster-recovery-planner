@@ -8,7 +8,7 @@ interface StageWithTasks extends Stage {
 
 export default function StagePerformanceTable({ stages }: { stages: StageWithTasks[] }) {
   return (
-    <div className="mt-20 skeuo-card p-10 rounded-[3rem] border border-white overflow-hidden">
+    <div className="mt-20 clean-card p-10 rounded-[3rem] border border-white overflow-hidden">
       <h2 className="text-2xl font-black tracking-tight uppercase mb-8 px-4">Stage Analytics Protocol</h2>
       <div className="overflow-x-auto">
         <table className="w-full text-left border-separate border-spacing-y-4">
@@ -29,7 +29,7 @@ export default function StagePerformanceTable({ stages }: { stages: StageWithTas
               const successRate = stage.tasks.length ? Math.floor((stage.tasks.filter(t => t.status === "Completed").length / stage.tasks.length) * 100) : 0;
 
               return (
-                <tr key={stage.id} className="skeuo-inset bg-white/40 group hover:scale-[1.01] transition-transform">
+                <tr key={stage.id} className="clean-inset bg-white/40 group hover:scale-[1.01] transition-transform">
                   <td className="px-6 py-5 rounded-l-2xl">
                     <div className="text-sm font-black uppercase tracking-tight">{stage.name}</div>
                     <div className="text-[9px] font-bold text-gray-400 uppercase">{stage.tasks.length} Tasks Decoded</div>
@@ -41,7 +41,7 @@ export default function StagePerformanceTable({ stages }: { stages: StageWithTas
                   </td>
                   <td className="px-6 py-5 rounded-r-2xl">
                     <div className="flex items-center gap-3">
-                      <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden skeuo-inset border-none">
+                      <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden clean-inset border-none">
                         <div
                           className={`h-full transition-all duration-1000 ${successRate === 100 ? "bg-green-500" : "bg-blue-500"}`}
                           style={{ width: `${successRate}%` }}

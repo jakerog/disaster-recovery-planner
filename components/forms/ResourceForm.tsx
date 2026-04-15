@@ -29,7 +29,7 @@ export default function ResourceForm({ initialData, teams = [], vendors = [], ex
   };
 
   const Field = ({ label, name, icon: Icon, type = "text", options = null }: any) => (
-    <div className="skeuo-inset p-3 px-5 border border-white/50">
+    <div className="clean-inset p-3 px-5 border border-white/50">
       <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 block mb-1 flex items-center gap-2">
         <Icon size={10} /> {label}
       </label>
@@ -45,13 +45,13 @@ export default function ResourceForm({ initialData, teams = [], vendors = [], ex
   );
 
   return (
-    <form onSubmit={handleSubmit} className="skeuo-card p-10 rounded-[2.5rem] space-y-10 max-w-2xl mx-auto">
+    <form onSubmit={handleSubmit} className="clean-card p-10 rounded-[2.5rem] space-y-10 max-w-2xl mx-auto">
       <header className="flex justify-between items-center border-b border-gray-100 pb-8">
          <div>
             <h2 className="text-3xl font-black uppercase tracking-tighter text-black">{initialData ? "Edit Agent" : "New Agent"}</h2>
             <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">Resource Matrix Entry</p>
          </div>
-         <div className="w-16 h-16 rounded-3xl bg-gray-50 flex items-center justify-center text-gray-300 skeuo-inset border-2 border-white">
+         <div className="w-16 h-16 rounded-3xl bg-gray-50 flex items-center justify-center text-gray-300 clean-inset border-2 border-white">
             <Camera size={24} />
          </div>
       </header>
@@ -70,7 +70,7 @@ export default function ResourceForm({ initialData, teams = [], vendors = [], ex
         </div>
       </div>
 
-      <button type="submit" disabled={loading} className="w-full skeuo-button text-white p-5 rounded-2xl font-black uppercase tracking-[0.3em] text-[11px] disabled:opacity-50">
+      <button type="submit" disabled={loading} className="w-full clean-button text-white p-5 rounded-2xl font-black uppercase tracking-[0.3em] text-[11px] disabled:opacity-50">
         {loading ? "Synchronizing Matrix..." : "Commit Data Stream"}
       </button>
     </form>

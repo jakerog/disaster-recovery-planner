@@ -51,7 +51,7 @@ export default function TaskEditForm({ task, allResources = [], allTeams = [], a
 
   if (!canEdit && session) {
     return (
-      <div className="skeuo-card p-12 text-center">
+      <div className="clean-card p-12 text-center">
         <h2 className="text-xl font-black text-red-600 uppercase mb-4">Access Restricted</h2>
         <p className="text-sm font-bold text-gray-500 italic">This recovery task is outside your current operational mandate.</p>
       </div>
@@ -59,21 +59,21 @@ export default function TaskEditForm({ task, allResources = [], allTeams = [], a
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-12 text-gray-900 skeuo-card p-10 md:p-16 rounded-[3rem] border border-white">
+    <form onSubmit={handleSubmit} className="space-y-12 text-gray-900 clean-card p-10 md:p-16 rounded-[3rem] border border-white">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
         <div>
           <label className="text-[10px] font-black text-gray-400 uppercase block mb-3 tracking-widest px-1">Task Designation (ID)</label>
-          <input name="taskId" defaultValue={task.taskId} className="skeuo-inset w-full p-4 text-sm font-bold border-none focus:ring-1 focus:ring-blue-500/20" />
+          <input name="taskId" defaultValue={task.taskId} className="clean-inset w-full p-4 text-sm font-bold border-none focus:ring-1 focus:ring-blue-500/20" />
         </div>
         <div>
           <label className="text-[10px] font-black text-gray-400 uppercase block mb-3 tracking-widest px-1">Operational Stage</label>
-          <select name="stageId" defaultValue={task.stageId} className="skeuo-inset w-full p-4 text-sm font-bold border-none appearance-none cursor-pointer">
+          <select name="stageId" defaultValue={task.stageId} className="clean-inset w-full p-4 text-sm font-bold border-none appearance-none cursor-pointer">
             {allStages.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
           </select>
         </div>
         <div>
           <label className="text-[10px] font-black text-gray-400 uppercase block mb-3 tracking-widest px-1">Status Protocol</label>
-          <select name="status" defaultValue={task.status} className="skeuo-inset w-full p-4 text-sm font-bold border-none appearance-none cursor-pointer">
+          <select name="status" defaultValue={task.status} className="clean-inset w-full p-4 text-sm font-bold border-none appearance-none cursor-pointer">
             <option value="Not-Started">Not-Started</option>
             <option value="In-Progress">In-Progress</option>
             <option value="Completed">Completed</option>
@@ -82,24 +82,24 @@ export default function TaskEditForm({ task, allResources = [], allTeams = [], a
         </div>
         <div>
           <label className="text-[10px] font-black text-gray-400 uppercase block mb-3 tracking-widest px-1">Workflow Chain</label>
-          <select name="workflow" defaultValue={task.workflow} className="skeuo-inset w-full p-4 text-sm font-bold border-none appearance-none cursor-pointer">
+          <select name="workflow" defaultValue={task.workflow} className="clean-inset w-full p-4 text-sm font-bold border-none appearance-none cursor-pointer">
             <option value="Sequential">Sequential</option>
             <option value="Parallel">Parallel</option>
           </select>
         </div>
         <div>
           <label className="text-[10px] font-black text-gray-400 uppercase block mb-3 tracking-widest px-1">Allocation Profile</label>
-          <select name="resourceAllocation" defaultValue={task.resourceAllocation} className="skeuo-inset w-full p-4 text-sm font-bold border-none appearance-none cursor-pointer">
+          <select name="resourceAllocation" defaultValue={task.resourceAllocation} className="clean-inset w-full p-4 text-sm font-bold border-none appearance-none cursor-pointer">
             <option value="Single">Single</option>
             <option value="Multiple">Multiple</option>
           </select>
         </div>
         <div>
           <label className="text-[10px] font-black text-gray-400 uppercase block mb-3 tracking-widest px-1">Estimated Window (m)</label>
-          <input name="estimatedTime" type="number" defaultValue={task.estimatedTime || 0} className="skeuo-inset w-full p-4 text-sm font-bold border-none" />
+          <input name="estimatedTime" type="number" defaultValue={task.estimatedTime || 0} className="clean-inset w-full p-4 text-sm font-bold border-none" />
         </div>
 
-        <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-10 p-8 skeuo-inset border border-white/50">
+        <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-10 p-8 clean-inset border border-white/50">
           <div>
             <label className="text-[10px] font-black text-gray-400 uppercase block mb-3 tracking-widest px-1">Commencement Window</label>
             <div className="flex gap-4">
@@ -118,7 +118,7 @@ export default function TaskEditForm({ task, allResources = [], allTeams = [], a
 
         <div>
           <label className="text-[10px] font-black text-gray-400 uppercase block mb-3 tracking-widest px-1">Team Mandate</label>
-          <select name="teamId" defaultValue={task.teamId || ""} className="skeuo-inset w-full p-4 text-sm font-bold border-none appearance-none cursor-pointer">
+          <select name="teamId" defaultValue={task.teamId || ""} className="clean-inset w-full p-4 text-sm font-bold border-none appearance-none cursor-pointer">
             <option value="">Select Team</option>
             {allTeams.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
           </select>
@@ -126,7 +126,7 @@ export default function TaskEditForm({ task, allResources = [], allTeams = [], a
 
         <div>
           <label className="text-[10px] font-black text-gray-400 uppercase block mb-3 tracking-widest px-1">Evidence Cryptography</label>
-          <div className="skeuo-inset p-4 flex items-center justify-between group cursor-pointer hover:bg-white/50 transition-colors">
+          <div className="clean-inset p-4 flex items-center justify-between group cursor-pointer hover:bg-white/50 transition-colors">
              <span className="text-[11px] font-bold text-gray-400">Upload Visual Proof (Photos/Logs)</span>
              <Camera size={18} className="text-gray-300" />
           </div>
@@ -142,7 +142,7 @@ export default function TaskEditForm({ task, allResources = [], allTeams = [], a
               type="button"
               onClick={() => setResourceIds(prev => prev.includes(r.id) ? prev.filter(i => i !== r.id) : [...prev, r.id])}
               className={`px-5 py-2.5 rounded-2xl text-[10px] font-black border-none uppercase tracking-widest transition-all ${
-                resourceIds.includes(r.id) ? "skeuo-button text-white scale-105" : "skeuo-inset text-gray-400 opacity-60"
+                resourceIds.includes(r.id) ? "clean-button text-white scale-105" : "clean-inset text-gray-400 opacity-60"
               }`}
             >
               {r.fullName}
@@ -153,13 +153,13 @@ export default function TaskEditForm({ task, allResources = [], allTeams = [], a
 
       <div>
         <label className="text-[10px] font-black text-gray-400 block mb-3 tracking-widest px-1">Operational Intelligence (Notes)</label>
-        <textarea name="notes" defaultValue={task.notes || ""} className="skeuo-inset w-full p-6 text-sm font-bold border-none min-h-[160px] leading-relaxed" />
+        <textarea name="notes" defaultValue={task.notes || ""} className="clean-inset w-full p-6 text-sm font-bold border-none min-h-[160px] leading-relaxed" />
       </div>
 
       <button
         type="submit"
         disabled={loading}
-        className="w-full skeuo-button text-white p-8 rounded-[2rem] font-black uppercase tracking-[0.5em] text-[13px] shadow-[0_25px_60px_rgba(0,0,0,0.4)] flex items-center justify-center gap-4 group transition-all"
+        className="w-full clean-button text-white p-8 rounded-[2rem] font-black uppercase tracking-[0.5em] text-[13px] shadow-[0_25px_60px_rgba(0,0,0,0.4)] flex items-center justify-center gap-4 group transition-all"
       >
         <Save size={20} className="group-hover:scale-110 transition-transform" />
         {loading ? "Transmitting..." : "Synchronize Metadata"}
