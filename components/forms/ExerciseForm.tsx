@@ -43,18 +43,42 @@ export default function ExerciseForm({ initialData }: { initialData?: Exercise }
           <input name="name" required defaultValue={initialData?.name} className="w-full border p-2 rounded text-sm" />
         </div>
         <div>
+          <label className="flex items-center gap-3 skeuo-inset p-3 cursor-pointer">
+            <input type="checkbox" name="mock3Required" defaultChecked={initialData?.mock3Required} className="w-5 h-5 accent-black" />
+            <span className="text-[10px] font-black uppercase tracking-widest text-gray-500">Require Mock 3 Phase</span>
+          </label>
+        </div>
+        <div>
           <label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">Start</label>
           <input name="startDate" type="date" defaultValue={initialData?.startDate?.toISOString().split('T')[0]} className="w-full border p-2 rounded text-sm" />
+        </div>
+        <div>
+          <label className="flex items-center gap-3 skeuo-inset p-3 cursor-pointer">
+            <input type="checkbox" name="mock3Required" defaultChecked={initialData?.mock3Required} className="w-5 h-5 accent-black" />
+            <span className="text-[10px] font-black uppercase tracking-widest text-gray-500">Require Mock 3 Phase</span>
+          </label>
         </div>
         <div>
           <label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">End</label>
           <input name="endDate" type="date" defaultValue={initialData?.endDate?.toISOString().split('T')[0]} className="w-full border p-2 rounded text-sm" />
         </div>
         <div>
+          <label className="flex items-center gap-3 skeuo-inset p-3 cursor-pointer">
+            <input type="checkbox" name="mock3Required" defaultChecked={initialData?.mock3Required} className="w-5 h-5 accent-black" />
+            <span className="text-[10px] font-black uppercase tracking-widest text-gray-500">Require Mock 3 Phase</span>
+          </label>
+        </div>
+        <div>
           <label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">Status</label>
           <select name="status" defaultValue={initialData?.status} className="w-full border p-2 rounded text-sm">
             <option>Planned</option><option>In-Progress</option><option>On-Hold</option><option>Completed</option><option>Cancelled</option>
           </select>
+        </div>
+        <div>
+          <label className="flex items-center gap-3 skeuo-inset p-3 cursor-pointer">
+            <input type="checkbox" name="mock3Required" defaultChecked={initialData?.mock3Required} className="w-5 h-5 accent-black" />
+            <span className="text-[10px] font-black uppercase tracking-widest text-gray-500">Require Mock 3 Phase</span>
+          </label>
         </div>
         <div>
           <label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">Logo URL</label>

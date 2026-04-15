@@ -41,49 +41,49 @@ export default function TaskEditForm({ task, allResources = [], allTeams = [], a
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">Task ID</label>
-          <input name="taskId" defaultValue={task.taskId} className="w-full border p-2 rounded text-sm" />
+          <input name="taskId" defaultValue={task.taskId} className="skeuo-inset w-full p-3 text-sm font-bold border-none focus:ring-2 focus:ring-black transition-all" />
         </div>
         <div>
           <label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">Status</label>
-          <select name="status" defaultValue={task.status} className="w-full border p-2 rounded text-sm">
+          <select name="status" defaultValue={task.status} className="skeuo-inset w-full p-3 text-sm font-bold border-none focus:ring-2 focus:ring-black transition-all">
             <option>Not-Started</option><option>In-Progress</option><option>Completed</option><option>Failed</option>
           </select>
         </div>
         <div>
           <label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">Workflow</label>
-          <select name="workflow" defaultValue={task.workflow} className="w-full border p-2 rounded text-sm">
+          <select name="workflow" defaultValue={task.workflow} className="skeuo-inset w-full p-3 text-sm font-bold border-none focus:ring-2 focus:ring-black transition-all">
             <option>Sequential</option><option>Parallel</option>
           </select>
         </div>
         <div>
           <label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">Allocation</label>
-          <select name="resourceAllocation" defaultValue={task.resourceAllocation} className="w-full border p-2 rounded text-sm">
+          <select name="resourceAllocation" defaultValue={task.resourceAllocation} className="skeuo-inset w-full p-3 text-sm font-bold border-none focus:ring-2 focus:ring-black transition-all">
             <option>Single</option><option>Multiple</option>
           </select>
         </div>
         <div>
           <label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">Start Date</label>
-          <input name="startDate" type="date" defaultValue={task.startDate?.toISOString().split('T')[0]} className="w-full border p-2 rounded text-sm" />
+          <input name="startDate" type="date" defaultValue={task.startDate?.toISOString().split('T')[0]} className="skeuo-inset w-full p-3 text-sm font-bold border-none focus:ring-2 focus:ring-black transition-all" />
         </div>
         <div>
           <label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">Start Time</label>
-          <input name="startTime" type="time" defaultValue={task.startDate?.toISOString().split('T')[1]?.substring(0,5)} className="w-full border p-2 rounded text-sm" />
+          <input name="startTime" type="time" defaultValue={task.startDate?.toISOString().split('T')[1]?.substring(0,5)} className="skeuo-inset w-full p-3 text-sm font-bold border-none focus:ring-2 focus:ring-black transition-all" />
         </div>
         <div>
           <label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">End Date</label>
-          <input name="endDate" type="date" defaultValue={task.endDate?.toISOString().split('T')[0]} className="w-full border p-2 rounded text-sm" />
+          <input name="endDate" type="date" defaultValue={task.endDate?.toISOString().split('T')[0]} className="skeuo-inset w-full p-3 text-sm font-bold border-none focus:ring-2 focus:ring-black transition-all" />
         </div>
         <div>
           <label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">End Time</label>
-          <input name="endTime" type="time" defaultValue={task.endDate?.toISOString().split('T')[1]?.substring(0,5)} className="w-full border p-2 rounded text-sm" />
+          <input name="endTime" type="time" defaultValue={task.endDate?.toISOString().split('T')[1]?.substring(0,5)} className="skeuo-inset w-full p-3 text-sm font-bold border-none focus:ring-2 focus:ring-black transition-all" />
         </div>
         <div>
           <label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">Est Min</label>
-          <input name="estimatedTime" type="number" defaultValue={task.estimatedTime || 0} className="w-full border p-2 rounded text-sm" />
+          <input name="estimatedTime" type="number" defaultValue={task.estimatedTime || 0} className="skeuo-inset w-full p-3 text-sm font-bold border-none focus:ring-2 focus:ring-black transition-all" />
         </div>
         <div>
           <label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">Team</label>
-          <select name="teamId" defaultValue={task.teamId || ""} className="w-full border p-2 rounded text-sm">
+          <select name="teamId" defaultValue={task.teamId || ""} className="skeuo-inset w-full p-3 text-sm font-bold border-none focus:ring-2 focus:ring-black transition-all">
             <option value="">Select Team</option>
             {allTeams.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
           </select>
@@ -104,7 +104,7 @@ export default function TaskEditForm({ task, allResources = [], allTeams = [], a
 
       <div>
         <label className="text-[10px] font-bold text-gray-400 block mb-1 uppercase">Notes</label>
-        <textarea name="notes" defaultValue={task.notes || ""} className="w-full border p-2 rounded text-sm min-h-[80px]" />
+        <textarea name="notes" defaultValue={task.notes || ""} className="skeuo-inset w-full p-3 text-sm font-bold border-none focus:ring-2 focus:ring-black transition-all min-h-[80px]" />
       </div>
 
       <button type="submit" disabled={loading} className="w-full py-4 bg-black text-white rounded font-bold uppercase tracking-widest hover:bg-gray-800 transition-colors">

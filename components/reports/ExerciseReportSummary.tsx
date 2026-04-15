@@ -26,23 +26,23 @@ export default function ExerciseReportSummary({ exercise }: Props) {
   return (
     <div className="space-y-20 text-gray-900 font-sans">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div className="bg-gray-50 p-8 rounded-3xl border border-gray-100 shadow-sm">
+        <div className="skeuo-card p-8 rounded-[2rem]">
           <span className="text-gray-400 font-black uppercase text-[10px] block mb-2 tracking-[0.2em]">Total Uptime Risk</span>
           <span className="text-5xl font-black tracking-tighter">{totalActual} <small className="text-xl">min</small></span>
         </div>
-        <div className="bg-gray-50 p-8 rounded-3xl border border-gray-100 shadow-sm">
+        <div className="skeuo-card p-8 rounded-[2rem]">
           <span className="text-gray-400 font-black uppercase text-[10px] block mb-2 tracking-[0.2em]">SLA Variance</span>
           <span className={`text-5xl font-black tracking-tighter ${variance > 0 ? "text-red-600" : "text-green-600"}`}>
             {variance > 0 ? "+" : ""}{variance} <small className="text-xl">min</small>
           </span>
         </div>
-        <div className="bg-gray-50 p-8 rounded-3xl border border-gray-100 shadow-sm">
+        <div className="skeuo-card p-8 rounded-[2rem]">
           <span className="text-gray-400 font-black uppercase text-[10px] block mb-2 tracking-[0.2em]">Efficiency Score</span>
           <span className="text-5xl font-black tracking-tighter">
             {totalEst ? Math.max(0, Math.floor(100 - (variance / totalEst) * 100)) : 100}%
           </span>
         </div>
-        <div className="bg-gray-50 p-8 rounded-3xl border border-gray-100 shadow-sm">
+        <div className="skeuo-card p-8 rounded-[2rem]">
           <span className="text-gray-400 font-black uppercase text-[10px] block mb-2 tracking-[0.2em]">Task Integrity</span>
           <span className="text-5xl font-black tracking-tighter">
             {Math.floor((exercise.stages.reduce((sum, s) => sum + s.tasks.filter(t => t.status === "Completed").length, 0) / Math.max(1, exercise.stages.reduce((sum, s) => sum + s.tasks.length, 0))) * 100)}%
@@ -56,7 +56,7 @@ export default function ExerciseReportSummary({ exercise }: Props) {
             <h2 className="text-xl font-black tracking-tight uppercase">Failover Recovery Cycle</h2>
             <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{failoverData.length} STAGES ANALYZED</span>
           </div>
-          <div className="h-[400px] w-full bg-white border border-gray-100 p-8 rounded-3xl shadow-2xl shadow-gray-100">
+          <div className="h-[400px] w-full skeuo-inset p-8 rounded-[2rem]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={failoverData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
@@ -75,7 +75,7 @@ export default function ExerciseReportSummary({ exercise }: Props) {
             <h2 className="text-xl font-black tracking-tight uppercase">Failback Recovery Cycle</h2>
             <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{failbackData.length} STAGES ANALYZED</span>
           </div>
-          <div className="h-[400px] w-full bg-white border border-gray-100 p-8 rounded-3xl shadow-2xl shadow-gray-100">
+          <div className="h-[400px] w-full skeuo-inset p-8 rounded-[2rem]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={failbackData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />

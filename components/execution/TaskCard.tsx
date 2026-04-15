@@ -49,7 +49,7 @@ export default function TaskCard({ task }: { task: TaskWithRelations }) {
   };
 
   return (
-    <div className={`bg-white border p-6 rounded-2xl shadow-sm transition-all flex flex-col h-full ${task.status === "Failed" ? "border-red-300 ring-4 ring-red-50" : "border-gray-100"}`}>
+    <div className={`skeuo-card p-6 rounded-3xl transition-all flex flex-col h-full ${task.status === "Failed" ? "border-red-300 ring-4 ring-red-50" : "border-gray-100"}`}>
       <div className="flex justify-between items-start mb-4">
         <span className="text-[10px] font-mono font-black text-gray-400 uppercase tracking-widest">{task.taskId}</span>
         <div className="flex gap-2">
@@ -93,7 +93,7 @@ export default function TaskCard({ task }: { task: TaskWithRelations }) {
         <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileUpload} />
         <button
           onClick={() => handleUpdate(task.status === "In-Progress" ? "Completed" : "In-Progress")}
-          className={`flex items-center justify-center gap-2 p-3 rounded-xl text-white transition-all text-[10px] font-black uppercase tracking-widest shadow-lg ${task.status === "Completed" ? "bg-green-600 shadow-green-100" : "bg-black shadow-gray-200"}`}
+          className={`flex items-center justify-center gap-2 p-3 rounded-xl text-white transition-all text-[10px] font-black uppercase tracking-widest shadow-lg ${task.status === "Completed" ? "bg-green-600 shadow-green-100" : "skeuo-button"}`}
         >
           <CheckCircle2 size={14} />
           {task.status === "Not-Started" ? "Start" : task.status === "In-Progress" ? "Finish" : "Done"}

@@ -21,44 +21,46 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center p-8 font-sans">
-      <div className="max-w-md w-full">
-        <div className="flex justify-center mb-12">
-          <div className="w-20 h-20 bg-black rounded-3xl flex items-center justify-center text-white shadow-2xl">
-            <Shield size={40} />
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-8 font-sans">
+      <div className="max-w-md w-full skeuo-card p-12 rounded-[2.5rem]">
+        <div className="flex justify-center mb-10">
+          <div className="w-24 h-24 bg-black rounded-3xl flex items-center justify-center text-white shadow-[0_20px_50px_rgba(0,0,0,0.3)] ring-8 ring-white">
+            <Shield size={48} />
           </div>
         </div>
 
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-black uppercase tracking-tighter mb-2">Sentinel</h1>
-          <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em]">Secure DR Access Portal</p>
+        <div className="text-center mb-10">
+          <h1 className="text-4xl font-black uppercase tracking-tighter mb-2 text-black">Sentinel</h1>
+          <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.4em]">Secure Access Node</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 block mb-2" htmlFor="email">
-              Email Address
+        <form onSubmit={handleSubmit} className="space-y-8">
+          <div className="skeuo-inset p-2 px-4">
+            <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 block mb-1 px-1" htmlFor="email">
+              Identity Protocol
             </label>
             <input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-gray-50 border border-gray-100 p-4 rounded-2xl font-bold focus:outline-none focus:ring-2 focus:ring-black transition-all"
+              className="w-full bg-transparent p-2 text-sm font-bold focus:outline-none text-black"
+              placeholder="user@sentinel.cloud"
               required
             />
           </div>
 
-          <div>
-            <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 block mb-2" htmlFor="password">
-              Password
+          <div className="skeuo-inset p-2 px-4">
+            <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 block mb-1 px-1" htmlFor="password">
+              Access Code
             </label>
             <input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-gray-50 border border-gray-100 p-4 rounded-2xl font-bold focus:outline-none focus:ring-2 focus:ring-black transition-all"
+              className="w-full bg-transparent p-2 text-sm font-bold focus:outline-none text-black"
+              placeholder="••••••••"
               required
             />
           </div>
@@ -66,14 +68,14 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-black text-white p-5 rounded-2xl font-black uppercase tracking-[0.2em] hover:bg-gray-800 transition-all shadow-xl disabled:opacity-50"
+            className="w-full skeuo-button text-white p-5 rounded-2xl font-black uppercase tracking-[0.3em] text-[11px] disabled:opacity-50"
           >
-            {loading ? "Verifying..." : "Access System"}
+            {loading ? "Authenticating..." : "Establish Connection"}
           </button>
         </form>
 
-        <p className="mt-12 text-center text-[10px] font-black text-gray-300 uppercase tracking-widest">
-          Authored by Sentinel Global Operations
+        <p className="mt-12 text-center text-[10px] font-black text-gray-300 uppercase tracking-[0.2em]">
+          End-to-End Encrypted Terminal
         </p>
       </div>
     </div>
