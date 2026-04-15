@@ -2,6 +2,7 @@
 
 import { Exercise, Phase, Event, Stage, Task } from "@prisma/client";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import StagePerformanceTable from './StagePerformanceTable';
 
 interface Props {
   exercise: Exercise & {
@@ -86,27 +87,7 @@ export default function ExerciseReportSummary({ exercise }: Props) {
         </section>
       </div>
 
-      <section className="mt-20">
-         <h2 className="text-2xl font-black tracking-tight uppercase mb-10 px-4">Detailed Stage Performance</h2>
-         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {allEvents.flatMap(e => e.stages).map(s => {
-               const act = s.tasks.reduce((sum, t) => sum + (t.actualDuration || 0), 0);
-               const est = s.tasks.reduce((sum, t) => sum + (t.estimatedTime || 0), 0);
-               const varMin = act - est;
-               return (
-                  <div key={s.id} className="skeuo-inset p-6 border border-white/50">
-                     <div className="text-[9px] font-black text-gray-400 uppercase mb-2 tracking-widest">{s.name}</div>
-                     <div className="flex justify-between items-end">
-                        <div className="text-2xl font-black">{act}m</div>
-                        <div className={`text-[10px] font-black uppercase ${varMin > 0 ? "text-red-500" : "text-green-600"}`}>
-                           {varMin > 0 ? "+" : ""}{varMin}m
-                        </div>
-                     </div>
-                  </div>
-               );
-            })}
-         </div>
-      </section>
+      <StagePerformanceTable stages={allEvents.flatMap(e => e.stages) as any} />
     </div>
   );
 }
