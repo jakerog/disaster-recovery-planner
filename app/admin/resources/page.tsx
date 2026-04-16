@@ -3,6 +3,7 @@
 import { Resource, Team, Vendor, Exercise } from "@prisma/client";
 import ResourceForm from "@/components/forms/ResourceForm";
 import { useState, useEffect } from "react";
+import { User, Trash2, Edit3, Shield, Mail, Phone } from "lucide-react";
 
 export default function AdminResourcesPage() {
   const [resources, setResources] = useState<any[]>([]);
@@ -27,38 +28,80 @@ export default function AdminResourcesPage() {
   useEffect(() => { fetchData(); }, []);
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure?")) return;
+    if (!confirm("Terminate this resource access? This action cannot be undone.")) return;
     await fetch(`/api/resources?id=${id}`, { method: "DELETE" });
     fetchData();
   };
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen text-gray-900">
-      <div className="max-w-5xl mx-auto">
-        <h1 className="text-3xl font-black mb-10 tracking-tighter uppercase">Resource Management</h1>
+    <div className="p-4 md:p-8 bg-slate-50 min-h-screen text-slate-900 font-sans pb-24">
+      <div className="max-w-6xl mx-auto">
+        <header className="mb-12 flex flex-col md:flex-row md:items-center justify-between gap-6">
+           <div>
+              <h1 className="text-4xl font-black tracking-tighter uppercase leading-none">Personnel Registry</h1>
+              <p className="text-sm font-bold text-slate-400 uppercase tracking-widest mt-2">Resource Allocation & Identity Node</p>
+           </div>
+           <div className="flex items-center gap-4 bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+              <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white">
+                 <Shield size={20} />
+              </div>
+              <div>
+                 <p className="text-[10px] font-black text-slate-400 uppercase">Active Agents</p>
+                 <p className="text-lg font-black">{resources.length}</p>
+              </div>
+           </div>
+        </header>
+
         <ResourceForm initialData={editingResource} teams={teams} vendors={vendors} exercises={exercises} />
-        <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
-          <table className="w-full text-left">
-            <thead>
-              <tr className="bg-gray-50 border-b border-gray-200 text-xs font-bold text-gray-500 uppercase tracking-widest">
-                <th className="px-6 py-4">Name</th>
-                <th className="px-6 py-4">Assignment</th>
-                <th className="px-6 py-4">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              {resources.map((r) => (
-                <tr key={r.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-6 py-4 font-bold">{r.fullName}</td>
-                  <td className="px-6 py-4 text-xs font-bold text-gray-400 uppercase">{r.team?.name || "No Team"} / {r.vendor?.name || "Internal"}</td>
-                  <td className="px-6 py-4 text-sm flex gap-4">
-                    <button onClick={() => setEditingResource(r)} className="text-black font-bold">Edit</button>
-                    <button onClick={() => handleDelete(r.id)} className="text-red-600 font-bold">Delete</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+           {resources.map((r) => (
+             <div key={r.id} className="clean-card p-6 flex flex-col group animate-slide-up">
+                <div className="flex items-center gap-4 mb-6">
+                   {r.photo ? (
+                     <img src={r.photo} className="w-14 h-14 rounded-2xl object-cover shadow-md border border-white" alt={r.fullName} />
+                   ) : (
+                     <div className="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400">
+                        <User size={24} />
+                     </div>
+                   )}
+                   <div>
+                      <h3 className="font-black text-slate-900 leading-tight">{r.fullName}</h3>
+                      <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest">{r.role}</p>
+                   </div>
+                </div>
+
+                <div className="space-y-3 mb-8 flex-1">
+                   <div className="flex items-center gap-2 text-[11px] font-bold text-slate-500">
+                      <Mail size={12} className="text-slate-300" /> {r.email}
+                   </div>
+                   {r.phoneNumber && (
+                     <div className="flex items-center gap-2 text-[11px] font-bold text-slate-500">
+                        <Phone size={12} className="text-slate-300" /> {r.phoneNumber}
+                     </div>
+                   )}
+                   <div className="pt-3 border-t border-slate-50 mt-3">
+                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Unit Assignment</p>
+                      <p className="text-[11px] font-black text-slate-700">{r.team?.name || "Independent"} / {r.vendor?.name || "Internal"}</p>
+                   </div>
+                </div>
+
+                <div className="flex gap-2">
+                   <button
+                     onClick={() => { setEditingResource(r); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                     className="flex-1 clean-button-secondary py-2 text-[10px] uppercase tracking-widest flex items-center justify-center gap-2"
+                   >
+                      <Edit3 size={12} /> Edit
+                   </button>
+                   <button
+                     onClick={() => handleDelete(r.id)}
+                     className="p-2 rounded-xl bg-rose-50 text-rose-600 border border-rose-100 hover:bg-rose-100 transition-colors"
+                   >
+                      <Trash2 size={16} />
+                   </button>
+                </div>
+             </div>
+           ))}
         </div>
       </div>
     </div>

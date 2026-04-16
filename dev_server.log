@@ -99,3 +99,9 @@ Error: Requested and resolved page mismatch: /admin/exercises//[id/]/workflow/pa
     at Array.reduce (<anonymous>)
  ⨯ unhandledRejection:  Error: Requested and resolved page mismatch: /admin/exercises//[id/]/workflow/page /admin/exercises/[id/]/workflow/page
     at Array.reduce (<anonymous>)
+Error: Requested and resolved page mismatch: /admin/exercises//[id/]/workflow/page /admin/exercises/[id/]/workflow/page
+    at Array.reduce (<anonymous>)
+ ⨯ unhandledRejection: Error: Requested and resolved page mismatch: /admin/exercises//[id/]/workflow/page /admin/exercises/[id/]/workflow/page
+    at Array.reduce (<anonymous>)
+ ⨯ unhandledRejection:  Error: Requested and resolved page mismatch: /admin/exercises//[id/]/workflow/page /admin/exercises/[id/]/workflow/page
+    at Array.reduce (<anonymous>)

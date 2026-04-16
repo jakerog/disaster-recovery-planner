@@ -8,93 +8,128 @@
 }
 
 @layer utilities {
+  /* Modern Depth (Skeuomorphic Lite) */
   .clean-card {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    background: linear-gradient(145deg, #ffffff, #fbfcfd);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow:
+      0 10px 25px -5px rgba(0, 0, 0, 0.05),
+      0 8px 10px -6px rgba(0, 0, 0, 0.05),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    border-radius: 2rem;
+  }
+
+  .clean-inset {
+    background: #f1f5f9;
+    box-shadow:
+      inset 2px 2px 5px rgba(0, 0, 0, 0.02),
+      inset -2px -2px 5px rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.02);
+    border-radius: 1rem;
   }
 
   .clean-button {
-    background: #2563eb;
+    background: linear-gradient(to bottom, #3b82f6, #2563eb);
     color: #ffffff;
-    font-weight: 600;
-    transition: all 0.2s ease;
-    border: 1px solid #2563eb;
+    font-weight: 700;
+    border: 1px solid #1d4ed8;
+    box-shadow:
+      0 4px 6px -1px rgba(37, 99, 235, 0.2),
+      0 2px 4px -2px rgba(37, 99, 235, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
+    border-radius: 1rem;
   }
 
   .clean-button:hover {
-    background: #1d4ed8;
-    border-color: #1d4ed8;
+    transform: translateY(-1px);
+    box-shadow:
+      0 10px 15px -3px rgba(37, 99, 235, 0.3),
+      0 4px 6px -4px rgba(37, 99, 235, 0.3);
   }
 
   .clean-button:active {
-    transform: scale(0.98);
+    transform: translateY(1px);
+    background: linear-gradient(to bottom, #2563eb, #1d4ed8);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   .clean-button-secondary {
     background: #ffffff;
     color: #1e293b;
     border: 1px solid #e2e8f0;
-    font-weight: 600;
-    transition: all 0.2s ease;
+    font-weight: 700;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    transition: all 0.2s;
     cursor: pointer;
+    border-radius: 1rem;
   }
 
   .clean-button-secondary:hover {
     background: #f8fafc;
     border-color: #cbd5e1;
-  }
-
-  .clean-button-secondary:active {
-    transform: scale(0.98);
+    transform: translateY(-1px);
   }
 
   .clean-glass {
     background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid #e2e8f0;
-  }
-
-  .clean-inset {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.75rem;
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
   }
 
   .clean-input {
     width: 100%;
-    padding: 0.75rem 1rem;
+    padding: 0.875rem 1.25rem;
     background: #ffffff;
     border: 1px solid #e2e8f0;
-    border-radius: 0.5rem;
+    border-radius: 1rem;
     font-size: 0.875rem;
+    font-weight: 600;
     transition: all 0.2s;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
   }
 
   .clean-input:focus {
     outline: none;
     border-color: #3b82f6;
-    ring: 2px;
-    ring-color: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
   }
 
   .safe-area-bottom {
     padding-bottom: env(safe-area-inset-bottom);
   }
+
+  .status-pill {
+    @apply px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border;
+  }
+  .status-pill-green { @apply bg-emerald-50 text-emerald-600 border-emerald-100; }
+  .status-pill-blue { @apply bg-blue-50 text-blue-600 border-blue-100; }
+  .status-pill-amber { @apply bg-amber-50 text-amber-600 border-amber-100; }
+  .status-pill-red { @apply bg-rose-50 text-rose-600 border-rose-100; }
 }
 
-/* Mobile-native specific enhancements */
 @media (max-width: 768px) {
   .clean-card {
-    border-radius: 1.5rem;
+    border-radius: 2rem;
   }
 
   input, select, textarea {
-    font-size: 16px !important; /* Prevents iOS auto-zoom on focus */
+    font-size: 16px !important;
   }
 
   button, a {
-    min-height: 44px; /* Apple Human Interface Guidelines minimum touch target */
+    min-height: 44px;
   }
+}
+
+/* Animations */
+@keyframes slide-up {
+  from { transform: translateY(10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.4s ease-out forwards;
 }
