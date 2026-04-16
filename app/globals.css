@@ -20,11 +20,16 @@
     font-weight: 600;
     transition: all 0.2s ease;
     border: 1px solid #2563eb;
+    cursor: pointer;
   }
 
   .clean-button:hover {
     background: #1d4ed8;
     border-color: #1d4ed8;
+  }
+
+  .clean-button:active {
+    transform: scale(0.98);
   }
 
   .clean-button-secondary {
@@ -33,11 +38,16 @@
     border: 1px solid #e2e8f0;
     font-weight: 600;
     transition: all 0.2s ease;
+    cursor: pointer;
   }
 
   .clean-button-secondary:hover {
     background: #f8fafc;
     border-color: #cbd5e1;
+  }
+
+  .clean-button-secondary:active {
+    transform: scale(0.98);
   }
 
   .clean-glass {
@@ -67,5 +77,24 @@
     border-color: #3b82f6;
     ring: 2px;
     ring-color: #3b82f6;
+  }
+
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Mobile-native specific enhancements */
+@media (max-width: 768px) {
+  .clean-card {
+    border-radius: 1.5rem;
+  }
+
+  input, select, textarea {
+    font-size: 16px !important; /* Prevents iOS auto-zoom on focus */
+  }
+
+  button, a {
+    min-height: 44px; /* Apple Human Interface Guidelines minimum touch target */
   }
 }

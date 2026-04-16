@@ -93,3 +93,9 @@ prisma:query SELECT `main`.`EmailTemplate`.`id`, `main`.`EmailTemplate`.`name`, 
  ✓ Starting...
  ○ (pwa) PWA support is disabled.
  ✓ Ready in 3s
+Error: Requested and resolved page mismatch: /admin/exercises//[id/]/workflow/page /admin/exercises/[id/]/workflow/page
+    at Array.reduce (<anonymous>)
+ ⨯ unhandledRejection: Error: Requested and resolved page mismatch: /admin/exercises//[id/]/workflow/page /admin/exercises/[id/]/workflow/page
+    at Array.reduce (<anonymous>)
+ ⨯ unhandledRejection:  Error: Requested and resolved page mismatch: /admin/exercises//[id/]/workflow/page /admin/exercises/[id/]/workflow/page
+    at Array.reduce (<anonymous>)

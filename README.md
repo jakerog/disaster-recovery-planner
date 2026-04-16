@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sentinel - Disaster Recovery Orchestrator
+
+Sentinel is a professional, clean, and modern Disaster Resilience & Recovery Orchestration platform. Built as a Progressive Web App (PWA) with a mobile-native feel, it enables organizations to execute complex DR exercises with precision.
+
+## Key Features
+
+- **Mission Control**: Tactical monitor for real-time recovery execution across multiple phases (Mock 1, 2, 3 & Production).
+- **5-Tier Recovery Hierarchy**: Exercise > Phase > Event (Failover/Failback) > Stage > Task.
+- **Role-Based Access Control (RBAC)**: Secure access for Admins, Moderators, Reporters, and recovery agents.
+- **Resource Readiness**: A dedicated portal for resources to check in and validate their availability ahead of recovery windows.
+- **Advanced Analytics**: Detailed reporting on SLA targets, actual durations, and efficiency variance using interactive charts.
+- **Communication Center**: Management of standardized email templates and strategic resource pools with broadcast scheduling.
+- **Evidence Integrity**: Functional Base64-based visual proof/photo logging for mission-critical task verification.
+
+## Tech Stack
+
+- **Framework**: Next.js 15 (App Router)
+- **Database**: SQLite with Prisma ORM
+- **Authentication**: NextAuth.js v5 (Auth.js)
+- **Styling**: Tailwind CSS 4
+- **Charts**: Recharts
+- **PWA**: @ducanh2912/next-pwa
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Node.js 18+
+- npm
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. Initialize the database:
+   ```bash
+   npx prisma generate
+   npx prisma db push
+   ```
 
-## Learn More
+3. Seed the database with sample DR data:
+   ```bash
+   node prisma/seed.js
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Default Credentials (for testing)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Admin**: admin@sentinel.com / password123
+- **User**: agent@sentinel.com / password123
+- **Reporter**: report@sentinel.com / password123
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The application is configured for deployment on Vercel with a secure pipeline that preserves production data during schema synchronization.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+*Global Operations Matrix v2.0*

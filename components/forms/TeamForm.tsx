@@ -3,10 +3,12 @@
 import { Team, Vendor, Exercise } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import StatusMessage from "@/components/ui/StatusMessage";
 
 export default function TeamForm({ initialData, vendors, exercises }: { initialData?: Team | null, vendors: Vendor[], exercises: Exercise[] }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState("");
   const [data, setData] = useState<any>(initialData || { name: "", vendorId: "", description: "", photo: "", exerciseId: "" });
 
   useEffect(() => {
@@ -22,9 +24,17 @@ export default function TeamForm({ initialData, vendors, exercises }: { initialD
       if (res.ok) {
         router.refresh();
         if (!data.id) setData({ name: "", vendorId: "", description: "", photo: "", exerciseId: "" });
-        alert("Team Saved");
+        setStatus("Team Saved");
+        setTimeout(() => setStatus(""), 3000);
+      } else {
+        setStatus("Failed to save team");
       }
-    } catch (err) { console.error(err); } finally { setLoading(false); }
+    } catch (err) {
+      console.error(err);
+      setStatus("Operation Failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -48,6 +58,7 @@ export default function TeamForm({ initialData, vendors, exercises }: { initialD
         <div className="md:col-span-2"><label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">Description</label>
         <textarea value={data.description || ""} onChange={e => setData({...data, description: e.target.value})} className="w-full border p-2 rounded text-sm" /></div>
       </div>
+      <StatusMessage message={status} />
       <button type="submit" disabled={loading} className="w-full py-3 bg-black text-white rounded font-bold uppercase tracking-widest">Establish Team</button>
     </form>
   );

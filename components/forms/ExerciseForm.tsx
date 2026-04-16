@@ -4,10 +4,12 @@ import { Exercise } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Briefcase, Calendar, Globe, Info, Shield, Activity } from "lucide-react";
+import StatusMessage from "@/components/ui/StatusMessage";
 
 export default function ExerciseForm({ initialData }: { initialData?: Exercise }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -29,8 +31,17 @@ export default function ExerciseForm({ initialData }: { initialData?: Exercise }
         }),
       });
 
-      if (res.ok) { router.refresh(); alert("Mandate Initialized"); }
-    } catch (error) { console.error(error); } finally { setLoading(false); }
+      if (res.ok) {
+        router.refresh();
+        setStatus("Mandate Initialized");
+        setTimeout(() => setStatus(""), 3000);
+      }
+    } catch (error) {
+      console.error(error);
+      setStatus("Operation Failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const Field = ({ label, name, icon: Icon, type = "text", checkbox = false }: any) => (
@@ -83,6 +94,8 @@ export default function ExerciseForm({ initialData }: { initialData?: Exercise }
           <Field label="Operational Notes & Intel" name="notes" icon={Info} />
         </div>
       </div>
+
+      <StatusMessage message={status} />
 
       <button type="submit" disabled={loading} className="w-full clean-button text-white p-5 rounded-2xl font-black uppercase tracking-[0.3em] text-[11px] disabled:opacity-50">
         {loading ? "Deploying Mandate..." : "Initialize Command"}

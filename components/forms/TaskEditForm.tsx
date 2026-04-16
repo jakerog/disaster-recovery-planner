@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { Camera, Save } from "lucide-react";
+import StatusMessage from "@/components/ui/StatusMessage";
 
 export default function TaskEditForm({ task, allResources = [], allTeams = [], allStages = [] }: {
   task: Task & { resources?: Resource[] },
@@ -15,6 +16,7 @@ export default function TaskEditForm({ task, allResources = [], allTeams = [], a
   const router = useRouter();
   const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState("");
   const [resourceIds, setResourceIds] = useState<string[]>(task.resources?.map(r => r.id) || []);
 
   const userRole = (session?.user as any)?.role;
@@ -23,7 +25,10 @@ export default function TaskEditForm({ task, allResources = [], allTeams = [], a
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!canEdit) return alert("Permission Denied: Unauthorized access to task stream.");
+    if (!canEdit) {
+      setStatus("Permission Denied: Unauthorized access to task stream.");
+      return;
+    }
 
     setLoading(true);
     const formData = new FormData(e.currentTarget);
@@ -42,11 +47,21 @@ export default function TaskEditForm({ task, allResources = [], allTeams = [], a
         }),
       });
       if (res.ok) {
-        router.push(`/exercise/${task.exerciseId}`);
-        router.refresh();
+        setStatus("Metadata Synchronized");
+        setTimeout(() => {
+          router.push(`/exercise/${task.exerciseId}`);
+          router.refresh();
+        }, 1500);
       }
-      else { alert(await res.text()); }
-    } catch (error) { console.error(error); } finally { setLoading(false); }
+      else {
+        setStatus(await res.text());
+      }
+    } catch (error) {
+      console.error(error);
+      setStatus("Operation Failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!canEdit && session) {
@@ -150,6 +165,8 @@ export default function TaskEditForm({ task, allResources = [], allTeams = [], a
           ))}
         </div>
       </div>
+
+      <StatusMessage message={status} />
 
       <div>
         <label className="text-[10px] font-black text-gray-400 block mb-3 tracking-widest px-1">Operational Intelligence (Notes)</label>

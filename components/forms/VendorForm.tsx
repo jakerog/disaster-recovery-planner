@@ -3,10 +3,12 @@
 import { Vendor, Exercise } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import StatusMessage from "@/components/ui/StatusMessage";
 
 export default function VendorForm({ initialData, exercises }: { initialData?: Vendor | null, exercises: Exercise[] }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState("");
   const [data, setData] = useState<any>(initialData || { name: "", type: "Internal", email: "", phone: "", photo: "", exerciseId: "" });
 
   useEffect(() => {
@@ -22,9 +24,17 @@ export default function VendorForm({ initialData, exercises }: { initialData?: V
       if (res.ok) {
         router.refresh();
         if (!data.id) setData({ name: "", type: "Internal", email: "", phone: "", photo: "", exerciseId: "" });
-        alert("Vendor Saved");
+        setStatus("Vendor Saved");
+        setTimeout(() => setStatus(""), 3000);
+      } else {
+        setStatus("Failed to save vendor");
       }
-    } catch (err) { console.error(err); } finally { setLoading(false); }
+    } catch (err) {
+      console.error(err);
+      setStatus("Operation Failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -49,6 +59,7 @@ export default function VendorForm({ initialData, exercises }: { initialData?: V
           {exercises.map(ex => <option key={ex.id} value={ex.id}>{ex.name}</option>)}
         </select></div>
       </div>
+      <StatusMessage message={status} />
       <button type="submit" disabled={loading} className="w-full py-3 bg-black text-white rounded font-bold uppercase tracking-widest">Save Vendor</button>
     </form>
   );

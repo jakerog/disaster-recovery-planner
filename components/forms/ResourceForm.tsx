@@ -2,77 +2,76 @@
 
 import { Resource, Team, Vendor, Exercise } from "@prisma/client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { User, Mail, Phone, Hash, Shield, Camera } from "lucide-react";
+import { useState, useEffect } from "react";
+import StatusMessage from "@/components/ui/StatusMessage";
 
-export default function ResourceForm({ initialData, teams = [], vendors = [], exercises = [] }: {
-  initialData?: Resource | null,
-  teams?: Team[],
-  vendors?: Vendor[],
-  exercises?: Exercise[]
-}) {
+export default function ResourceForm({ initialData, teams, vendors, exercises }: { initialData?: Resource | null, teams: Team[], vendors: Vendor[], exercises: Exercise[] }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState("");
+  const [data, setData] = useState<any>(initialData || { fullName: "", email: "", phoneNumber: "", telephoneNumber: "", photo: "", teamId: "", vendorId: "", exerciseId: "" });
+
+  useEffect(() => {
+    if (initialData) setData(initialData);
+    else setData({ fullName: "", email: "", phoneNumber: "", telephoneNumber: "", photo: "", teamId: "", vendorId: "", exerciseId: "" });
+  }, [initialData]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries());
-
     try {
-      const method = initialData ? "PATCH" : "POST";
-      const body = initialData ? { ...data, id: initialData.id } : data;
-      const res = await fetch("/api/resources", { method, body: JSON.stringify(body) });
-      if (res.ok) { router.refresh(); alert("Resource Synchronized"); }
-    } catch (error) { console.error(error); } finally { setLoading(false); }
+      const res = await fetch("/api/resources", {
+        method: data.id ? "PATCH" : "POST",
+        body: JSON.stringify(data),
+      });
+      if (res.ok) {
+        router.refresh();
+        if (!data.id) setData({ fullName: "", email: "", phoneNumber: "", telephoneNumber: "", photo: "", teamId: "", vendorId: "", exerciseId: "" });
+        setStatus("Resource Synchronized");
+        setTimeout(() => setStatus(""), 3000);
+      } else {
+        setStatus("Failed to sync resource");
+      }
+    } catch (err) {
+      console.error(err);
+      setStatus("Operation Failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const Field = ({ label, name, icon: Icon, type = "text", options = null }: any) => (
-    <div className="clean-inset p-3 px-5 border border-white/50">
-      <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 block mb-1 flex items-center gap-2">
-        <Icon size={10} /> {label}
-      </label>
-      {options ? (
-        <select name={name} defaultValue={initialData ? (initialData as any)[name] : ""} className="w-full bg-transparent text-sm font-bold focus:outline-none appearance-none cursor-pointer">
-          <option value="">None / Unassigned</option>
-          {options.map((o: any) => <option key={o.id} value={o.id}>{o.name || o.fullName}</option>)}
-        </select>
-      ) : (
-        <input name={name} type={type} defaultValue={initialData ? (initialData as any)[name] : ""} className="w-full bg-transparent text-sm font-bold focus:outline-none" />
-      )}
-    </div>
-  );
-
   return (
-    <form onSubmit={handleSubmit} className="clean-card p-10 rounded-[2.5rem] space-y-10 max-w-2xl mx-auto">
-      <header className="flex justify-between items-center border-b border-gray-100 pb-8">
-         <div>
-            <h2 className="text-3xl font-black uppercase tracking-tighter text-black">{initialData ? "Edit Agent" : "New Agent"}</h2>
-            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">Resource Matrix Entry</p>
-         </div>
-         <div className="w-16 h-16 rounded-3xl bg-gray-50 flex items-center justify-center text-gray-300 clean-inset border-2 border-white">
-            <Camera size={24} />
-         </div>
-      </header>
-
+    <form onSubmit={handleSubmit} className="bg-white p-8 rounded-2xl border border-gray-200 space-y-6 shadow-sm mb-10 text-gray-900">
+      <h2 className="text-xl font-black tracking-tight uppercase">{data.id ? "Modify Resource" : "Create Resource"}</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="md:col-span-2"><Field label="Full Identity Name" name="fullName" icon={User} /></div>
-        <Field label="Protocol Email" name="email" icon={Mail} type="email" />
-        <Field label="Comm Phone" name="phoneNumber" icon={Phone} />
-        <Field label="Alt Telephone" name="telephoneNumber" icon={Hash} />
-        <Field label="Operational Role" name="role" icon={Shield} />
-
-        <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
-           <Field label="Team Assignment" name="teamId" icon={Shield} options={teams} />
-           <Field label="Vendor Affiliation" name="vendorId" icon={Shield} options={vendors} />
-           <Field label="Exercise Mandate" name="exerciseId" icon={Shield} options={exercises} />
-        </div>
+        <div><label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">Full Name</label>
+        <input value={data.fullName} onChange={e => setData({...data, fullName: e.target.value})} required className="w-full border p-2 rounded text-sm" /></div>
+        <div><label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">Email</label>
+        <input value={data.email} onChange={e => setData({...data, email: e.target.value})} type="email" required className="w-full border p-2 rounded text-sm" /></div>
+        <div><label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">Phone</label>
+        <input value={data.phoneNumber || ""} onChange={e => setData({...data, phoneNumber: e.target.value})} className="w-full border p-2 rounded text-sm" /></div>
+        <div><label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">Telephone</label>
+        <input value={data.telephoneNumber || ""} onChange={e => setData({...data, telephoneNumber: e.target.value})} className="w-full border p-2 rounded text-sm" /></div>
+        <div><label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">Photo URL</label>
+        <input value={data.photo || ""} onChange={e => setData({...data, photo: e.target.value})} className="w-full border p-2 rounded text-sm" /></div>
+        <div><label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">Team</label>
+        <select value={data.teamId || ""} onChange={e => setData({...data, teamId: e.target.value})} className="w-full border p-2 rounded text-sm">
+          <option value="">No Team</option>
+          {teams.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
+        </select></div>
+        <div><label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">Vendor</label>
+        <select value={data.vendorId || ""} onChange={e => setData({...data, vendorId: e.target.value})} className="w-full border p-2 rounded text-sm">
+          <option value="">No Vendor</option>
+          {vendors.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
+        </select></div>
+        <div><label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">Exercise</label>
+        <select value={data.exerciseId || ""} onChange={e => setData({...data, exerciseId: e.target.value})} className="w-full border p-2 rounded text-sm">
+          <option value="">No Exercise</option>
+          {exercises.map(ex => <option key={ex.id} value={ex.id}>{ex.name}</option>)}
+        </select></div>
       </div>
-
-      <button type="submit" disabled={loading} className="w-full clean-button text-white p-5 rounded-2xl font-black uppercase tracking-[0.3em] text-[11px] disabled:opacity-50">
-        {loading ? "Synchronizing Matrix..." : "Commit Data Stream"}
-      </button>
+      <StatusMessage message={status} />
+      <button type="submit" disabled={loading} className="w-full py-3 bg-black text-white rounded font-bold uppercase tracking-widest">{loading ? "Processing..." : "Sync Resource"}</button>
     </form>
   );
 }

@@ -2,9 +2,10 @@
 
 import { Task, Resource, Team } from "@prisma/client";
 import { useState, useRef } from "react";
-import { Camera, Clock, User, CheckCircle2, Upload, AlertTriangle, Info, Timer } from "lucide-react";
+import { Camera, Clock, User, CheckCircle2, AlertTriangle, Info, Timer } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import StatusMessage from "@/components/ui/StatusMessage";
 
 interface TaskWithRelations extends Task {
   resources: Resource[];
@@ -13,13 +14,14 @@ interface TaskWithRelations extends Task {
 
 export default function TaskCard({ task }: { task: TaskWithRelations }) {
   const [uploading, setUploading] = useState(false);
+  const [status, setStatus] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   const statusColors = {
-    "Not-Started": "bg-gray-100 text-gray-500 border-gray-200",
+    "Not-Started": "bg-slate-100 text-slate-500 border-slate-200",
     "In-Progress": "bg-blue-50 text-blue-600 border-blue-200",
-    "Completed": "bg-green-50 text-green-600 border-green-200",
+    "Completed": "bg-emerald-50 text-emerald-600 border-emerald-200",
     "Failed": "bg-red-50 text-red-600 border-red-200",
   };
 
@@ -58,9 +60,11 @@ export default function TaskCard({ task }: { task: TaskWithRelations }) {
           evidence: base64Data
         })
       });
+      setStatus("Evidence Captured");
+      setTimeout(() => setStatus(""), 3000);
     } catch (err) {
       console.error("Transmission error:", err);
-      alert("Failed to upload evidence.");
+      setStatus("Failed to upload evidence.");
     } finally {
       setUploading(false);
       router.refresh();
@@ -68,11 +72,11 @@ export default function TaskCard({ task }: { task: TaskWithRelations }) {
   };
 
   return (
-    <div className={`clean-card p-6 rounded-3xl transition-all flex flex-col h-full ${task.status === "Failed" ? "border-red-300 ring-4 ring-red-50" : "border-gray-100"}`}>
+    <div className={`clean-card p-6 rounded-3xl transition-all flex flex-col h-full ${task.status === "Failed" ? "border-red-300 ring-4 ring-red-50" : "border-slate-100"}`}>
       <div className="flex justify-between items-start mb-4">
-        <span className="text-[10px] font-mono font-black text-gray-400 uppercase tracking-widest">{task.taskId}</span>
+        <span className="text-[10px] font-mono font-black text-slate-400 uppercase tracking-widest">{task.taskId}</span>
         <div className="flex gap-2">
-           <Link href={`/exercise/${task.exerciseId}/task/${task.taskId}`} className="p-1 hover:bg-gray-100 rounded text-gray-400"><Info size={14}/></Link>
+           <Link href={`/exercise/${task.exerciseId}/task/${task.taskId}`} className="p-1 hover:bg-slate-100 rounded text-slate-400"><Info size={14}/></Link>
            <span className={`px-3 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${statusColors[task.status as keyof typeof statusColors]}`}>
             {task.status}
            </span>
@@ -80,13 +84,13 @@ export default function TaskCard({ task }: { task: TaskWithRelations }) {
       </div>
 
       <div className="mb-6 flex-grow">
-        <h3 className="text-lg font-black text-gray-900 mb-3 leading-tight uppercase tracking-tight">{task.notes || "Task Objective"}</h3>
+        <h3 className="text-lg font-black text-slate-900 mb-3 leading-tight uppercase tracking-tight">{task.notes || "Task Objective"}</h3>
 
         <div className="grid grid-cols-2 gap-y-3 mb-6">
-           <div className="flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase">
+           <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase">
              <User size={12}/> {task.team?.name || "Unassigned"}
            </div>
-           <div className="flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase">
+           <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase">
              <Clock size={12}/> {task.estimatedTime}m est
            </div>
            {task.actualDuration !== null && (
@@ -95,7 +99,7 @@ export default function TaskCard({ task }: { task: TaskWithRelations }) {
              </div>
            )}
            {task.varianceDuration !== null && (
-             <div className={`flex items-center gap-2 text-[10px] font-bold uppercase ${task.varianceDuration > 0 ? "text-red-500" : "text-green-600"}`}>
+             <div className={`flex items-center gap-2 text-[10px] font-bold uppercase ${task.varianceDuration > 0 ? "text-red-500" : "text-emerald-600"}`}>
                Var: {task.varianceDuration > 0 ? "+" : ""}{task.varianceDuration}m
              </div>
            )}
@@ -103,16 +107,18 @@ export default function TaskCard({ task }: { task: TaskWithRelations }) {
 
         <div className="flex flex-wrap gap-2">
            {task.resources?.map(r => (
-             <span key={r.id} className="text-[9px] font-black bg-gray-50 border border-gray-100 px-2 py-0.5 rounded text-gray-500 uppercase tracking-tighter">{r.fullName}</span>
+             <span key={r.id} className="text-[9px] font-black bg-slate-50 border border-slate-100 px-2 py-0.5 rounded text-slate-500 uppercase tracking-tighter">{r.fullName}</span>
            ))}
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 pt-4 border-t border-gray-50">
+      <StatusMessage message={status} />
+
+      <div className="grid grid-cols-2 gap-3 pt-4 border-t border-slate-50">
         <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileUpload} />
         <button
           onClick={() => handleUpdate(task.status === "In-Progress" ? "Completed" : "In-Progress")}
-          className={`flex items-center justify-center gap-2 p-3 rounded-xl text-white transition-all text-[10px] font-black uppercase tracking-widest shadow-lg ${task.status === "Completed" ? "bg-green-600 shadow-green-100" : "clean-button"}`}
+          className={`flex items-center justify-center gap-2 p-3 rounded-xl text-white transition-all text-[10px] font-black uppercase tracking-widest shadow-lg ${task.status === "Completed" ? "bg-emerald-600 shadow-emerald-100" : "clean-button"}`}
         >
           <CheckCircle2 size={14} />
           {task.status === "Not-Started" ? "Start" : task.status === "In-Progress" ? "Finish" : "Done"}

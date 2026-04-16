@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SessionProvider from "@/components/providers/SessionProvider";
+import MobileNav from "@/components/navigation/MobileNav";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,6 +17,19 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Sentinel - DR Orchestrator",
   description: "Enterprise Resilience & Recovery platform",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Sentinel DR",
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
@@ -28,11 +42,12 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <meta name="apple-mobile-web-app-capable" content="yes" />
-      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-      <body className="min-h-full flex flex-col bg-gray-100">
+      <body className="min-h-full flex flex-col bg-slate-50 overflow-x-hidden">
         <SessionProvider>
-          {children}
+          <main className="flex-1 pb-20 md:pb-0">
+            {children}
+          </main>
+          <MobileNav />
         </SessionProvider>
       </body>
     </html>
