@@ -36,6 +36,22 @@ export default function WorkflowManagementPage({ params }: { params: Promise<{ i
     fetchWorkflow();
   };
 
+  const editEvent = async (event: any) => {
+    const name = prompt("Edit Event Name?", event.name);
+    if (!name) return;
+    await fetch("/api/events", {
+      method: "PATCH",
+      body: JSON.stringify({ id: event.id, name })
+    });
+    fetchWorkflow();
+  };
+
+  const deleteEvent = async (id: string) => {
+    if (!confirm("Are you sure? This will delete all stages and tasks associated with this event.")) return;
+    await fetch(`/api/events?id=${id}`, { method: "DELETE" });
+    fetchWorkflow();
+  };
+
   const addStage = async (eventId: string) => {
     const name = prompt("Stage Name?");
     if (!name) return;
@@ -46,7 +62,18 @@ export default function WorkflowManagementPage({ params }: { params: Promise<{ i
     fetchWorkflow();
   };
 
+  const editStage = async (stage: any) => {
+    const name = prompt("Edit Stage Name?", stage.name);
+    if (!name) return;
+    await fetch("/api/stages", {
+      method: "PATCH",
+      body: JSON.stringify({ id: stage.id, name })
+    });
+    fetchWorkflow();
+  };
+
   const deleteStage = async (id: string) => {
+    if (!confirm("Are you sure? This will delete all tasks associated with this stage.")) return;
     await fetch(`/api/stages?id=${id}`, { method: "DELETE" });
     fetchWorkflow();
   };
@@ -72,8 +99,14 @@ export default function WorkflowManagementPage({ params }: { params: Promise<{ i
               <div className="space-y-8">
                 {phase.events?.map((event: any) => (
                   <div key={event.id} className="ml-6 border-l-2 border-gray-100 pl-6 py-2">
-                    <div className="flex justify-between items-center mb-4">
-                      <h3 className="font-bold text-gray-700 tracking-tight">{event.name} Event</h3>
+                    <div className="flex justify-between items-center mb-4 group/event">
+                      <div className="flex items-center gap-4">
+                        <h3 className="font-bold text-gray-700 tracking-tight">{event.name} Event</h3>
+                        <div className="flex gap-2 opacity-0 group-hover/event:opacity-100 transition-opacity">
+                          <button onClick={() => editEvent(event)} className="text-[10px] font-black text-blue-400 hover:text-blue-600 uppercase">Edit</button>
+                          <button onClick={() => deleteEvent(event.id)} className="text-[10px] font-black text-red-300 hover:text-red-500 uppercase">Delete</button>
+                        </div>
+                      </div>
                       <button onClick={() => addStage(event.id)} className="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 px-2 py-1 rounded">Add Stage</button>
                     </div>
 
@@ -81,7 +114,8 @@ export default function WorkflowManagementPage({ params }: { params: Promise<{ i
                       {event.stages?.map((stage: any) => (
                         <div key={stage.id} className="bg-gray-50 border border-gray-100 p-4 rounded-xl flex justify-between items-center group">
                           <span className="text-sm font-bold text-gray-800">{stage.name}</span>
-                          <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <div className="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                             <button onClick={() => editStage(stage)} className="text-xs font-bold text-blue-400 hover:text-blue-600">Edit</button>
                              <button onClick={() => deleteStage(stage.id)} className="text-xs font-bold text-red-300 hover:text-red-600">Delete</button>
                           </div>
                         </div>

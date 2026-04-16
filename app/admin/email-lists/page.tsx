@@ -2,6 +2,8 @@ import { prisma } from "@/lib/prisma";
 import EmailListForm from "@/components/forms/EmailListForm";
 import { Users, Plus, Mail, Shield, Trash2, Globe } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function EmailListsPage() {
   const lists = await prisma.emailList.findMany({
     orderBy: { createdAt: 'desc' }

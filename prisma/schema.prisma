@@ -87,7 +87,7 @@ model Event {
   name      String   // Failover, Failback
   startDate DateTime?
   endDate   DateTime?
-  phase     Phase    @relation(fields: [phaseId], references: [id])
+  phase     Phase    @relation(fields: [phaseId], references: [id], onDelete: Cascade)
   phaseId   String
   stages    Stage[]
 }
@@ -97,9 +97,9 @@ model Stage {
   name      String    // Pre-Failover, Failover, Post-Failover, Failover-Rollback, Pre-Failback, Failback, Post-Failback, Failback-Rollback
   startDate DateTime?
   endDate   DateTime?
-  exercise  Exercise  @relation(fields: [exerciseId], references: [id])
+  exercise  Exercise  @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
   exerciseId String
-  event     Event?    @relation(fields: [eventId], references: [id])
+  event     Event?    @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId   String?
   notes     String?
   tasks     Task[]
@@ -118,7 +118,7 @@ model Task {
   varianceDuration   Int?
   evidence           String?
   notes              String?
-  stage              Stage     @relation(fields: [stageId], references: [id])
+  stage              Stage     @relation(fields: [stageId], references: [id], onDelete: Cascade)
   stageId            String
   resources          Resource[]
   team               Team?     @relation(fields: [teamId], references: [id])

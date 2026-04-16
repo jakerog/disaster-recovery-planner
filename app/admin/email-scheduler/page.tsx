@@ -2,6 +2,8 @@ import { prisma } from "@/lib/prisma";
 import EmailSchedulerClient from "@/components/execution/EmailSchedulerClient";
 import EmailScheduleForm from "@/components/forms/EmailScheduleForm";
 
+export const dynamic = "force-dynamic";
+
 export default async function EmailSchedulerPage() {
   const [schedules, templates, lists] = await Promise.all([
     prisma.emailSchedule.findMany({

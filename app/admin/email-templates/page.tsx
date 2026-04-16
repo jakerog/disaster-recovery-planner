@@ -3,6 +3,8 @@ import Link from "next/link";
 import EmailTemplateForm from "@/components/forms/EmailTemplateForm";
 import { Mail, Plus, Users, Layout, Send, Calendar, ClipboardList, Zap } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function EmailTemplatesPage() {
   const templates = await prisma.emailTemplate.findMany({
     orderBy: { createdAt: 'desc' }
