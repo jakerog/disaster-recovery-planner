@@ -30,6 +30,15 @@ async function main() {
   })
 
   // 2. Vendor & Team
+  const existingExercise = await prisma.exercise.findFirst({
+    where: { name: 'Q1 Global Recovery Simulation' }
+  })
+
+  if (existingExercise) {
+    console.log('Seed data already exists. Skipping creation.')
+    return
+  }
+
   const vendor = await prisma.vendor.create({
     data: { name: 'Sentinel Systems', type: 'Internal', email: 'support@sentinel.com' }
   })
