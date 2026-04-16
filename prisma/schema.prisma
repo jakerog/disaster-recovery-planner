@@ -76,7 +76,9 @@ model Phase {
   id             String         @id @default(cuid())
   name           String         // Mock 1, Mock 2, Mock 3, Prod
   order          Int
-  exercise       Exercise       @relation(fields: [exerciseId], references: [id])
+  startDate      DateTime?
+  endDate        DateTime?
+  exercise       Exercise       @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
   exerciseId     String
   events         Event[]
   availabilities Availability[]
@@ -95,6 +97,7 @@ model Event {
 model Stage {
   id        String    @id @default(cuid())
   name      String    // Pre-Failover, Failover, Post-Failover, Failover-Rollback, Pre-Failback, Failback, Post-Failback, Failback-Rollback
+  order     Int       @default(0)
   startDate DateTime?
   endDate   DateTime?
   exercise  Exercise  @relation(fields: [exerciseId], references: [id], onDelete: Cascade)

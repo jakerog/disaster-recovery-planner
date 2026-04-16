@@ -14,3 +14,13 @@ export async function DELETE(req: Request) {
   await prisma.phase.delete({ where: { id } });
   return new Response(null, { status: 204 });
 }
+
+export async function PATCH(req: Request) {
+  const body = await req.json();
+  const { id, ...data } = body;
+  const phase = await prisma.phase.update({
+    where: { id },
+    data
+  });
+  return NextResponse.json(phase);
+}

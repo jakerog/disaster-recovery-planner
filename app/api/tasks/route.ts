@@ -14,6 +14,27 @@ export async function GET(req: Request) {
   return NextResponse.json(tasks);
 }
 
+export async function POST(req: Request) {
+  const body = await req.json();
+  const { resourceIds, ...data } = body;
+
+  const task = await prisma.task.create({
+    data: {
+      ...data,
+      resources: resourceIds ? { connect: resourceIds.map((id: string) => ({ id })) } : undefined
+    }
+  });
+  return NextResponse.json(task);
+}
+
+export async function DELETE(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const id = searchParams.get("id");
+  if (!id) return new Response("Missing ID", { status: 400 });
+  await prisma.task.delete({ where: { id } });
+  return new Response(null, { status: 204 });
+}
+
 export async function PATCH(req: Request) {
   const session = await auth();
   if (!session) return new Response("Unauthorized", { status: 401 });
