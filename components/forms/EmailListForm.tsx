@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import StatusMessage from "@/components/ui/StatusMessage";
+import { Users, Mail, Save, Plus } from "lucide-react";
 
 export default function EmailListForm() {
   const router = useRouter();
@@ -24,7 +25,7 @@ export default function EmailListForm() {
       if (res.ok) {
         router.refresh();
         (e.target as HTMLFormElement).reset();
-        setStatus("Email list created successfully");
+        setStatus("Communication Pool Initialized");
         setTimeout(() => setStatus(""), 3000);
       } else {
         setStatus("Failed to create list");
@@ -38,19 +39,30 @@ export default function EmailListForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-6 rounded-xl border border-gray-200 space-y-4 mb-10 text-gray-900">
-      <h2 className="text-lg font-bold uppercase tracking-tight">Create New Recipient List</h2>
-      <div>
-        <label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">List Name</label>
-        <input name="name" required className="w-full border border-gray-200 rounded-lg p-2 text-sm" placeholder="e.g. IT Leadership" />
+    <form onSubmit={handleSubmit} className="clean-card p-8 rounded-[2rem] space-y-6 mb-12 text-slate-900 shadow-xl shadow-slate-200/50">
+      <div className="flex items-center gap-4 border-b border-slate-50 pb-4">
+        <div className="p-2 bg-blue-600 rounded-lg text-white">
+          <Users size={20} />
+        </div>
+        <h2 className="text-xl font-black uppercase tracking-tighter">New Communication Pool</h2>
       </div>
-      <div>
-        <label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">Emails (comma separated)</label>
-        <textarea name="emails" required className="w-full border border-gray-200 rounded-lg p-2 text-sm" placeholder="user1@company.com, user2@company.com"></textarea>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="clean-inset p-4">
+          <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2 px-1">Pool Designation (Name)</label>
+          <input name="name" required className="w-full bg-transparent border-none text-sm font-bold focus:ring-0" placeholder="e.g. Crisis Response Alpha" />
+        </div>
+        <div className="clean-inset p-4">
+          <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2 px-1">Recipient Nodes (Emails)</label>
+          <textarea name="emails" required className="w-full bg-transparent border-none text-sm font-bold focus:ring-0 min-h-[40px] resize-none" placeholder="agent1@sentinel.cloud, agent2@sentinel.cloud" />
+        </div>
       </div>
+
       <StatusMessage message={status} />
-      <button type="submit" disabled={loading} className="w-full py-2 bg-black text-white rounded-lg font-bold hover:bg-gray-800 transition-all disabled:opacity-50 uppercase tracking-widest text-[10px]">
-        {loading ? "Creating..." : "Save List"}
+
+      <button type="submit" disabled={loading} className="w-full clean-button py-4 text-[10px] uppercase tracking-[0.3em] flex items-center justify-center gap-2">
+        <Plus size={14} />
+        {loading ? "Initializing..." : "Commit Pool Definition"}
       </button>
     </form>
   );

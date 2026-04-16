@@ -142,7 +142,7 @@ export default async function ExerciseExecutionPage({ params }: { params: Promis
                                              <div className="text-[12px] font-black uppercase text-black leading-none mb-1.5 tracking-tight">{task.notes}</div>
                                              <div className="flex items-center gap-3">
                                                 <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest flex items-center gap-1">
-                                                   <Users size={8} /> {task.team?.name || "Global Ops"}
+                                                   <div className="flex items-center gap-2"><Users size={8} /> {task.team?.name || "Global Ops"}</div><div className="flex -space-x-1">{task.resources.map(r => r.photo ? <img key={r.id} src={r.photo} className="w-4 h-4 rounded-full ring-1 ring-white object-cover" title={r.fullName} /> : <div key={r.id} className="w-4 h-4 rounded-full bg-slate-200 flex items-center justify-center text-[6px] font-black ring-1 ring-white" title={r.fullName}>{r.fullName[0]}</div>)}</div>
                                                 </span>
                                                 <span className="text-[9px] font-black text-gray-300 uppercase tracking-widest">•</span>
                                                 <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest flex items-center gap-1">

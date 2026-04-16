@@ -2,14 +2,13 @@
 > sentinel-dr@0.1.0 start
 > next start
 
-   ▲ Next.js 15.2.0
-   - Local:        http://localhost:3000
-   - Network:      http://192.168.0.2:3000
-
- ✓ Starting...
-[Error: ENOENT: no such file or directory, open '/app/.next/prerender-manifest.json'] {
-  errno: -2,
-  code: 'ENOENT',
-  syscall: 'open',
-  path: '/app/.next/prerender-manifest.json'
+ ⨯ Failed to start server
+Error: listen EADDRINUSE: address already in use :::3000
+    at <unknown> (Error: listen EADDRINUSE: address already in use :::3000)
+    at new Promise (<anonymous>) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
 }

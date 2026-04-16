@@ -3,6 +3,27 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   const body = await req.json();
+
+  if (Array.isArray(body)) {
+    const results = await Promise.all(
+      body.map(item => {
+        const { resourceId, phaseId, exerciseId, available, notes } = item;
+        return prisma.availability.upsert({
+          where: { resourceId_phaseId: { resourceId, phaseId } },
+          update: { available, notes },
+          create: {
+            resource: { connect: { id: resourceId } },
+            phase: { connect: { id: phaseId } },
+            exercise: { connect: { id: exerciseId } },
+            available,
+            notes
+          },
+        });
+      })
+    );
+    return NextResponse.json(results);
+  }
+
   const { resourceId, phaseId, exerciseId, available, notes } = body;
 
   const availability = await prisma.availability.upsert({

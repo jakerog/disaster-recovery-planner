@@ -18,9 +18,9 @@ export default auth((req) => {
     return NextResponse.redirect(new URL("/login", nextUrl));
   }
 
-  // Admin protection
+  // Admin protection - Allow Admin and Moderator
   if (nextUrl.pathname.startsWith("/admin")) {
-    if (userRole !== "Admin") {
+    if (!["Admin", "Moderator"].includes(userRole)) {
       return NextResponse.redirect(new URL("/", nextUrl));
     }
   }

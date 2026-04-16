@@ -19,11 +19,27 @@ export async function PATCH(req: Request) {
   if (!session) return new Response("Unauthorized", { status: 401 });
 
   const body = await req.json();
-  const { id, resourceIds, startDate, endDate, ...data } = body;
+  const {
+    id,
+    resourceIds,
+    startDate,
+    endDate,
+    startTime,
+    endTime,
+    estimatedTime,
+    evidence,
+    taskId,
+    workflow,
+    resourceAllocation,
+    status,
+    notes,
+    stageId,
+    teamId
+  } = body;
 
   const currentTask = await prisma.task.findUnique({
     where: { id },
-    include: { resources: true }
+    include: { resources: true, exercise: { include: { phases: { include: { events: { include: { stages: { include: { tasks: true } } } } } } } } }
   });
 
   if (!currentTask) return new Response("Task not found", { status: 404 });
@@ -45,14 +61,22 @@ export async function PATCH(req: Request) {
 
   if (start && end) {
     actualDuration = Math.abs(differenceInMinutes(new Date(end), new Date(start)));
-    const est = data.estimatedTime || currentTask.estimatedTime;
+    const est = estimatedTime || currentTask.estimatedTime;
     if (est) varianceDuration = actualDuration - est;
   }
 
-  const task = await prisma.task.update({
+  const updatedTask = await prisma.task.update({
     where: { id },
     data: {
-      ...data,
+      taskId,
+      workflow,
+      resourceAllocation,
+      status,
+      notes,
+      stageId,
+      teamId: teamId || null,
+      evidence,
+      estimatedTime,
       startDate: startDate ? new Date(startDate) : undefined,
       endDate: endDate ? new Date(endDate) : undefined,
       actualDuration,
@@ -60,5 +84,23 @@ export async function PATCH(req: Request) {
       resources: resourceIds ? { set: resourceIds.map((rid: string) => ({ id: rid })) } : undefined
     },
   });
-  return NextResponse.json(task);
+
+  // Re-evaluate Mock 3 requirement if a task in Mock 1/2 changes
+  const exercise = currentTask.exercise;
+  const mock12Phases = exercise.phases.filter(p => p.name.includes("Mock 1") || p.name.includes("Mock 2"));
+  const allMock12Tasks = mock12Phases.flatMap(p => p.events.flatMap(e => e.stages.flatMap(s => s.tasks)));
+
+  // A simple heuristic: if any task in Mock 1/2 fails, Mock 3 is definitely required.
+  // If all are completed successfully, it might not be.
+  if (allMock12Tasks.length > 0) {
+    const hasFailures = allMock12Tasks.some(t => t.id === id ? updatedTask.status === "Failed" : t.status === "Failed");
+    const anyIncomplete = allMock12Tasks.some(t => t.id === id ? updatedTask.status !== "Completed" : t.status !== "Completed");
+
+    await prisma.exercise.update({
+      where: { id: exercise.id },
+      data: { mock3Required: hasFailures || anyIncomplete }
+    });
+  }
+
+  return NextResponse.json(updatedTask);
 }

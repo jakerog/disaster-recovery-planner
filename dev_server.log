@@ -9,99 +9,249 @@
 
  ✓ Starting...
  ○ (pwa) PWA support is disabled.
- ✓ Ready in 2.8s
+ ✓ Ready in 2.9s
  ○ Compiling /middleware ...
- ✓ Compiled /middleware in 612ms (246 modules)
+ ✓ Compiled /middleware in 618ms (246 modules)
  ○ Compiling /login ...
- ✓ Compiled /login in 2.5s (753 modules)
- GET /login 200 in 3067ms
+ ✓ Compiled /login in 2.5s (810 modules)
+ GET /login 200 in 3852ms
  ○ Compiling /api/auth/[...nextauth] ...
- ✓ Compiled /api/auth/[...nextauth] in 1452ms (932 modules)
- GET /login 200 in 131ms
- GET /api/auth/session 200 in 2568ms
- GET /api/auth/session 200 in 33ms
- GET /api/auth/providers 200 in 27ms
- GET /api/auth/csrf 200 in 18ms
+ ✓ Compiled /api/auth/[...nextauth] in 1458ms (989 modules)
+ GET /api/auth/session 200 in 2597ms
+ GET /api/auth/session 200 in 29ms
+ GET /api/auth/providers 200 in 49ms
+ GET /api/auth/csrf 200 in 16ms
 prisma:query SELECT `main`.`Resource`.`id`, `main`.`Resource`.`fullName`, `main`.`Resource`.`email`, `main`.`Resource`.`password`, `main`.`Resource`.`role`, `main`.`Resource`.`phoneNumber`, `main`.`Resource`.`telephoneNumber`, `main`.`Resource`.`photo`, `main`.`Resource`.`teamId`, `main`.`Resource`.`vendorId`, `main`.`Resource`.`exerciseId` FROM `main`.`Resource` WHERE (`main`.`Resource`.`email` = ? AND 1=1) LIMIT ? OFFSET ?
- POST /api/auth/callback/credentials? 200 in 184ms
+ POST /api/auth/callback/credentials? 200 in 281ms
  ○ Compiling / ...
- ✓ Compiled / in 1137ms (994 modules)
- GET / 200 in 1550ms
- GET /api/auth/session 200 in 42ms
- GET /api/auth/session 200 in 18ms
- GET /login 200 in 103ms
+ ✓ Compiled / in 661ms (1006 modules)
+ GET / 200 in 1142ms
+ GET /api/auth/session 200 in 53ms
+ GET /api/auth/session 200 in 37ms
+ ✓ Compiled /exercises in 456ms (1012 modules)
+prisma:query SELECT `main`.`Exercise`.`id`, `main`.`Exercise`.`name`, `main`.`Exercise`.`startDate`, `main`.`Exercise`.`endDate`, `main`.`Exercise`.`status`, `main`.`Exercise`.`photo`, `main`.`Exercise`.`notes`, `main`.`Exercise`.`mock3Required`, COALESCE(`aggr_selection_0_Task`.`_aggr_count_tasks`, 0) AS `_aggr_count_tasks` FROM `main`.`Exercise` LEFT JOIN (SELECT `main`.`Task`.`exerciseId`, COUNT(*) AS `_aggr_count_tasks` FROM `main`.`Task` WHERE 1=1 GROUP BY `main`.`Task`.`exerciseId`) AS `aggr_selection_0_Task` ON (`main`.`Exercise`.`id` = `aggr_selection_0_Task`.`exerciseId`) WHERE 1=1 ORDER BY `main`.`Exercise`.`startDate` DESC LIMIT ? OFFSET ?
+ GET /exercises 200 in 679ms
+ ○ Compiling /exercise/[id] ...
+ ✓ Compiled /exercise/[id] in 863ms (1019 modules)
+prisma:query SELECT `main`.`Exercise`.`id`, `main`.`Exercise`.`name`, `main`.`Exercise`.`startDate`, `main`.`Exercise`.`endDate`, `main`.`Exercise`.`status`, `main`.`Exercise`.`photo`, `main`.`Exercise`.`notes`, `main`.`Exercise`.`mock3Required` FROM `main`.`Exercise` WHERE (`main`.`Exercise`.`id` = ? AND 1=1) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Phase`.`id`, `main`.`Phase`.`name`, `main`.`Phase`.`order`, `main`.`Phase`.`exerciseId` FROM `main`.`Phase` WHERE `main`.`Phase`.`exerciseId` IN (?) ORDER BY `main`.`Phase`.`order` ASC LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Event`.`id`, `main`.`Event`.`name`, `main`.`Event`.`startDate`, `main`.`Event`.`endDate`, `main`.`Event`.`phaseId` FROM `main`.`Event` WHERE `main`.`Event`.`phaseId` IN (?,?,?,?) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Stage`.`id`, `main`.`Stage`.`name`, `main`.`Stage`.`startDate`, `main`.`Stage`.`endDate`, `main`.`Stage`.`exerciseId`, `main`.`Stage`.`eventId`, `main`.`Stage`.`notes` FROM `main`.`Stage` WHERE `main`.`Stage`.`eventId` IN (?,?,?,?,?,?,?,?) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Task`.`id`, `main`.`Task`.`taskId`, `main`.`Task`.`workflow`, `main`.`Task`.`resourceAllocation`, `main`.`Task`.`status`, `main`.`Task`.`startDate`, `main`.`Task`.`endDate`, `main`.`Task`.`estimatedTime`, `main`.`Task`.`actualDuration`, `main`.`Task`.`varianceDuration`, `main`.`Task`.`evidence`, `main`.`Task`.`notes`, `main`.`Task`.`stageId`, `main`.`Task`.`teamId`, `main`.`Task`.`exerciseId` FROM `main`.`Task` WHERE `main`.`Task`.`stageId` IN (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ORDER BY `main`.`Task`.`taskId` ASC LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`_ResourceToTask`.`B`, `main`.`_ResourceToTask`.`A` FROM `main`.`_ResourceToTask` WHERE `main`.`_ResourceToTask`.`B` IN (?,?,?,?)
+prisma:query SELECT `main`.`Resource`.`id`, `main`.`Resource`.`fullName`, `main`.`Resource`.`email`, `main`.`Resource`.`password`, `main`.`Resource`.`role`, `main`.`Resource`.`phoneNumber`, `main`.`Resource`.`telephoneNumber`, `main`.`Resource`.`photo`, `main`.`Resource`.`teamId`, `main`.`Resource`.`vendorId`, `main`.`Resource`.`exerciseId` FROM `main`.`Resource` WHERE `main`.`Resource`.`id` IN (?,?,?,?) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Team`.`id`, `main`.`Team`.`name`, `main`.`Team`.`description`, `main`.`Team`.`photo`, `main`.`Team`.`vendorId`, `main`.`Team`.`exerciseId` FROM `main`.`Team` WHERE `main`.`Team`.`id` IN (?) LIMIT ? OFFSET ?
+ GET /exercise/cmo0k810g0005j6n1lb74qg46 200 in 1953ms
+ ○ Compiling /exercise/[id]/task/[taskId] ...
+ ✓ Compiled /exercise/[id]/task/[taskId] in 1155ms (1041 modules)
+prisma:query SELECT `main`.`Team`.`id`, `main`.`Team`.`name`, `main`.`Team`.`description`, `main`.`Team`.`photo`, `main`.`Team`.`vendorId`, `main`.`Team`.`exerciseId` FROM `main`.`Team` WHERE 1=1 LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Stage`.`id`, `main`.`Stage`.`name`, `main`.`Stage`.`startDate`, `main`.`Stage`.`endDate`, `main`.`Stage`.`exerciseId`, `main`.`Stage`.`eventId`, `main`.`Stage`.`notes` FROM `main`.`Stage` WHERE `main`.`Stage`.`exerciseId` = ? LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Resource`.`id`, `main`.`Resource`.`fullName`, `main`.`Resource`.`email`, `main`.`Resource`.`password`, `main`.`Resource`.`role`, `main`.`Resource`.`phoneNumber`, `main`.`Resource`.`telephoneNumber`, `main`.`Resource`.`photo`, `main`.`Resource`.`teamId`, `main`.`Resource`.`vendorId`, `main`.`Resource`.`exerciseId` FROM `main`.`Resource` WHERE 1=1 LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Task`.`id`, `main`.`Task`.`taskId`, `main`.`Task`.`workflow`, `main`.`Task`.`resourceAllocation`, `main`.`Task`.`status`, `main`.`Task`.`startDate`, `main`.`Task`.`endDate`, `main`.`Task`.`estimatedTime`, `main`.`Task`.`actualDuration`, `main`.`Task`.`varianceDuration`, `main`.`Task`.`evidence`, `main`.`Task`.`notes`, `main`.`Task`.`stageId`, `main`.`Task`.`teamId`, `main`.`Task`.`exerciseId` FROM `main`.`Task` WHERE (`main`.`Task`.`exerciseId` = ? AND `main`.`Task`.`taskId` = ?) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`_ResourceToTask`.`B`, `main`.`_ResourceToTask`.`A` FROM `main`.`_ResourceToTask` WHERE `main`.`_ResourceToTask`.`B` IN (?)
+prisma:query SELECT `main`.`Resource`.`id`, `main`.`Resource`.`fullName`, `main`.`Resource`.`email`, `main`.`Resource`.`password`, `main`.`Resource`.`role`, `main`.`Resource`.`phoneNumber`, `main`.`Resource`.`telephoneNumber`, `main`.`Resource`.`photo`, `main`.`Resource`.`teamId`, `main`.`Resource`.`vendorId`, `main`.`Resource`.`exerciseId` FROM `main`.`Resource` WHERE `main`.`Resource`.`id` IN (?) LIMIT ? OFFSET ?
+ GET /exercise/cmo0k810g0005j6n1lb74qg46/task/T-M-F-01 200 in 2141ms
+ ○ Compiling /api/tasks ...
+ ✓ Compiled /api/tasks in 657ms (1050 modules)
+prisma:query SELECT `main`.`Task`.`id`, `main`.`Task`.`taskId`, `main`.`Task`.`workflow`, `main`.`Task`.`resourceAllocation`, `main`.`Task`.`status`, `main`.`Task`.`startDate`, `main`.`Task`.`endDate`, `main`.`Task`.`estimatedTime`, `main`.`Task`.`actualDuration`, `main`.`Task`.`varianceDuration`, `main`.`Task`.`evidence`, `main`.`Task`.`notes`, `main`.`Task`.`stageId`, `main`.`Task`.`teamId`, `main`.`Task`.`exerciseId` FROM `main`.`Task` WHERE (`main`.`Task`.`id` = ? AND 1=1) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`_ResourceToTask`.`B`, `main`.`_ResourceToTask`.`A` FROM `main`.`_ResourceToTask` WHERE `main`.`_ResourceToTask`.`B` IN (?)
+prisma:query SELECT `main`.`Resource`.`id`, `main`.`Resource`.`fullName`, `main`.`Resource`.`email`, `main`.`Resource`.`password`, `main`.`Resource`.`role`, `main`.`Resource`.`phoneNumber`, `main`.`Resource`.`telephoneNumber`, `main`.`Resource`.`photo`, `main`.`Resource`.`teamId`, `main`.`Resource`.`vendorId`, `main`.`Resource`.`exerciseId` FROM `main`.`Resource` WHERE `main`.`Resource`.`id` IN (?) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Exercise`.`id`, `main`.`Exercise`.`name`, `main`.`Exercise`.`startDate`, `main`.`Exercise`.`endDate`, `main`.`Exercise`.`status`, `main`.`Exercise`.`photo`, `main`.`Exercise`.`notes`, `main`.`Exercise`.`mock3Required` FROM `main`.`Exercise` WHERE `main`.`Exercise`.`id` IN (?) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Phase`.`id`, `main`.`Phase`.`name`, `main`.`Phase`.`order`, `main`.`Phase`.`exerciseId` FROM `main`.`Phase` WHERE `main`.`Phase`.`exerciseId` IN (?) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Event`.`id`, `main`.`Event`.`name`, `main`.`Event`.`startDate`, `main`.`Event`.`endDate`, `main`.`Event`.`phaseId` FROM `main`.`Event` WHERE `main`.`Event`.`phaseId` IN (?,?,?,?) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Stage`.`id`, `main`.`Stage`.`name`, `main`.`Stage`.`startDate`, `main`.`Stage`.`endDate`, `main`.`Stage`.`exerciseId`, `main`.`Stage`.`eventId`, `main`.`Stage`.`notes` FROM `main`.`Stage` WHERE `main`.`Stage`.`eventId` IN (?,?,?,?,?,?,?,?) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Task`.`id`, `main`.`Task`.`taskId`, `main`.`Task`.`workflow`, `main`.`Task`.`resourceAllocation`, `main`.`Task`.`status`, `main`.`Task`.`startDate`, `main`.`Task`.`endDate`, `main`.`Task`.`estimatedTime`, `main`.`Task`.`actualDuration`, `main`.`Task`.`varianceDuration`, `main`.`Task`.`evidence`, `main`.`Task`.`notes`, `main`.`Task`.`stageId`, `main`.`Task`.`teamId`, `main`.`Task`.`exerciseId` FROM `main`.`Task` WHERE `main`.`Task`.`stageId` IN (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) LIMIT ? OFFSET ?
+ ⨯ Error [PrismaClientValidationError]:
+Invalid `prisma.task.update()` invocation:
+
+{
+  where: {
+    id: "cmo0k8111000hj6n19vip8gss"
+  },
+  data: {
+    taskId: "T-M-F-01",
+    stageId: "cmo0k810y000fj6n1qfl03jgf",
+    ~~~~~~~
+    status: "Not-Started",
+    workflow: "Sequential",
+    resourceAllocation: "Single",
+    estimatedTime: 30,
+    startTime: "",
+    endTime: "",
+    teamId: "cmo0k810b0004j6n109j5p884",
+    notes: "Initial site isolation protocols verified. Redundant power checks complete. Functional test passed. [VERIFIED BY SENTINEL AUTONOMOUS AGENT]",
+    evidence: "",
+    startDate: undefined,
+    endDate: undefined,
+    actualDuration: null,
+    varianceDuration: null,
+    resources: {
+      set: [
+        {
+          id: "cmo0k81040001j6n1pmfn9d96"
+        }
+      ]
+    },
+?   id?: String | StringFieldUpdateOperationsInput,
+?   stage?: StageUpdateOneRequiredWithoutTasksNestedInput,
+?   team?: TeamUpdateOneWithoutTasksNestedInput,
+?   exercise?: ExerciseUpdateOneRequiredWithoutTasksNestedInput
+  }
+}
+
+Unknown argument `stageId`. Did you mean `stage`? Available options are marked with ?.
+    at async PATCH (app/api/tasks/route.ts:52:22)
+  50 |   }
+  51 |
+> 52 |   const updatedTask = await prisma.task.update({
+     |                      ^
+  53 |     where: { id },
+  54 |     data: {
+  55 |       ...data,  {
+  clientVersion: '6.19.3'
+}
+ ⨯ Error [PrismaClientValidationError]:
+Invalid `prisma.task.update()` invocation:
+
+{
+  where: {
+    id: "cmo0k8111000hj6n19vip8gss"
+  },
+  data: {
+    taskId: "T-M-F-01",
+    stageId: "cmo0k810y000fj6n1qfl03jgf",
+    ~~~~~~~
+    status: "Not-Started",
+    workflow: "Sequential",
+    resourceAllocation: "Single",
+    estimatedTime: 30,
+    startTime: "",
+    endTime: "",
+    teamId: "cmo0k810b0004j6n109j5p884",
+    notes: "Initial site isolation protocols verified. Redundant power checks complete. Functional test passed. [VERIFIED BY SENTINEL AUTONOMOUS AGENT]",
+    evidence: "",
+    startDate: undefined,
+    endDate: undefined,
+    actualDuration: null,
+    varianceDuration: null,
+    resources: {
+      set: [
+        {
+          id: "cmo0k81040001j6n1pmfn9d96"
+        }
+      ]
+    },
+?   id?: String | StringFieldUpdateOperationsInput,
+?   stage?: StageUpdateOneRequiredWithoutTasksNestedInput,
+?   team?: TeamUpdateOneWithoutTasksNestedInput,
+?   exercise?: ExerciseUpdateOneRequiredWithoutTasksNestedInput
+  }
+}
+
+Unknown argument `stageId`. Did you mean `stage`? Available options are marked with ?.
+    at async PATCH (app/api/tasks/route.ts:52:22)
+  50 |   }
+  51 |
+> 52 |   const updatedTask = await prisma.task.update({
+     |                      ^
+  53 |     where: { id },
+  54 |     data: {
+  55 |       ...data,  {
+  clientVersion: '6.19.3'
+}
+ PATCH /api/tasks 500 in 1185ms
+ GET /login 200 in 245ms
  GET /api/auth/session 200 in 49ms
- GET /api/auth/session 200 in 19ms
- GET /api/auth/providers 200 in 28ms
- GET /api/auth/csrf 200 in 12ms
+ GET /api/auth/session 200 in 28ms
+ GET /api/auth/providers 200 in 33ms
+ GET /api/auth/csrf 200 in 57ms
 prisma:query SELECT 1
 prisma:query SELECT `main`.`Resource`.`id`, `main`.`Resource`.`fullName`, `main`.`Resource`.`email`, `main`.`Resource`.`password`, `main`.`Resource`.`role`, `main`.`Resource`.`phoneNumber`, `main`.`Resource`.`telephoneNumber`, `main`.`Resource`.`photo`, `main`.`Resource`.`teamId`, `main`.`Resource`.`vendorId`, `main`.`Resource`.`exerciseId` FROM `main`.`Resource` WHERE (`main`.`Resource`.`email` = ? AND 1=1) LIMIT ? OFFSET ?
- POST /api/auth/callback/credentials? 200 in 168ms
- GET / 200 in 71ms
- GET /api/auth/session 200 in 44ms
- GET /api/auth/session 200 in 23ms
- GET /login 200 in 72ms
- GET /api/auth/session 200 in 42ms
- GET /api/auth/session 200 in 12ms
- GET /api/auth/providers 200 in 30ms
- GET /api/auth/csrf 200 in 15ms
-prisma:query SELECT 1
-prisma:query SELECT `main`.`Resource`.`id`, `main`.`Resource`.`fullName`, `main`.`Resource`.`email`, `main`.`Resource`.`password`, `main`.`Resource`.`role`, `main`.`Resource`.`phoneNumber`, `main`.`Resource`.`telephoneNumber`, `main`.`Resource`.`photo`, `main`.`Resource`.`teamId`, `main`.`Resource`.`vendorId`, `main`.`Resource`.`exerciseId` FROM `main`.`Resource` WHERE (`main`.`Resource`.`email` = ? AND 1=1) LIMIT ? OFFSET ?
- POST /api/auth/callback/credentials? 200 in 150ms
- GET / 200 in 94ms
- GET /api/auth/session 200 in 39ms
- GET /api/auth/session 200 in 12ms
+ POST /api/auth/callback/credentials? 200 in 200ms
+ GET / 200 in 129ms
+ GET /api/auth/session 200 in 54ms
+ GET /api/auth/session 200 in 21ms
+prisma:query SELECT `main`.`Exercise`.`id`, `main`.`Exercise`.`name`, `main`.`Exercise`.`startDate`, `main`.`Exercise`.`endDate`, `main`.`Exercise`.`status`, `main`.`Exercise`.`photo`, `main`.`Exercise`.`notes`, `main`.`Exercise`.`mock3Required`, COALESCE(`aggr_selection_0_Task`.`_aggr_count_tasks`, 0) AS `_aggr_count_tasks` FROM `main`.`Exercise` LEFT JOIN (SELECT `main`.`Task`.`exerciseId`, COUNT(*) AS `_aggr_count_tasks` FROM `main`.`Task` WHERE 1=1 GROUP BY `main`.`Task`.`exerciseId`) AS `aggr_selection_0_Task` ON (`main`.`Exercise`.`id` = `aggr_selection_0_Task`.`exerciseId`) WHERE 1=1 ORDER BY `main`.`Exercise`.`startDate` DESC LIMIT ? OFFSET ?
+ GET /exercises 200 in 66ms
+prisma:query SELECT `main`.`Exercise`.`id`, `main`.`Exercise`.`name`, `main`.`Exercise`.`startDate`, `main`.`Exercise`.`endDate`, `main`.`Exercise`.`status`, `main`.`Exercise`.`photo`, `main`.`Exercise`.`notes`, `main`.`Exercise`.`mock3Required` FROM `main`.`Exercise` WHERE (`main`.`Exercise`.`id` = ? AND 1=1) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Phase`.`id`, `main`.`Phase`.`name`, `main`.`Phase`.`order`, `main`.`Phase`.`exerciseId` FROM `main`.`Phase` WHERE `main`.`Phase`.`exerciseId` IN (?) ORDER BY `main`.`Phase`.`order` ASC LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Event`.`id`, `main`.`Event`.`name`, `main`.`Event`.`startDate`, `main`.`Event`.`endDate`, `main`.`Event`.`phaseId` FROM `main`.`Event` WHERE `main`.`Event`.`phaseId` IN (?,?,?,?) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Stage`.`id`, `main`.`Stage`.`name`, `main`.`Stage`.`startDate`, `main`.`Stage`.`endDate`, `main`.`Stage`.`exerciseId`, `main`.`Stage`.`eventId`, `main`.`Stage`.`notes` FROM `main`.`Stage` WHERE `main`.`Stage`.`eventId` IN (?,?,?,?,?,?,?,?) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Task`.`id`, `main`.`Task`.`taskId`, `main`.`Task`.`workflow`, `main`.`Task`.`resourceAllocation`, `main`.`Task`.`status`, `main`.`Task`.`startDate`, `main`.`Task`.`endDate`, `main`.`Task`.`estimatedTime`, `main`.`Task`.`actualDuration`, `main`.`Task`.`varianceDuration`, `main`.`Task`.`evidence`, `main`.`Task`.`notes`, `main`.`Task`.`stageId`, `main`.`Task`.`teamId`, `main`.`Task`.`exerciseId` FROM `main`.`Task` WHERE `main`.`Task`.`stageId` IN (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ORDER BY `main`.`Task`.`taskId` ASC LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`_ResourceToTask`.`B`, `main`.`_ResourceToTask`.`A` FROM `main`.`_ResourceToTask` WHERE `main`.`_ResourceToTask`.`B` IN (?,?,?,?)
+prisma:query SELECT `main`.`Resource`.`id`, `main`.`Resource`.`fullName`, `main`.`Resource`.`email`, `main`.`Resource`.`password`, `main`.`Resource`.`role`, `main`.`Resource`.`phoneNumber`, `main`.`Resource`.`telephoneNumber`, `main`.`Resource`.`photo`, `main`.`Resource`.`teamId`, `main`.`Resource`.`vendorId`, `main`.`Resource`.`exerciseId` FROM `main`.`Resource` WHERE `main`.`Resource`.`id` IN (?,?,?,?) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Team`.`id`, `main`.`Team`.`name`, `main`.`Team`.`description`, `main`.`Team`.`photo`, `main`.`Team`.`vendorId`, `main`.`Team`.`exerciseId` FROM `main`.`Team` WHERE `main`.`Team`.`id` IN (?) LIMIT ? OFFSET ?
+ GET /exercise/cmo0k810g0005j6n1lb74qg46 200 in 217ms
  ○ Compiling /reports/[id] ...
- ✓ Compiled /reports/[id] in 5.1s (2044 modules)
+ ✓ Compiled /availability in 7.6s (2107 modules)
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Phase`.`id`, `main`.`Phase`.`name`, `main`.`Phase`.`order`, `main`.`Phase`.`exerciseId` FROM `main`.`Phase` WHERE 1=1 ORDER BY `main`.`Phase`.`order` ASC LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Exercise`.`id`, `main`.`Exercise`.`name`, `main`.`Exercise`.`startDate`, `main`.`Exercise`.`endDate`, `main`.`Exercise`.`status`, `main`.`Exercise`.`photo`, `main`.`Exercise`.`notes`, `main`.`Exercise`.`mock3Required` FROM `main`.`Exercise` WHERE `main`.`Exercise`.`id` IN (?) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Event`.`id`, `main`.`Event`.`name`, `main`.`Event`.`startDate`, `main`.`Event`.`endDate`, `main`.`Event`.`phaseId` FROM `main`.`Event` WHERE `main`.`Event`.`phaseId` IN (?,?,?,?) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Resource`.`id`, `main`.`Resource`.`fullName`, `main`.`Resource`.`email`, `main`.`Resource`.`password`, `main`.`Resource`.`role`, `main`.`Resource`.`phoneNumber`, `main`.`Resource`.`telephoneNumber`, `main`.`Resource`.`photo`, `main`.`Resource`.`teamId`, `main`.`Resource`.`vendorId`, `main`.`Resource`.`exerciseId` FROM `main`.`Resource` WHERE (`main`.`Resource`.`email` = ? AND 1=1) LIMIT ? OFFSET ?
+ GET /reports/cmo0k810g0005j6n1lb74qg46 200 in 8207ms
+ GET /availability 200 in 4219ms
 prisma:query SELECT `main`.`Exercise`.`id`, `main`.`Exercise`.`name`, `main`.`Exercise`.`startDate`, `main`.`Exercise`.`endDate`, `main`.`Exercise`.`status`, `main`.`Exercise`.`photo`, `main`.`Exercise`.`notes`, `main`.`Exercise`.`mock3Required` FROM `main`.`Exercise` WHERE (`main`.`Exercise`.`id` = ? AND 1=1) LIMIT ? OFFSET ?
 prisma:query SELECT `main`.`Phase`.`id`, `main`.`Phase`.`name`, `main`.`Phase`.`order`, `main`.`Phase`.`exerciseId` FROM `main`.`Phase` WHERE `main`.`Phase`.`exerciseId` IN (?) LIMIT ? OFFSET ?
 prisma:query SELECT `main`.`Event`.`id`, `main`.`Event`.`name`, `main`.`Event`.`startDate`, `main`.`Event`.`endDate`, `main`.`Event`.`phaseId` FROM `main`.`Event` WHERE `main`.`Event`.`phaseId` IN (?,?,?,?) LIMIT ? OFFSET ?
 prisma:query SELECT `main`.`Stage`.`id`, `main`.`Stage`.`name`, `main`.`Stage`.`startDate`, `main`.`Stage`.`endDate`, `main`.`Stage`.`exerciseId`, `main`.`Stage`.`eventId`, `main`.`Stage`.`notes` FROM `main`.`Stage` WHERE `main`.`Stage`.`eventId` IN (?,?,?,?,?,?,?,?) LIMIT ? OFFSET ?
 prisma:query SELECT `main`.`Task`.`id`, `main`.`Task`.`taskId`, `main`.`Task`.`workflow`, `main`.`Task`.`resourceAllocation`, `main`.`Task`.`status`, `main`.`Task`.`startDate`, `main`.`Task`.`endDate`, `main`.`Task`.`estimatedTime`, `main`.`Task`.`actualDuration`, `main`.`Task`.`varianceDuration`, `main`.`Task`.`evidence`, `main`.`Task`.`notes`, `main`.`Task`.`stageId`, `main`.`Task`.`teamId`, `main`.`Task`.`exerciseId` FROM `main`.`Task` WHERE `main`.`Task`.`stageId` IN (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) LIMIT ? OFFSET ?
- GET /reports/cmo0k810g0005j6n1lb74qg46 200 in 6501ms
- GET /api/auth/session 200 in 123ms
- GET /api/auth/session 200 in 34ms
- ○ Compiling /admin/email-templates ...
- ✓ Compiled /admin/email-templates in 633ms (2079 modules)
-prisma:query SELECT 1
-prisma:query SELECT `main`.`EmailTemplate`.`id`, `main`.`EmailTemplate`.`name`, `main`.`EmailTemplate`.`subject`, `main`.`EmailTemplate`.`body`, `main`.`EmailTemplate`.`createdAt` FROM `main`.`EmailTemplate` WHERE 1=1 ORDER BY `main`.`EmailTemplate`.`createdAt` DESC LIMIT ? OFFSET ?
- GET /admin/email-templates 200 in 996ms
- GET /api/auth/session 200 in 81ms
+ GET /api/auth/session 200 in 91ms
+ GET /api/auth/session 200 in 17ms
+ ○ Compiling /admin/exercises ...
+ ✓ Compiled /admin/exercises in 2.3s (2157 modules)
+ GET /admin/exercises 200 in 2627ms
+ ○ Compiling /api/exercises ...
+ ✓ Compiled /api/exercises in 1041ms (2159 modules)
+prisma:query SELECT `main`.`Exercise`.`id`, `main`.`Exercise`.`name`, `main`.`Exercise`.`startDate`, `main`.`Exercise`.`endDate`, `main`.`Exercise`.`status`, `main`.`Exercise`.`photo`, `main`.`Exercise`.`notes`, `main`.`Exercise`.`mock3Required` FROM `main`.`Exercise` WHERE 1=1 LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`_ExerciseOwner`.`A`, `main`.`_ExerciseOwner`.`B` FROM `main`.`_ExerciseOwner` WHERE `main`.`_ExerciseOwner`.`A` IN (?)
+prisma:query SELECT `main`.`Resource`.`id`, `main`.`Resource`.`fullName`, `main`.`Resource`.`email`, `main`.`Resource`.`password`, `main`.`Resource`.`role`, `main`.`Resource`.`phoneNumber`, `main`.`Resource`.`telephoneNumber`, `main`.`Resource`.`photo`, `main`.`Resource`.`teamId`, `main`.`Resource`.`vendorId`, `main`.`Resource`.`exerciseId` FROM `main`.`Resource` WHERE `main`.`Resource`.`id` IN (?) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Resource`.`id`, `main`.`Resource`.`fullName`, `main`.`Resource`.`email`, `main`.`Resource`.`password`, `main`.`Resource`.`role`, `main`.`Resource`.`phoneNumber`, `main`.`Resource`.`telephoneNumber`, `main`.`Resource`.`photo`, `main`.`Resource`.`teamId`, `main`.`Resource`.`vendorId`, `main`.`Resource`.`exerciseId` FROM `main`.`Resource` WHERE `main`.`Resource`.`exerciseId` IN (?) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Vendor`.`id`, `main`.`Vendor`.`name`, `main`.`Vendor`.`type`, `main`.`Vendor`.`email`, `main`.`Vendor`.`phone`, `main`.`Vendor`.`photo`, `main`.`Vendor`.`exerciseId` FROM `main`.`Vendor` WHERE `main`.`Vendor`.`exerciseId` IN (?) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Team`.`id`, `main`.`Team`.`name`, `main`.`Team`.`description`, `main`.`Team`.`photo`, `main`.`Team`.`vendorId`, `main`.`Team`.`exerciseId` FROM `main`.`Team` WHERE `main`.`Team`.`exerciseId` IN (?) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Phase`.`id`, `main`.`Phase`.`name`, `main`.`Phase`.`order`, `main`.`Phase`.`exerciseId` FROM `main`.`Phase` WHERE `main`.`Phase`.`exerciseId` IN (?) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Event`.`id`, `main`.`Event`.`name`, `main`.`Event`.`startDate`, `main`.`Event`.`endDate`, `main`.`Event`.`phaseId` FROM `main`.`Event` WHERE `main`.`Event`.`phaseId` IN (?,?,?,?) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Stage`.`id`, `main`.`Stage`.`name`, `main`.`Stage`.`startDate`, `main`.`Stage`.`endDate`, `main`.`Stage`.`exerciseId`, `main`.`Stage`.`eventId`, `main`.`Stage`.`notes` FROM `main`.`Stage` WHERE `main`.`Stage`.`eventId` IN (?,?,?,?,?,?,?,?) LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`Task`.`id`, `main`.`Task`.`taskId`, `main`.`Task`.`workflow`, `main`.`Task`.`resourceAllocation`, `main`.`Task`.`status`, `main`.`Task`.`startDate`, `main`.`Task`.`endDate`, `main`.`Task`.`estimatedTime`, `main`.`Task`.`actualDuration`, `main`.`Task`.`varianceDuration`, `main`.`Task`.`evidence`, `main`.`Task`.`notes`, `main`.`Task`.`stageId`, `main`.`Task`.`teamId`, `main`.`Task`.`exerciseId` FROM `main`.`Task` WHERE `main`.`Task`.`stageId` IN (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) LIMIT ? OFFSET ?
+ GET /api/exercises 200 in 1200ms
+ GET /api/auth/session 200 in 1202ms
  GET /api/auth/session 200 in 14ms
- GET / 200 in 87ms
- GET /api/auth/session 200 in 34ms
- GET /api/auth/session 200 in 12ms
- ✓ Compiled in 762ms (902 modules)
- ✓ Compiled in 326ms (902 modules)
- ✓ Compiled in 914ms (2087 modules)
- ✓ Compiled in 208ms (902 modules)
- ✓ Compiled in 239ms (902 modules)
- ⚠ Found a change in next.config.ts. Restarting the server to apply the changes...
-   ▲ Next.js 15.2.0
-   - Local:        http://localhost:3000
-   - Network:      http://192.168.0.2:3000
-   - Environments: .env
-
- ✓ Starting...
- ✓ Ready in 2.9s
- ⚠ Found a change in next.config.ts. Restarting the server to apply the changes...
-   ▲ Next.js 15.2.0
-   - Local:        http://localhost:3000
-   - Network:      http://192.168.0.2:3000
-   - Environments: .env
-
- ✓ Starting...
- ○ (pwa) PWA support is disabled.
- ✓ Ready in 3s
-Error: Requested and resolved page mismatch: /admin/exercises//[id/]/workflow/page /admin/exercises/[id/]/workflow/page
+ ○ Compiling /admin/email-scheduler ...
+ ✓ Compiled /admin/email-scheduler in 927ms (2254 modules)
+prisma:query SELECT `main`.`EmailSchedule`.`id`, `main`.`EmailSchedule`.`templateId`, `main`.`EmailSchedule`.`scheduledAt`, `main`.`EmailSchedule`.`status` FROM `main`.`EmailSchedule` WHERE 1=1 ORDER BY `main`.`EmailSchedule`.`scheduledAt` DESC LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`EmailTemplate`.`id`, `main`.`EmailTemplate`.`name`, `main`.`EmailTemplate`.`subject`, `main`.`EmailTemplate`.`body`, `main`.`EmailTemplate`.`createdAt` FROM `main`.`EmailTemplate` WHERE 1=1 ORDER BY `main`.`EmailTemplate`.`name` ASC LIMIT ? OFFSET ?
+prisma:query SELECT `main`.`EmailList`.`id`, `main`.`EmailList`.`name`, `main`.`EmailList`.`emails`, `main`.`EmailList`.`createdAt` FROM `main`.`EmailList` WHERE 1=1 ORDER BY `main`.`EmailList`.`name` ASC LIMIT ? OFFSET ?
+ GET /admin/email-scheduler 200 in 1192ms
+ GET /api/auth/session 200 in 498ms
+ GET /api/auth/session 200 in 29ms
+ ✓ Compiled in 1858ms (976 modules)
+ ✓ Compiled in 494ms (976 modules)
+ ⨯ Error: Cannot find module './638.js'
+Require stack:
+- /app/.next/server/webpack-runtime.js
+- /app/.next/server/app/admin/email-scheduler/page.js
+- /app/node_modules/next/dist/server/require.js
+- /app/node_modules/next/dist/server/load-components.js
+- /app/node_modules/next/dist/build/utils.js
+- /app/node_modules/next/dist/build/swc/options.js
+- /app/node_modules/next/dist/build/swc/index.js
+- /app/node_modules/next/dist/build/next-config-ts/transpile-config.js
+- /app/node_modules/next/dist/server/config.js
+- /app/node_modules/next/dist/server/next.js
+- /app/node_modules/next/dist/server/lib/start-server.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:203:28)
+    at <unknown> (.next/server/webpack-runtime.js:116:40)
     at Array.reduce (<anonymous>)
- ⨯ unhandledRejection: Error: Requested and resolved page mismatch: /admin/exercises//[id/]/workflow/page /admin/exercises/[id/]/workflow/page
-    at Array.reduce (<anonymous>)
- ⨯ unhandledRejection:  Error: Requested and resolved page mismatch: /admin/exercises//[id/]/workflow/page /admin/exercises/[id/]/workflow/page
-    at Array.reduce (<anonymous>)
-Error: Requested and resolved page mismatch: /admin/exercises//[id/]/workflow/page /admin/exercises/[id/]/workflow/page
-    at Array.reduce (<anonymous>)
- ⨯ unhandledRejection: Error: Requested and resolved page mismatch: /admin/exercises//[id/]/workflow/page /admin/exercises/[id/]/workflow/page
-    at Array.reduce (<anonymous>)
- ⨯ unhandledRejection:  Error: Requested and resolved page mismatch: /admin/exercises//[id/]/workflow/page /admin/exercises/[id/]/workflow/page
-    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (.next/server/webpack-runtime.js:115:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (.next/server/webpack-runtime.js:167:22)
+    at <unknown> (.next/server/app/login/page.js:1:8782)
+    at Object.<anonymous> (.next/server/app/login/page.js:1:8831) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/login'
+}
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 4.1s (1959 modules)
+ GET /login 500 in 4818ms
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                [?25h
