@@ -11,18 +11,18 @@
   "dependencies": {
     "@ducanh2912/next-pwa": "^10.2.9",
     "@prisma/client": "^6.4.1",
-    "@types/uuid": "^10.0.0",
-    "bcryptjs": "^3.0.3",
+    "@types/uuid": "^9.0.8",
+    "bcryptjs": "^2.4.3",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "lucide-react": "^1.8.0",
     "next": "^15.5.15",
-    "next-auth": "5.0.0-beta.25",
+    "next-auth": "^5.0.0-beta.25",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "recharts": "^2.13.3",
     "tailwind-merge": "^2.5.4",
-    "uuid": "^13.0.0"
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.0.0",

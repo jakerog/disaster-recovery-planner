@@ -15,22 +15,27 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
         }
 
         try {
+          const email = (credentials.email as string).toLowerCase().trim();
+          const password = credentials.password as string;
+
           const resource = await prisma.resource.findUnique({
-            where: { email: (credentials.email as string).toLowerCase() },
+            where: { email },
           });
 
-          if (!resource || !resource.password) {
-            console.warn(`Auth failure: Target identity not found or restricted. [${credentials.email}]`);
+          if (!resource) {
+            console.warn(`Auth: Identity [${email}] not found.`);
             return null;
           }
 
-          const isValid = await bcrypt.compare(
-            credentials.password as string,
-            resource.password
-          );
+          if (!resource.password) {
+            console.warn(`Auth: Identity [${email}] has no credential assigned.`);
+            return null;
+          }
+
+          const isValid = await bcrypt.compare(password, resource.password);
 
           if (!isValid) {
-            console.warn(`Auth failure: Cryptographic validation failed. [${credentials.email}]`);
+            console.warn(`Auth: Credential mismatch for [${email}].`);
             return null;
           }
 
@@ -40,8 +45,8 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
             name: resource.fullName,
             role: resource.role,
           };
-        } catch (error) {
-          console.error("Auth protocol violation:", error);
+        } catch (error: any) {
+          console.error("Auth System Error:", error.message);
           return null;
         }
       },
