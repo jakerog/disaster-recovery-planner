@@ -6,7 +6,7 @@ import { Shield, AlertCircle } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 
 function LoginContent() {
-  const [email, setEmail] = useState("admin@sentinel.com");
+  const [email, setEmail] = useState("jake.rog@gmail.com");
   const [password, setPassword] = useState("password123");
   const [loading, setLoading] = useState(false);
   const searchParams = useSearchParams();
@@ -23,6 +23,31 @@ function LoginContent() {
       });
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    if (!email) {
+      alert("Please provide an identity (email) to initiate reset.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await fetch("/api/auth/forgot-password", {
+        method: "POST",
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert(`Reset protocols initiated. Simulation reset link: ${data.resetLink}`);
+      } else {
+        alert(data.error || "Reset transmission failed.");
+      }
+    } catch (err) {
+      alert("System fault during reset transmission.");
     } finally {
       setLoading(false);
     }
@@ -87,6 +112,16 @@ function LoginContent() {
             {loading ? "Authenticating..." : "Sign In"}
           </button>
         </form>
+
+        <div className="mt-8 text-center">
+          <button
+            type="button"
+            onClick={handleForgotPassword}
+            className="text-[10px] font-black text-blue-600 uppercase tracking-widest hover:underline"
+          >
+            Forgot Password?
+          </button>
+        </div>
 
         <p className="mt-10 text-center text-xs font-medium text-slate-300 uppercase tracking-widest">
           Secure Terminal v2.0
