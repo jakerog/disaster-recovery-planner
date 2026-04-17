@@ -28,6 +28,7 @@ export default function TaskEditForm({ task, allResources = [], allTeams = [], a
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Support images, excel, word, pdf
     const reader = new FileReader();
     reader.onload = () => {
       setEvidence(reader.result as string);
@@ -90,8 +91,12 @@ export default function TaskEditForm({ task, allResources = [], allTeams = [], a
     <form onSubmit={handleSubmit} className="space-y-12 text-slate-900 clean-card p-10 md:p-16 rounded-[3rem] border border-white shadow-2xl shadow-slate-200/50">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
         <div>
-          <label className="text-[10px] font-black text-slate-400 uppercase block mb-3 tracking-widest px-1">Task Designation (ID)</label>
-          <input name="taskId" defaultValue={task.taskId} className="clean-inset w-full p-4 text-sm font-bold border-none focus:ring-1 focus:ring-blue-500/20" />
+          <label className="text-[10px] font-black text-slate-400 uppercase block mb-3 tracking-widest px-1">Task ID (Number)</label>
+          <input name="taskId" type="number" defaultValue={task.taskId} className="clean-inset w-full p-4 text-sm font-bold border-none focus:ring-1 focus:ring-blue-500/20" />
+        </div>
+        <div>
+          <label className="text-[10px] font-black text-slate-400 uppercase block mb-3 tracking-widest px-1">Task Name (Description)</label>
+          <input name="name" defaultValue={task.name || ""} className="clean-inset w-full p-4 text-sm font-bold border-none" required />
         </div>
         <div>
           <label className="text-[10px] font-black text-slate-400 uppercase block mb-3 tracking-widest px-1">Operational Stage</label>
@@ -102,10 +107,13 @@ export default function TaskEditForm({ task, allResources = [], allTeams = [], a
         <div>
           <label className="text-[10px] font-black text-slate-400 uppercase block mb-3 tracking-widest px-1">Status Protocol</label>
           <select name="status" defaultValue={task.status} className="clean-inset w-full p-4 text-sm font-bold border-none appearance-none cursor-pointer">
-            <option value="Not-Started">Not-Started</option>
-            <option value="In-Progress">In-Progress</option>
-            <option value="Completed">Completed</option>
+            <option value="Not started">Not started</option>
+            <option value="In Progress">In Progress</option>
             <option value="Failed">Failed</option>
+            <option value="Delayed">Delayed</option>
+            <option value="Optional">Optional</option>
+            <option value="Completed">Completed</option>
+            <option value="Cancelled">Cancelled</option>
           </select>
         </div>
         <div>
@@ -123,7 +131,7 @@ export default function TaskEditForm({ task, allResources = [], allTeams = [], a
           </select>
         </div>
         <div>
-          <label className="text-[10px] font-black text-slate-400 uppercase block mb-3 tracking-widest px-1">Estimated Window (m)</label>
+          <label className="text-[10px] font-black text-slate-400 uppercase block mb-3 tracking-widest px-1">Estimated Duration (Minutes)</label>
           <input name="estimatedTime" type="number" defaultValue={task.estimatedTime || 0} className="clean-inset w-full p-4 text-sm font-bold border-none" />
         </div>
 
@@ -155,14 +163,14 @@ export default function TaskEditForm({ task, allResources = [], allTeams = [], a
         <div className="clean-inset p-4 relative group cursor-pointer hover:bg-white/50 transition-colors">
           <label className="text-[10px] font-black text-slate-400 uppercase block mb-3 tracking-widest px-1">Evidence Cryptography</label>
           <div className="flex items-center justify-between">
-             <span className="text-[11px] font-bold text-slate-400">{evidence ? "Visual Proof Attached" : "Upload Visual Proof (Photos/Logs)"}</span>
+             <span className="text-[11px] font-bold text-slate-400">{evidence ? "Evidence Synchronized" : "Upload Evidence (Photos/Logs/Docs)"}</span>
              <Camera size={18} className="text-blue-600" />
           </div>
-          <input type="file" onChange={handleFileUpload} accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer" />
+          <input type="file" onChange={handleFileUpload} accept=".jpg,.jpeg,.png,.webp,.pdf,.doc,.docx,.xls,.xlsx" className="absolute inset-0 opacity-0 cursor-pointer" />
         </div>
       </div>
 
-      {evidence && (
+      {evidence && evidence.startsWith('data:image/') && (
         <div className="mt-4">
           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Evidence Preview</p>
           <img src={evidence} className="max-w-xs rounded-2xl border border-slate-100 shadow-lg" alt="Evidence" />
@@ -170,18 +178,21 @@ export default function TaskEditForm({ task, allResources = [], allTeams = [], a
       )}
 
       <div>
-        <label className="text-[10px] font-black text-slate-400 block mb-4 uppercase tracking-[0.2em] px-1">Agent Matrix Allocation</label>
-        <div className="flex flex-wrap gap-3">
+        <label className="text-[10px] font-black text-slate-400 block mb-4 uppercase tracking-[0.2em] px-1">Assigned Resource(s) [Name | Team]</label>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
           {allResources.map(r => (
             <button
               key={r.id}
               type="button"
               onClick={() => setResourceIds(prev => prev.includes(r.id) ? prev.filter(i => i !== r.id) : [...prev, r.id])}
-              className={`px-5 py-2.5 rounded-2xl text-[10px] font-black border-none uppercase tracking-widest transition-all ${
+              className={`p-4 rounded-2xl border-none uppercase transition-all flex flex-col items-start ${
                 resourceIds.includes(r.id) ? "clean-button text-white scale-105" : "clean-inset text-slate-400 opacity-60"
               }`}
             >
-              {r.fullName}
+              <span className="text-[10px] font-black tracking-widest">{r.fullName}</span>
+              <span className={`text-[8px] font-bold ${resourceIds.includes(r.id) ? 'text-blue-200' : 'text-slate-300'}`}>
+                {allTeams.find(t => t.id === r.teamId)?.name || 'Independent'}
+              </span>
             </button>
           ))}
         </div>

@@ -50,6 +50,7 @@ export async function PATCH(req: Request) {
     estimatedTime,
     evidence,
     taskId,
+    name,
     workflow,
     resourceAllocation,
     status,
@@ -90,6 +91,7 @@ export async function PATCH(req: Request) {
     where: { id },
     data: {
       taskId,
+      name,
       workflow,
       resourceAllocation,
       status,

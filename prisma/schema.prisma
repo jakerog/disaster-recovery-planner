@@ -111,6 +111,7 @@ model Stage {
 model Task {
   id                 String    @id @default(cuid())
   taskId             String
+  name               String?
   workflow           String    @default("Sequential") // Sequential, Parallel
   resourceAllocation String    @default("Single") // Single, Multiple
   status             String    @default("Not-Started") // Not-Started, In-Progress, Completed, Failed

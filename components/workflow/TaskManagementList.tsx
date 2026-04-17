@@ -74,8 +74,12 @@ export default function TaskManagementList({ exerciseId, stages, teams, resource
 
            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-2">
-                <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1">Task Designation (ID)</label>
-                <input name="taskId" defaultValue={editingTask?.taskId} className="clean-input" required placeholder="T-XXX" />
+                <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1">Task ID (Number)</label>
+                <input name="taskId" type="number" defaultValue={editingTask?.taskId} className="clean-input" required placeholder="101" />
+              </div>
+              <div className="space-y-2">
+                <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1">Task Name (Description)</label>
+                <input name="name" defaultValue={editingTask?.name} className="clean-input" required placeholder="Service Isolation..." />
               </div>
               <div className="space-y-2">
                 <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1">Operational Stage</label>
@@ -92,20 +96,49 @@ export default function TaskManagementList({ exerciseId, stages, teams, resource
                 </select>
               </div>
               <div className="space-y-2">
-                <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1">Estimated Window (m)</label>
+                <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1">Estimated Duration (Minutes)</label>
                 <input name="estimatedTime" type="number" defaultValue={editingTask?.estimatedTime || 0} className="clean-input" required />
+              </div>
+              <div className="space-y-2">
+                <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1">Status Protocol</label>
+                <select name="status" defaultValue={editingTask?.status || "Not started"} className="clean-input" required>
+                  <option value="Not started">Not started</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Failed">Failed</option>
+                  <option value="Delayed">Delayed</option>
+                  <option value="Optional">Optional</option>
+                  <option value="Completed">Completed</option>
+                  <option value="Cancelled">Cancelled</option>
+                </select>
+              </div>
+              <div className="space-y-2">
+                <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1">Workflow Chain</label>
+                <select name="workflow" defaultValue={editingTask?.workflow || "Sequential"} className="clean-input" required>
+                  <option value="Sequential">Sequential</option>
+                  <option value="Parallel">Parallel</option>
+                </select>
+              </div>
+              <div className="space-y-2">
+                <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1">Resource Allocation</label>
+                <select name="resourceAllocation" defaultValue={editingTask?.resourceAllocation || "Single"} className="clean-input" required>
+                  <option value="Single">Single</option>
+                  <option value="Multiple">Multiple</option>
+                </select>
               </div>
               <div className="md:col-span-2 space-y-2">
                 <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1">Operational Intelligence (Notes)</label>
                 <textarea name="notes" defaultValue={editingTask?.notes} className="clean-input min-h-[100px]" placeholder="Detailed recovery instructions..." required />
               </div>
               <div className="md:col-span-2 space-y-4">
-                <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1">Agent Matrix Allocation</label>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1">Assigned Resource(s) [Name | Team]</label>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                    {resources.map((r: any) => (
                      <label key={r.id} className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100 cursor-pointer hover:bg-white transition-colors">
                         <input type="checkbox" name="resourceIds" value={r.id} defaultChecked={editingTask?.resources?.some((tr: any) => tr.id === r.id)} className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500" />
-                        <span className="text-[10px] font-bold uppercase truncate">{r.fullName}</span>
+                        <div className="flex flex-col">
+                          <span className="text-[10px] font-black uppercase truncate">{r.fullName}</span>
+                          <span className="text-[8px] font-bold text-slate-400 uppercase truncate">{r.team?.name || 'Independent'}</span>
+                        </div>
                      </label>
                    ))}
                 </div>
@@ -128,7 +161,7 @@ export default function TaskManagementList({ exerciseId, stages, teams, resource
                    {task.taskId.slice(-3)}
                 </div>
                 <div>
-                   <h4 className="text-sm font-black uppercase tracking-tight text-slate-900">{task.notes}</h4>
+                   <h4 className="text-sm font-black uppercase tracking-tight text-slate-900">{task.name || task.notes}</h4>
                    <div className="flex items-center gap-4 mt-1.5">
                       <span className="text-[9px] font-black text-slate-400 uppercase flex items-center gap-1.5">
                          <Activity size={10} className="text-blue-500" /> {task.stage?.name}
