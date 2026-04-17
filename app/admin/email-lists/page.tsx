@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import EmailListForm from "@/components/forms/EmailListForm";
 import { Users, Plus, Mail, Shield, Trash2, Globe } from "lucide-react";
+import BackButton from "@/components/ui/BackButton";
 
 export const dynamic = "force-dynamic";
 
@@ -11,6 +12,7 @@ export default async function EmailListsPage() {
 
   return (
     <div className="p-8 md:p-12 lg:p-16 max-w-7xl mx-auto min-h-screen pb-32">
+      <div className="mb-6"><BackButton /></div>
       <header className="mb-12">
         <div className="flex items-center gap-4 mb-4">
           <div className="p-3 bg-blue-600 rounded-xl text-white">

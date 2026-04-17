@@ -4,6 +4,7 @@ import GranularAnalytics from "@/components/reports/GranularAnalytics";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Download, Shield } from "lucide-react";
+import BackButton from "@/components/ui/BackButton";
 
 export default async function ExerciseReportPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -33,9 +34,12 @@ export default async function ExerciseReportPage({ params }: { params: Promise<{
     <div className="min-h-screen bg-slate-50 p-8 lg:p-16 text-slate-900 font-sans selection:bg-blue-100">
       <div className="max-w-7xl mx-auto">
         <nav className="mb-16 flex items-center justify-between">
-          <Link href={`/exercise/${id}`} className="clean-button-secondary">
-            <ArrowLeft size={16}/> Back to Mission Control
-          </Link>
+          <div className="flex items-center gap-4">
+            <BackButton />
+            <Link href={`/exercise/${id}`} className="clean-button-secondary">
+              <ArrowLeft size={16}/> Back to Mission Control
+            </Link>
+          </div>
           <div className="flex items-center gap-3">
              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white shadow-lg shadow-blue-100">
                 <Shield size={20} />

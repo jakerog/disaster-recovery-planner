@@ -3,10 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
-import { LayoutDashboard, Users, UserCheck, Mail, ClipboardList, Briefcase, Building2, LogOut } from "lucide-react";
+import { LayoutDashboard, Users, UserCheck, Mail, ClipboardList, Briefcase, Building2, LogOut, ListChecks } from "lucide-react";
 
 const links = [
   { href: "/admin/exercises", label: "Exercises", icon: LayoutDashboard },
+  { href: "/admin/tasks", label: "Tasks", icon: ListChecks },
   { href: "/admin/resources", label: "Resources", icon: Users },
   { href: "/admin/teams", label: "Teams", icon: Briefcase },
   { href: "/admin/vendors", label: "Vendors", icon: Building2 },

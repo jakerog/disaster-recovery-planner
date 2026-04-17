@@ -21,7 +21,7 @@ model Resource {
   tasks           Task[]
   vendor          Vendor?        @relation(fields: [vendorId], references: [id])
   vendorId        String?
-  exercise        Exercise?      @relation(fields: [exerciseId], references: [id])
+  exercise        Exercise?      @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
   exerciseId      String?
   ownedExercises  Exercise[]     @relation("ExerciseOwner")
   availabilities  Availability[]
@@ -36,7 +36,7 @@ model Vendor {
   photo      String?
   teams      Team[]
   resources  Resource[]
-  exercise   Exercise?  @relation(fields: [exerciseId], references: [id])
+  exercise   Exercise?  @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
   exerciseId String?
 }
 
@@ -49,7 +49,7 @@ model Team {
   vendorId    String?
   resources   Resource[]
   tasks       Task[]
-  exercise    Exercise?  @relation(fields: [exerciseId], references: [id])
+  exercise    Exercise?  @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
   exerciseId  String?
 }
 
@@ -126,17 +126,17 @@ model Task {
   resources          Resource[]
   team               Team?     @relation(fields: [teamId], references: [id])
   teamId             String?
-  exercise           Exercise  @relation(fields: [exerciseId], references: [id])
+  exercise           Exercise  @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
   exerciseId         String
 }
 
 model Availability {
   id         String   @id @default(cuid())
-  resource   Resource @relation(fields: [resourceId], references: [id])
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
   resourceId String
-  exercise   Exercise @relation(fields: [exerciseId], references: [id])
+  exercise   Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
   exerciseId String
-  phase      Phase    @relation(fields: [phaseId], references: [id])
+  phase      Phase    @relation(fields: [phaseId], references: [id], onDelete: Cascade)
   phaseId    String
   available  Boolean  @default(false)
   notes      String?

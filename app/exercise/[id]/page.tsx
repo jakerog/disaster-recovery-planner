@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Timer, CheckCircle2, AlertTriangle, FileText, User, Users, ChevronRight, Activity, Shield, LogOut } from "lucide-react";
 import Link from "next/link";
 import { auth } from "@/auth";
+import BackButton from "@/components/ui/BackButton";
 
 export default async function ExerciseExecutionPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -39,6 +40,7 @@ export default async function ExerciseExecutionPage({ params }: { params: Promis
     <div className="min-h-screen bg-gray-100 text-gray-900 font-sans pb-32">
       <nav className="sticky top-0 z-50 clean-glass border-b border-white/50 px-8 py-4 flex justify-between items-center mb-12">
          <div className="flex items-center gap-4">
+            <BackButton />
             <div className="w-10 h-10 bg-black rounded-xl flex items-center justify-center text-white shadow-lg">
                <Shield size={20} />
             </div>

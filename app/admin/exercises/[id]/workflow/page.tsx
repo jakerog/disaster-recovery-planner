@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Shield, ChevronRight, Activity, Calendar, Clock, Plus, Zap, Trash2, ArrowLeft, MoreHorizontal, Settings, GripVertical, FileText } from "lucide-react";
 import Link from "next/link";
 import SortableStageList from "@/components/workflow/SortableStageList";
+import BackButton from "@/components/ui/BackButton";
 import TaskManagementList from "@/components/workflow/TaskManagementList";
 
 export default function WorkflowManagementPage({ params }: { params: Promise<{ id: string }> }) {
@@ -157,9 +158,12 @@ export default function WorkflowManagementPage({ params }: { params: Promise<{ i
     <div className="p-4 md:p-12 lg:p-20 bg-slate-50 min-h-screen text-slate-900 font-sans selection:bg-blue-100">
       <div className="max-w-6xl mx-auto">
         <nav className="mb-16 flex items-center justify-between">
-           <Link href="/admin/exercises" className="clean-button-secondary py-3 px-6 flex items-center gap-3">
-              <ArrowLeft size={16} /> <span className="text-[11px] font-black uppercase tracking-widest">Exercise Registry</span>
-           </Link>
+           <div className="flex items-center gap-4">
+              <BackButton />
+              <Link href="/admin/exercises" className="clean-button-secondary py-3 px-6 flex items-center gap-3">
+                 <ArrowLeft size={16} /> <span className="text-[11px] font-black uppercase tracking-widest">Exercise Registry</span>
+              </Link>
+           </div>
            <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-blue-100 ring-4 ring-white">
                  <Settings size={22} />
