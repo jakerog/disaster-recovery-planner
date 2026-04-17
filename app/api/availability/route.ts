@@ -7,13 +7,14 @@ export async function POST(req: Request) {
   if (Array.isArray(body)) {
     const results = await Promise.all(
       body.map(item => {
-        const { resourceId, phaseId, exerciseId, available, notes } = item;
+        const { resourceId, phaseId, stageId, exerciseId, available, notes } = item;
         return prisma.availability.upsert({
-          where: { resourceId_phaseId: { resourceId, phaseId } },
+          where: { resourceId_phaseId_stageId: { resourceId, phaseId, stageId: stageId || null } },
           update: { available, notes },
           create: {
             resource: { connect: { id: resourceId } },
             phase: { connect: { id: phaseId } },
+            stage: stageId ? { connect: { id: stageId } } : undefined,
             exercise: { connect: { id: exerciseId } },
             available,
             notes
@@ -24,14 +25,15 @@ export async function POST(req: Request) {
     return NextResponse.json(results);
   }
 
-  const { resourceId, phaseId, exerciseId, available, notes } = body;
+  const { resourceId, phaseId, stageId, exerciseId, available, notes } = body;
 
   const availability = await prisma.availability.upsert({
-    where: { resourceId_phaseId: { resourceId, phaseId } },
+    where: { resourceId_phaseId_stageId: { resourceId, phaseId, stageId: stageId || null } },
     update: { available, notes },
     create: {
       resource: { connect: { id: resourceId } },
       phase: { connect: { id: phaseId } },
+      stage: stageId ? { connect: { id: stageId } } : undefined,
       exercise: { connect: { id: exerciseId } },
       available,
       notes

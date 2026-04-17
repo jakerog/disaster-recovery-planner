@@ -6,6 +6,13 @@ const prisma = new PrismaClient()
 async function main() {
   const password = await bcrypt.hash('password123', 10)
 
+  // Only seed if no resources exist (fresh database)
+  const resourceCount = await prisma.resource.count();
+  if (resourceCount > 0) {
+    console.log('Operational environment detected. Skipping initialization protocol.');
+    return;
+  }
+
   // 1. Resources - Primary Operator
   const admin = await prisma.resource.upsert({
     where: { email: 'jake.rog@gmail.com' },

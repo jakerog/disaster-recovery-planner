@@ -5,6 +5,7 @@ import ExerciseForm from "@/components/forms/ExerciseForm";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Shield, Calendar, Activity, Layout, Trash2, Edit3, Settings2 } from "lucide-react";
+import BackButton from "@/components/ui/BackButton";
 
 export default function AdminExercisesPage() {
   const [exercises, setExercises] = useState<Exercise[]>([]);
@@ -26,6 +27,7 @@ export default function AdminExercisesPage() {
   return (
     <div className="p-4 md:p-8 bg-slate-50 min-h-screen text-slate-900 font-sans pb-24">
       <div className="max-w-6xl mx-auto">
+        <div className="mb-6"><BackButton /></div>
         <header className="mb-12 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
             <h1 className="text-4xl font-black tracking-tighter uppercase leading-none">Exercise Master</h1>

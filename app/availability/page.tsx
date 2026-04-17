@@ -3,17 +3,33 @@ import AvailabilityForm from "@/components/forms/AvailabilityForm";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { CalendarCheck, Shield } from "lucide-react";
+import BackButton from "@/components/ui/BackButton";
 
 export default async function AvailabilityPage() {
   const session = await auth();
   if (!session) redirect("/login");
 
-  const [phases, resource] = await Promise.all([
+  const [phases, resource, availabilities] = await Promise.all([
     prisma.phase.findMany({
-      include: { exercise: true, events: true },
+      include: {
+        exercise: true,
+        events: {
+          include: {
+            stages: {
+              include: {
+                tasks: { include: { resources: { include: { team: true } } } },
+                availabilities: { include: { resource: { include: { team: true } } } }
+              }
+            }
+          }
+        }
+      },
       orderBy: { order: "asc" }
     }),
-    prisma.resource.findUnique({ where: { email: session.user?.email || "" } })
+    prisma.resource.findUnique({ where: { email: session.user?.email || "" } }),
+    prisma.availability.findMany({
+      where: { resource: { email: session.user?.email || "" } }
+    })
   ]);
 
   if (!resource) return <div className="p-8 text-gray-900 font-bold">Error: Resource record not found.</div>;
@@ -21,6 +37,7 @@ export default async function AvailabilityPage() {
   return (
     <div className="p-4 md:p-8 bg-gray-100 min-h-screen font-sans">
       <div className="max-w-4xl mx-auto clean-card p-8 md:p-16 rounded-[3rem] border border-white">
+        <div className="mb-6"><BackButton /></div>
         <header className="flex justify-between items-center mb-16">
            <div className="flex items-center gap-6">
              <div className="w-16 h-16 bg-black rounded-3xl flex items-center justify-center text-white shadow-2xl ring-4 ring-white">
@@ -45,7 +62,7 @@ export default async function AvailabilityPage() {
            <p className="text-base font-bold text-gray-600 leading-relaxed">Identity confirmed. Please validate your participation status for the following recovery cycles. Your response is mandatory for mission-critical resource allocation and failover orchestration.</p>
         </section>
 
-        <AvailabilityForm phases={phases as any} resourceId={resource.id} />
+        <AvailabilityForm phases={phases as any} resourceId={resource.id} initialAvailabilities={availabilities} />
 
         <footer className="mt-16 pt-12 border-t border-gray-50 text-center">
           <p className="text-[10px] font-black text-gray-300 uppercase tracking-[0.4em]">Sentinel Autonomous Resource Management Protocol</p>

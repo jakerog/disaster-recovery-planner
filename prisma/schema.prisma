@@ -106,6 +106,7 @@ model Stage {
   eventId   String?
   notes     String?
   tasks     Task[]
+  availabilities Availability[]
 }
 
 model Task {
@@ -139,10 +140,12 @@ model Availability {
   exerciseId String
   phase      Phase    @relation(fields: [phaseId], references: [id], onDelete: Cascade)
   phaseId    String
+  stage      Stage?   @relation(fields: [stageId], references: [id], onDelete: Cascade)
+  stageId    String?
   available  Boolean  @default(false)
   notes      String?
 
-  @@unique([resourceId, phaseId])
+  @@unique([resourceId, phaseId, stageId])
 }
 
 model EmailTemplate {

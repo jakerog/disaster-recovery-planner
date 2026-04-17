@@ -180,7 +180,11 @@ export default function TaskEditForm({ task, allResources = [], allTeams = [], a
       <div>
         <label className="text-[10px] font-black text-slate-400 block mb-4 uppercase tracking-[0.2em] px-1">Assigned Resource(s) [Name | Team]</label>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-          {allResources.map(r => (
+          {allResources.sort((a: any, b: any) => {
+            const teamA = allTeams.find(t => t.id === a.teamId)?.name || 'Z';
+            const teamB = allTeams.find(t => t.id === b.teamId)?.name || 'Z';
+            return teamA.localeCompare(teamB);
+          }).map(r => (
             <button
               key={r.id}
               type="button"

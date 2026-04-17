@@ -9,12 +9,22 @@ export default function TaskManagementList({ exerciseId, stages, teams, resource
   const [loading, setLoading] = useState(true);
   const [editingTask, setEditingTask] = useState<any>(null);
   const [showForm, setShowForm] = useState(false);
+  const [nextTaskId, setNextTaskId] = useState<number>(1);
 
   const fetchTasks = async () => {
     setLoading(true);
     const res = await fetch(`/api/tasks?exerciseId=${exerciseId}`);
     const data = await res.json();
     setTasks(data);
+
+    // Calculate next task ID
+    if (data.length > 0) {
+      const maxId = Math.max(...data.map((t: any) => parseInt(t.taskId) || 0));
+      setNextTaskId(maxId + 1);
+    } else {
+      setNextTaskId(1);
+    }
+
     setLoading(false);
   };
 
@@ -75,11 +85,11 @@ export default function TaskManagementList({ exerciseId, stages, teams, resource
            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-2">
                 <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1">Task ID (Number)</label>
-                <input name="taskId" type="number" defaultValue={editingTask?.taskId} className="clean-input" required placeholder="101" />
+                <input name="taskId" type="number" defaultValue={editingTask ? editingTask.taskId : nextTaskId} className="clean-input" required placeholder="101" />
               </div>
               <div className="space-y-2">
                 <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1">Task Name (Description)</label>
-                <input name="name" defaultValue={editingTask?.name} className="clean-input" required placeholder="Service Isolation..." />
+                <input name="name" defaultValue={editingTask ? editingTask.name : "Provide Brief Task Description"} className="clean-input" required />
               </div>
               <div className="space-y-2">
                 <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1">Operational Stage</label>
@@ -132,7 +142,7 @@ export default function TaskManagementList({ exerciseId, stages, teams, resource
               <div className="md:col-span-2 space-y-4">
                 <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1">Assigned Resource(s) [Name | Team]</label>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                   {resources.map((r: any) => (
+                   {resources.sort((a: any, b: any) => (a.team?.name || 'Z').localeCompare(b.team?.name || 'Z')).map((r: any) => (
                      <label key={r.id} className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100 cursor-pointer hover:bg-white transition-colors">
                         <input type="checkbox" name="resourceIds" value={r.id} defaultChecked={editingTask?.resources?.some((tr: any) => tr.id === r.id)} className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500" />
                         <div className="flex flex-col">
