@@ -2,7 +2,7 @@
 
 import { Phase, Exercise, Event, Stage, Resource, Task, Availability } from "@prisma/client";
 import { useState } from "react";
-import { CheckCircle2, XCircle, Clock, Shield, ChevronRight, Activity } from "lucide-react";
+import { CheckCircle2, XCircle, Clock, Shield, ChevronRight, Activity, Zap } from "lucide-react";
 
 interface StageWithRelations extends Stage {
   tasks: (Task & { resources: Resource[] })[];
@@ -35,7 +35,10 @@ export default function AvailabilityForm({
   const [localAvail, setLocalAvail] = useState<Record<string, boolean>>(() => {
     const initial: Record<string, boolean> = {};
     initialAvailabilities.forEach(a => {
-      initial[`${a.phaseId}_${a.stageId || 'global'}`] = a.available;
+      // Defaulting to FALSE (Red) as per requirement: "default status 'Not Confirmed'/Red toggle"
+      if (a.stageId) {
+        initial[`${a.phaseId}_${a.stageId}`] = a.available;
+      }
     });
     return initial;
   });
@@ -47,25 +50,19 @@ export default function AvailabilityForm({
     const availabilityData: any[] = [];
 
     phases.forEach(phase => {
-      // Global phase availability
-      availabilityData.push({
-        resourceId,
-        exerciseId: phase.exerciseId,
-        phaseId: phase.id,
-        stageId: null,
-        available: localAvail[`${phase.id}_global`] ?? true,
-      });
-
-      // Stage specific availability
       phase.events.forEach(event => {
         event.stages.forEach(stage => {
-          availabilityData.push({
-            resourceId,
-            exerciseId: phase.exerciseId,
-            phaseId: phase.id,
-            stageId: stage.id,
-            available: localAvail[`${phase.id}_${stage.id}`] ?? true,
-          });
+          // Only sync if I am assigned to this stage
+          const isMeAssigned = stage.tasks.some(t => t.resources.some(r => r.id === resourceId));
+          if (isMeAssigned) {
+            availabilityData.push({
+              resourceId,
+              exerciseId: phase.exerciseId,
+              phaseId: phase.id,
+              stageId: stage.id,
+              available: localAvail[`${phase.id}_${stage.id}`] ?? false,
+            });
+          }
         });
       });
     });
@@ -80,10 +77,10 @@ export default function AvailabilityForm({
     setTimeout(() => setSuccess(false), 3000);
   };
 
-  const toggle = (phaseId: string, stageId: string | null, val: boolean) => {
+  const toggle = (phaseId: string, stageId: string, val: boolean) => {
     setLocalAvail(prev => ({
       ...prev,
-      [`${phaseId}_${stageId || 'global'}`]: val
+      [`${phaseId}_${stageId}`]: val
     }));
   };
 
@@ -95,13 +92,6 @@ export default function AvailabilityForm({
              <div>
                 <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.4em] block mb-2">{phase.exercise.name}</span>
                 <h3 className="text-4xl font-black uppercase tracking-tighter text-black">{phase.name} Phase</h3>
-             </div>
-             <div className="flex gap-2">
-                <ToggleButton
-                  active={localAvail[`${phase.id}_global`] ?? true}
-                  onToggle={(v) => toggle(phase.id, null, v)}
-                  label="Phase Access"
-                />
              </div>
           </header>
 
@@ -121,32 +111,29 @@ export default function AvailabilityForm({
                       const isMeAssigned = stageResources.some(r => r.id === resourceId);
 
                       // Calculate "Ready to proceed" logic
-                      // A stage is ready if ALL resources assigned to tasks in that stage have confirmed availability for this stage.
-                      // Note: We only have full visibility into OTHER resources via stage.availabilities (which we included in the query)
+                      // A stage is ready if ALL resources assigned to tasks in that stage have confirmed availability.
                       const otherAvails = stage.availabilities;
-                      const allConfirmed = stageResources.every(r => {
-                        if (r.id === resourceId) return localAvail[`${phase.id}_${stage.id}`] ?? true;
+                      const allConfirmed = stageResources.length > 0 && stageResources.every(r => {
+                        if (r.id === resourceId) return localAvail[`${phase.id}_${stage.id}`] ?? false;
                         const record = otherAvails.find(a => a.resourceId === r.id);
-                        return record ? record.available : true; // Default to true if no record yet
+                        return record ? record.available : false; // Default to false
                       });
 
                       if (stageResources.length === 0) return null;
 
                       return (
-                        <div key={stage.id} className={`clean-card p-8 border-2 transition-all ${allConfirmed ? 'border-green-500 bg-green-50/30' : 'border-white shadow-xl shadow-gray-100'}`}>
+                        <div key={stage.id} className={`clean-card p-8 border-2 transition-all ${allConfirmed ? 'border-green-500 bg-green-50/30 shadow-[0_20px_50px_rgba(34,197,94,0.1)]' : 'border-rose-500 bg-rose-50/10 shadow-xl shadow-gray-100'}`}>
                            <div className="flex justify-between items-start mb-8">
                               <div>
-                                 <h4 className={`text-lg font-black uppercase tracking-tight ${allConfirmed ? 'text-green-700' : 'text-black'}`}>
+                                 <h4 className={`text-lg font-black uppercase tracking-tight ${allConfirmed ? 'text-green-700' : 'text-rose-700'}`}>
                                     {stage.name}
                                  </h4>
-                                 {allConfirmed && (
-                                   <span className="text-[9px] font-black text-green-600 uppercase tracking-widest flex items-center gap-1.5 mt-1">
-                                      <Activity size={10} /> Ready to proceed
-                                   </span>
-                                 )}
+                                 <span className={`text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 mt-1 ${allConfirmed ? 'text-green-600' : 'text-rose-600'}`}>
+                                    {allConfirmed ? <><Activity size={10} /> Ready To Proceed</> : <><Zap size={10} /> Not Ready To Proceed</>}
+                                 </span>
                               </div>
                               <ToggleButton
-                                active={localAvail[`${phase.id}_${stage.id}`] ?? true}
+                                active={localAvail[`${phase.id}_${stage.id}`] ?? false}
                                 onToggle={(v) => toggle(phase.id, stage.id, v)}
                                 disabled={!isMeAssigned}
                               />
@@ -158,8 +145,8 @@ export default function AvailabilityForm({
                                  {stageResources.map(r => {
                                     const isMe = r.id === resourceId;
                                     const isConfirmed = isMe
-                                      ? (localAvail[`${phase.id}_${stage.id}`] ?? true)
-                                      : (otherAvails.find(a => a.resourceId === r.id)?.available ?? true);
+                                      ? (localAvail[`${phase.id}_${stage.id}`] ?? false)
+                                      : (otherAvails.find(a => a.resourceId === r.id)?.available ?? false);
 
                                     return (
                                       <div key={r.id} className="flex items-center justify-between p-3 bg-white/50 rounded-xl border border-white">
@@ -170,7 +157,7 @@ export default function AvailabilityForm({
                                             </span>
                                          </div>
                                          <span className={`text-[9px] font-black uppercase tracking-widest ${isConfirmed ? 'text-green-600' : 'text-red-600'}`}>
-                                            {isConfirmed ? 'Confirmed' : 'Unavailable'}
+                                            {isConfirmed ? 'Confirmed' : 'Not Confirmed'}
                                          </span>
                                       </div>
                                     );
@@ -217,7 +204,7 @@ function ToggleButton({ active, onToggle, label, disabled = false }: { active: b
       >
         <div className={`absolute top-1 w-5 h-5 bg-white rounded-full shadow-lg transition-all duration-300 ${active ? 'left-8' : 'left-1'}`}></div>
       </button>
-      {label && <span className="text-[9px] font-black uppercase tracking-widest text-gray-400">{label}</span>}
+      <span className="text-[9px] font-black uppercase tracking-widest text-gray-400">{active ? "Confirmed" : "Unavailable"}</span>
     </div>
   );
 }

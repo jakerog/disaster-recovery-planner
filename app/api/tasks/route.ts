@@ -15,6 +15,10 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
+  const session = await auth();
+  const userRole = (session?.user as any)?.role;
+  if (userRole !== "Admin" && userRole !== "Moderator") return new Response("Unauthorized", { status: 401 });
+
   const body = await req.json();
   const { resourceIds, ...data } = body;
 
@@ -28,6 +32,10 @@ export async function POST(req: Request) {
 }
 
 export async function DELETE(req: Request) {
+  const session = await auth();
+  const userRole = (session?.user as any)?.role;
+  if (userRole !== "Admin" && userRole !== "Moderator") return new Response("Unauthorized", { status: 401 });
+
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");
   if (!id) return new Response("Missing ID", { status: 400 });

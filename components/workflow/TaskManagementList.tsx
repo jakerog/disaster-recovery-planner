@@ -2,7 +2,7 @@
 
 import { Task, Resource, Team, Stage } from "@prisma/client";
 import { useState, useEffect } from "react";
-import { Plus, Trash2, Edit2, Shield, Activity, Users, Clock, Save, X, GripVertical } from "lucide-react";
+import { Plus, Trash2, Edit2, Shield, Activity, Users, Clock, Save, X, GripVertical, Camera } from "lucide-react";
 import {
   DndContext,
   closestCenter,
@@ -24,6 +24,7 @@ export default function TaskManagementList({ exerciseId, stages, teams, resource
   const [tasks, setTasks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingTask, setEditingTask] = useState<any>(null);
+  const [evidence, setEvidence] = useState("");
 
   const sensors = useSensors(
     useSensor(MouseSensor, {
@@ -64,6 +65,14 @@ export default function TaskManagementList({ exerciseId, stages, teams, resource
   };
 
   useEffect(() => { fetchTasks(); }, [exerciseId]);
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => setEvidence(reader.result as string);
+    reader.readAsDataURL(file);
+  };
 
   const handleDelete = async (id: string) => {
     if (!confirm("Terminate this task? This cannot be reversed.")) return;
@@ -108,18 +117,22 @@ export default function TaskManagementList({ exerciseId, stages, teams, resource
       ...data,
       id: editingTask?.id,
       exerciseId,
+      evidence: evidence || editingTask?.evidence,
       estimatedTime: parseInt(data.estimatedTime as string),
       resourceIds: Array.from(formData.getAll("resourceIds"))
     };
 
-    await fetch("/api/tasks", {
+    const res = await fetch("/api/tasks", {
       method,
       body: JSON.stringify(body)
     });
 
-    setShowForm(false);
-    setEditingTask(null);
-    fetchTasks();
+    if (res.ok) {
+      setShowForm(false);
+      setEditingTask(null);
+      setEvidence("");
+      fetchTasks();
+    }
   };
 
   return (
@@ -201,6 +214,41 @@ export default function TaskManagementList({ exerciseId, stages, teams, resource
                 <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1">Operational Intelligence (Notes)</label>
                 <textarea name="notes" defaultValue={editingTask?.notes} className="clean-input min-h-[100px]" placeholder="Detailed recovery instructions..." required />
               </div>
+
+              {editingTask && (
+                <div className="md:col-span-2 space-y-4">
+                  <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1">Evidence Synchronicity</label>
+                  <div className="clean-inset p-6 flex flex-col gap-6">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="p-3 bg-blue-50 rounded-xl text-blue-600">
+                          <Camera size={20} />
+                        </div>
+                        <div>
+                          <p className="text-[10px] font-black uppercase tracking-widest">Attach Recovery Artifact</p>
+                          <p className="text-[8px] font-bold text-slate-400 uppercase">Supporting Images, Logs, or Dossiers</p>
+                        </div>
+                      </div>
+                      <input
+                        type="file"
+                        onChange={handleFileUpload}
+                        accept=".jpg,.jpeg,.png,.webp,.pdf,.doc,.docx,.xls,.xlsx"
+                        className="text-[10px] font-black uppercase"
+                      />
+                    </div>
+                    {evidence && (
+                      <div className="pt-6 border-t border-slate-50">
+                        <p className="text-[8px] font-black text-blue-500 uppercase mb-3">Protocol Payload Detected</p>
+                        {evidence.startsWith('data:image/') ? (
+                          <img src={evidence} className="h-32 rounded-xl border border-slate-100 shadow-sm" />
+                        ) : (
+                          <div className="p-4 bg-slate-50 rounded-xl text-[10px] font-bold text-slate-500 uppercase italic">Binary Metadata Staged</div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
               <div className="md:col-span-2 space-y-4">
                 <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1">Assigned Resource(s) [Name | Team]</label>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">

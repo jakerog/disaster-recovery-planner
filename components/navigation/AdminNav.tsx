@@ -7,6 +7,7 @@ import { LayoutDashboard, Users, UserCheck, Mail, ClipboardList, Briefcase, Buil
 
 const links = [
   { href: "/admin/exercises", label: "Exercises", icon: LayoutDashboard },
+  { href: "/admin/reports", label: "Report Dashboard", icon: ClipboardList },
   { href: "/admin/tasks", label: "Tasks", icon: ListChecks },
   { href: "/admin/resources", label: "Resources", icon: Users },
   { href: "/admin/teams", label: "Teams", icon: Briefcase },
