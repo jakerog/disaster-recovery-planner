@@ -7,7 +7,8 @@ import {
   DndContext,
   closestCenter,
   KeyboardSensor,
-  PointerSensor,
+  MouseSensor,
+  TouchSensor,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
@@ -25,7 +26,17 @@ export default function TaskManagementList({ exerciseId, stages, teams, resource
   const [editingTask, setEditingTask] = useState<any>(null);
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(MouseSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 200,
+        tolerance: 6,
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
@@ -236,12 +247,11 @@ export default function TaskManagementList({ exerciseId, stages, teams, resource
         </SortableContext>
       </DndContext>
 
-        {!loading && tasks.length === 0 && (
-           <div className="p-20 clean-inset border-dashed text-center">
-              <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest">No Operational Directives Defined</p>
-           </div>
-        )}
-      </div>
+      {!loading && tasks.length === 0 && (
+         <div className="p-20 clean-inset border-dashed text-center">
+            <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest">No Operational Directives Defined</p>
+         </div>
+      )}
     </div>
   );
 }
