@@ -25,6 +25,7 @@ export default function TaskManagementList({ exerciseId, stages, teams, resource
   const [loading, setLoading] = useState(true);
   const [editingTask, setEditingTask] = useState<any>(null);
   const [evidence, setEvidence] = useState("");
+  const [selectedStageId, setSelectedStageId] = useState("");
 
   const sensors = useSensors(
     useSensor(MouseSensor, {
@@ -131,6 +132,7 @@ export default function TaskManagementList({ exerciseId, stages, teams, resource
       setShowForm(false);
       setEditingTask(null);
       setEvidence("");
+    setSelectedStageId("");
       fetchTasks();
     }
   };
@@ -157,7 +159,11 @@ export default function TaskManagementList({ exerciseId, stages, teams, resource
               <button onClick={() => { setShowForm(false); setEditingTask(null); }} className="p-2 rounded-full hover:bg-slate-50 text-slate-400"><X size={20}/></button>
            </div>
 
-           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8">
+           <form
+              key={editingTask?.id || 'new'}
+              onSubmit={handleSubmit}
+              className="grid grid-cols-1 md:grid-cols-2 gap-8"
+           >
               <div className="space-y-2">
                 <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1">Task ID (Number)</label>
                 <input name="taskId" type="number" defaultValue={editingTask ? editingTask.taskId : nextTaskId} className="clean-input" required placeholder="101" />
@@ -168,7 +174,13 @@ export default function TaskManagementList({ exerciseId, stages, teams, resource
               </div>
               <div className="space-y-2">
                 <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1">Operational Stage</label>
-                <select name="stageId" defaultValue={editingTask?.stageId} className="clean-input" required>
+                <select
+                  name="stageId"
+                  defaultValue={editingTask?.stageId}
+                  className="clean-input"
+                  required
+                  onChange={(e) => setSelectedStageId(e.target.value)}
+                >
                   <option value="">Select Stage</option>
                   {stages.map((s: any) => <option key={s.id} value={s.id}>{s.name}</option>)}
                 </select>
@@ -215,7 +227,7 @@ export default function TaskManagementList({ exerciseId, stages, teams, resource
                 <textarea name="notes" defaultValue={editingTask?.notes} className="clean-input min-h-[100px]" placeholder="Detailed recovery instructions..." required />
               </div>
 
-              {editingTask && (
+              {(selectedStageId || editingTask?.stageId) && ['Pre-Failover', 'Pre-Failback', 'Post-Failover', 'Post-Failback'].includes(stages.find((s:any) => s.id === (selectedStageId || editingTask?.stageId))?.name) && (
                 <div className="md:col-span-2 space-y-4">
                   <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1">Evidence Synchronicity</label>
                   <div className="clean-inset p-6 flex flex-col gap-6">
@@ -287,7 +299,12 @@ export default function TaskManagementList({ exerciseId, stages, teams, resource
               <SortableTaskItem
                 key={task.id}
                 task={task}
-                onEdit={(t: any) => { setEditingTask(t); setShowForm(true); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                onEdit={(t: any) => {
+                  setEditingTask(t);
+                  setSelectedStageId(t.stageId);
+                  setShowForm(true);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
                 onDelete={handleDelete}
               />
             ))}

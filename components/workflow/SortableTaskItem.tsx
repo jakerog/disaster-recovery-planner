@@ -55,10 +55,16 @@ export default function SortableTaskItem({ task, onEdit, onDelete }: any) {
       <div className="flex items-center gap-4">
         <div className={`status-pill ${task.status === 'Completed' ? 'status-pill-green' : 'status-pill-blue'}`}>{task.status}</div>
         <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button onClick={() => onEdit(task)} className="p-2 rounded-xl bg-slate-50 text-slate-400 hover:text-blue-600 border border-slate-100 transition-colors">
+          <button
+            onClick={(e) => { e.stopPropagation(); onEdit(task); }}
+            className="p-2 rounded-xl bg-slate-50 text-slate-400 hover:text-blue-600 border border-slate-100 transition-colors pointer-events-auto"
+          >
             <Edit2 size={16}/>
           </button>
-          <button onClick={() => onDelete(task.id)} className="p-2 rounded-xl bg-rose-50 text-rose-300 hover:text-rose-600 border border-rose-100 transition-colors">
+          <button
+            onClick={(e) => { e.stopPropagation(); onDelete(task.id); }}
+            className="p-2 rounded-xl bg-rose-50 text-rose-300 hover:text-rose-600 border border-rose-100 transition-colors pointer-events-auto"
+          >
             <Trash2 size={16}/>
           </button>
         </div>
