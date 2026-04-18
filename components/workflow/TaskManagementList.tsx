@@ -2,12 +2,34 @@
 
 import { Task, Resource, Team, Stage } from "@prisma/client";
 import { useState, useEffect } from "react";
-import { Plus, Trash2, Edit2, Shield, Activity, Users, Clock, Save, X } from "lucide-react";
+import { Plus, Trash2, Edit2, Shield, Activity, Users, Clock, Save, X, GripVertical } from "lucide-react";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import SortableTaskItem from "./SortableTaskItem";
 
 export default function TaskManagementList({ exerciseId, stages, teams, resources }: any) {
   const [tasks, setTasks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingTask, setEditingTask] = useState<any>(null);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
   const [showForm, setShowForm] = useState(false);
   const [nextTaskId, setNextTaskId] = useState<number>(1);
 
@@ -15,7 +37,9 @@ export default function TaskManagementList({ exerciseId, stages, teams, resource
     setLoading(true);
     const res = await fetch(`/api/tasks?exerciseId=${exerciseId}`);
     const data = await res.json();
-    setTasks(data);
+    // Sort tasks by taskId (number) for initial load
+    const sorted = data.sort((a: any, b: any) => (parseInt(a.taskId) || 0) - (parseInt(b.taskId) || 0));
+    setTasks(sorted);
 
     // Calculate next task ID
     if (data.length > 0) {
@@ -34,6 +58,33 @@ export default function TaskManagementList({ exerciseId, stages, teams, resource
     if (!confirm("Terminate this task? This cannot be reversed.")) return;
     await fetch(`/api/tasks?id=${id}`, { method: "DELETE" });
     fetchTasks();
+  };
+
+  const handleDragEnd = async (event: any) => {
+    const { active, over } = event;
+
+    if (active.id !== over.id) {
+      const oldIndex = tasks.findIndex((t) => t.id === active.id);
+      const newIndex = tasks.findIndex((t) => t.id === over.id);
+
+      const newTasks = arrayMove(tasks, oldIndex, newIndex);
+
+      // Coordinate Task IDs based on new order
+      const coordinatedTasks = newTasks.map((task, index) => ({
+        ...task,
+        taskId: (index + 1).toString()
+      }));
+
+      setTasks(coordinatedTasks);
+
+      // Persist reordered Task IDs
+      await Promise.all(coordinatedTasks.map((task) =>
+        fetch("/api/tasks", {
+          method: "PATCH",
+          body: JSON.stringify({ id: task.id, taskId: task.taskId })
+        })
+      ));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -163,44 +214,27 @@ export default function TaskManagementList({ exerciseId, stages, teams, resource
         </div>
       )}
 
-      <div className="space-y-4">
-        {tasks.sort((a,b) => a.taskId.localeCompare(b.taskId)).map(task => (
-          <div key={task.id} className="clean-card p-6 flex items-center justify-between group hover:scale-[1.01] transition-all border-white/50 shadow-lg shadow-slate-100/30">
-             <div className="flex items-center gap-6">
-                <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-[11px] font-black text-blue-600 shadow-inner">
-                   {task.taskId.slice(-3)}
-                </div>
-                <div>
-                   <h4 className="text-sm font-black uppercase tracking-tight text-slate-900">{task.name || task.notes}</h4>
-                   <div className="flex items-center gap-4 mt-1.5">
-                      <span className="text-[9px] font-black text-slate-400 uppercase flex items-center gap-1.5">
-                         <Activity size={10} className="text-blue-500" /> {task.stage?.name}
-                      </span>
-                      <span className="text-[9px] text-slate-300">•</span>
-                      <span className="text-[9px] font-black text-slate-400 uppercase flex items-center gap-1.5">
-                         <Users size={10} className="text-blue-500" /> {task.team?.name || 'Global Ops'}
-                      </span>
-                      <span className="text-[9px] text-slate-300">•</span>
-                      <span className="text-[9px] font-black text-slate-400 uppercase flex items-center gap-1.5">
-                         <Clock size={10} className="text-blue-500" /> {task.estimatedTime}m
-                      </span>
-                   </div>
-                </div>
-             </div>
-
-             <div className="flex items-center gap-4">
-                <div className={`status-pill ${task.status === 'Completed' ? 'status-pill-green' : 'status-pill-blue'}`}>{task.status}</div>
-                <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                   <button onClick={() => { setEditingTask(task); setShowForm(true); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="p-2 rounded-xl bg-slate-50 text-slate-400 hover:text-blue-600 border border-slate-100 transition-colors">
-                      <Edit2 size={16}/>
-                   </button>
-                   <button onClick={() => handleDelete(task.id)} className="p-2 rounded-xl bg-rose-50 text-rose-300 hover:text-rose-600 border border-rose-100 transition-colors">
-                      <Trash2 size={16}/>
-                   </button>
-                </div>
-             </div>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext
+          items={tasks.map(t => t.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          <div className="space-y-4">
+            {tasks.map(task => (
+              <SortableTaskItem
+                key={task.id}
+                task={task}
+                onEdit={(t: any) => { setEditingTask(t); setShowForm(true); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                onDelete={handleDelete}
+              />
+            ))}
           </div>
-        ))}
+        </SortableContext>
+      </DndContext>
 
         {!loading && tasks.length === 0 && (
            <div className="p-20 clean-inset border-dashed text-center">
